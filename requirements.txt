@@ -1,0 +1,21 @@
+# Note: PySide2 is not available for macOS arm64, so we use PySide6 with a compatibility layer
+# The pyside2_compat.py file handles the compatibility
+PySide6>=6.0.0
+selenium>=4.0.0
+requests>=2.25.0
+pyDes>=2.0.1
+loguru>=0.6.0
+better-exceptions>=0.3.0
+# Windows-only dependency
+wmi>=1.5.1; sys_platform == 'win32'
+# Selenium dependencies
+trio>=0.30.0,<1.0
+trio-websocket>=0.12.2,<1.0
+typing-extensions>=4.14.0,<5.0
+websocket-client>=1.8.0,<2.0
+# Requests dependencies
+urllib3>=2.0.0
+certifi
+charset-normalizer
+idna
+

@@ -1,0 +1,60 @@
+name: Build Windows Executable
+
+on:
+  workflow_dispatch:  # Manual trigger - you can run it from GitHub UI
+  push:
+    tags:
+      - 'v*'  # Also trigger on version tags like v1.0.0
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pyinstaller
+    
+    - name: Build Windows executable
+      run: |
+        pyinstaller build_demo_windows.spec
+    
+    - name: Verify build
+      run: |
+        if (Test-Path "dist\FacebookMarketingTool.exe") {
+          Write-Host "✅ Build successful!"
+          Get-Item "dist\FacebookMarketingTool.exe" | Select-Object Name, Length
+        } else {
+          Write-Host "❌ Build failed - executable not found"
+          exit 1
+        }
+    
+    - name: Upload Windows executable
+      uses: actions/upload-artifact@v3
+      with:
+        name: FacebookMarketingTool-Windows
+        path: dist/FacebookMarketingTool.exe
+        retention-days: 30
+    
+    - name: Create distribution package
+      run: |
+        cd dist
+        Compress-Archive -Path FacebookMarketingTool.exe -DestinationPath FacebookMarketingTool_Windows.zip
+    
+    - name: Upload distribution package
+      uses: actions/upload-artifact@v3
+      with:
+        name: FacebookMarketingTool-Windows-Package
+        path: dist/FacebookMarketingTool_Windows.zip
+        retention-days: 30
+

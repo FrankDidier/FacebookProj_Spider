@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+.venv
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+*.spec
+!build_demo.spec
+!build_demo_windows.spec
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.bak
+client_package_*/
+
+# Data directories (optional - comment out if you want to track data)
+# fb/
+# ins/
+
