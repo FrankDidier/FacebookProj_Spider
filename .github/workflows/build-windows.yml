@@ -12,10 +12,10 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: '3.9'
     
@@ -40,7 +40,7 @@ jobs:
         }
     
     - name: Upload Windows executable
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: FacebookMarketingTool-Windows
         path: dist/FacebookMarketingTool.exe
@@ -52,7 +52,7 @@ jobs:
         Compress-Archive -Path FacebookMarketingTool.exe -DestinationPath FacebookMarketingTool_Windows.zip
     
     - name: Upload distribution package
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: FacebookMarketingTool-Windows-Package
         path: dist/FacebookMarketingTool_Windows.zip
