@@ -378,6 +378,17 @@ class Ui_MainWindow(object):
         self.verticalLayout_12.setStretch(0, 1)
         self.verticalLayout_12.setStretch(1, 16)
         self.tabWidget.addTab(self.tabGroupSpider, "")
+        # Configuration Wizard Page (First item)
+        try:
+            from config_wizard import ConfigWizardPage
+            self.configWizardPage = ConfigWizardPage()
+            self.configWizardPage.setObjectName(u"configWizardPage")
+            self.stackedPages.addWidget(self.configWizardPage)
+            self.sidebarList.addItem("⚙️ 配置向导")
+        except Exception as e:
+            # If config wizard fails to load, skip it
+            print(f"Warning: Could not load config wizard: {e}")
+        
         self.stackedPages.addWidget(self.tabGroupSpider)
         self.sidebarList.addItem("采集群组")
         self.tabMembersSpider = QWidget()

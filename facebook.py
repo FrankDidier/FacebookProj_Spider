@@ -285,6 +285,45 @@ class MainWindow(QMainWindow):
         
         # Connect sidebar list to tab change handler
         self.ui.sidebarList.currentRowChanged.connect(self.on_sidebar_changed)
+        
+        # Initialize configuration wizard (if not already added in fb_main.py)
+        try:
+            from config_wizard import ConfigWizardPage
+            # Check if config wizard already exists in stackedPages
+            config_wizard_exists = False
+            if hasattr(self.ui, 'stackedPages') and self.ui.stackedPages.count() > 0:
+                # Check if first widget is already the config wizard
+                first_widget = self.ui.stackedPages.widget(0)
+                if first_widget:
+                    obj_name = first_widget.objectName() if hasattr(first_widget, 'objectName') else ''
+                    if obj_name == "configWizardPage" or isinstance(first_widget, ConfigWizardPage):
+                        # Already exists, just reference it
+                        self.ui.configWizardPage = first_widget
+                        if hasattr(first_widget, 'main_window'):
+                            first_widget.main_window = self
+                        config_wizard_exists = True
+            
+            # If config wizard doesn't exist, check if we need to create it
+            if not config_wizard_exists:
+                if hasattr(self.ui, 'configWizardPage') and self.ui.configWizardPage:
+                    # Config wizard object exists but not in stackedPages, add it
+                    self.ui.stackedPages.insertWidget(0, self.ui.configWizardPage)
+                elif hasattr(self.ui, 'stackedPages'):
+                    # Check for placeholder
+                    if self.ui.stackedPages.count() > 0:
+                        first_widget = self.ui.stackedPages.widget(0)
+                        if first_widget and hasattr(first_widget, 'objectName') and first_widget.objectName() == "configWizardPlaceholder":
+                            self.ui.stackedPages.removeWidget(first_widget)
+                            first_widget.deleteLater()
+                    
+                    # Create and add config wizard
+                    self.ui.configWizardPage = ConfigWizardPage(self)
+                    self.ui.configWizardPage.setObjectName(u"configWizardPage")
+                    self.ui.stackedPages.insertWidget(0, self.ui.configWizardPage)
+        except Exception as e:
+            log.warning(f"Could not initialize config wizard: {e}")
+            import traceback
+            traceback.print_exc()
 
         # self.on_verify()  # 初始化的时候页面需要进行验证
         self.update_control_enabled([True, 0])
@@ -443,6 +482,54 @@ class MainWindow(QMainWindow):
                 main_text_browser: QTextBrowser = text_browsers[0]
                 main_text_browser.clear()
 
+    def validate_setup(self, feature_name="功能"):
+        """Validate setup before starting any feature"""
+        issues = []
+        
+        # Check AdsPower service
+        try:
+            import requests
+            response = requests.get("http://127.0.0.1:50325/api/v1/browser/list", timeout=2)
+            if response.status_code != 200:
+                issues.append("AdsPower 服务未运行")
+        except:
+            issues.append("AdsPower 服务未运行，请启动 AdsPower Global Browser")
+        
+        # Check API key
+        if not hasattr(config, 'ads_key') or not config.ads_key or config.ads_key.strip() == '':
+            issues.append("API 密钥未配置，请在配置向导中设置")
+        
+        # Check accounts
+        try:
+            ads_ids = tools.get_ads_id(1)  # Just check if we can get at least 1
+            if len(ads_ids) == 0:
+                issues.append("未找到 Facebook 账户，请在 AdsPower 中添加账户")
+        except:
+            issues.append("无法获取账户列表，请检查 AdsPower 配置")
+        
+        if issues:
+            msg = f"无法启动 {feature_name}:\n\n" + "\n".join(f"• {issue}" for issue in issues)
+            msg += "\n\n请前往「配置向导」页面完成设置。\n\n点击「确定」将自动跳转到配置向导。"
+            
+            reply = QMessageBox.warning(self, "配置不完整", msg, 
+                                       QMessageBox.Ok | QMessageBox.Cancel)
+            
+            # Switch to config wizard if user clicks OK
+            if reply == QMessageBox.Ok:
+                if hasattr(self.ui, 'sidebarList'):
+                    self.ui.sidebarList.setCurrentRow(0)  # Switch to config wizard
+                if hasattr(self.ui, 'stackedPages'):
+                    self.ui.stackedPages.setCurrentIndex(0)  # Ensure page is shown
+                # Run validation in wizard if it exists
+                if hasattr(self.ui, 'configWizardPage') and self.ui.configWizardPage:
+                    try:
+                        self.ui.configWizardPage.run_validation()
+                    except:
+                        pass
+            return False
+        
+        return True
+    
     def on_group_spider_start(self):
         """
         启动采集群组按钮
@@ -451,6 +538,9 @@ class MainWindow(QMainWindow):
         动态添加每个采集器对应的信息展示控件
         :return:
         """
+        # Validate setup first
+        if not self.validate_setup("采集群组"):
+            return
         doc: QTextDocument = self.ui.plainTextEditGroupWords.document()
         words = []
         # 搜集采集的关键词，如果采集过了，就不再采集了
@@ -505,6 +595,10 @@ class MainWindow(QMainWindow):
             stop_event=self.group_stop_event, grid_layout=grid_layout[0]).start()
 
     def on_member_spider_start(self):
+        # Validate setup first
+        if not self.validate_setup("采集成员"):
+            return
+        
         # 收集页面中输入的参数，并保存到配置文件中
         config.set_option('main', 'account_nums', self.ui.lineEditMemberMaxThreadCount.text())
         config.set_option('main', 'group_nums', self.ui.lineEditGroupCount.text())
@@ -532,6 +626,10 @@ class MainWindow(QMainWindow):
             stop_event=self.member_stop_event, grid_layout=grid_layout[0]).start()
 
     def on_greets_spider_start(self):
+        # Validate setup first
+        if not self.validate_setup("私信成员"):
+            return
+        
         doc: QTextDocument = self.ui.plainTextEditGreetsContent.document()
         greets_content = []
         for i in range(self.ui.plainTextEditGreetsContent.blockCount()):
@@ -590,6 +688,10 @@ class MainWindow(QMainWindow):
     # New spider handlers
     def on_group_specified_spider_start(self):
         """Start FB Group Specified Collection"""
+        # Validate setup first
+        if not self.validate_setup("FB小组指定采集"):
+            return
+        
         # Get keywords from UI
         doc: QTextDocument = self.ui.plainTextEditGroupSpecifiedWords.document()
         words = []
@@ -628,6 +730,10 @@ class MainWindow(QMainWindow):
 
     def on_members_rapid_spider_start(self):
         """Start FB Group Member Rapid Collection"""
+        # Validate setup first
+        if not self.validate_setup("FB小组成员极速采集"):
+            return
+        
         config.set_option('main', 'account_nums', self.ui.lineEditMembersRapidThreadCount.text())
         config.set_option('main', 'group_nums', self.ui.lineEditMembersRapidGroupCount.text())
         thread_count = tools.get_greet_threading_count(config_from_newest=config)
@@ -651,6 +757,10 @@ class MainWindow(QMainWindow):
 
     def on_posts_spider_start(self):
         """Start FB Group Post Collection"""
+        # Validate setup first
+        if not self.validate_setup("FB小组帖子采集"):
+            return
+        
         config.set_option('main', 'account_nums', self.ui.lineEditPostsThreadCount.text())
         config.set_option('posts', 'groups_nums', self.ui.lineEditPostsGroupCount.text())
         thread_count = tools.get_greet_threading_count(config_from_newest=config)
@@ -674,6 +784,10 @@ class MainWindow(QMainWindow):
 
     def on_pages_spider_start(self):
         """Start FB Public Page Collection"""
+        # Validate setup first
+        if not self.validate_setup("FB公共主页采集"):
+            return
+        
         # Get keywords/URLs from UI
         doc: QTextDocument = self.ui.plainTextEditPagesKeywords.document()
         keywords = []
@@ -713,6 +827,10 @@ class MainWindow(QMainWindow):
 
     def on_ins_followers_spider_start(self):
         """Start Instagram Follower Collection"""
+        # Validate setup first
+        if not self.validate_setup("INS用户粉丝采集"):
+            return
+        
         # Get usernames from UI
         doc: QTextDocument = self.ui.plainTextEditInsFollowersUsers.document()
         usernames = []
@@ -751,6 +869,9 @@ class MainWindow(QMainWindow):
 
     def on_ins_following_spider_start(self):
         """Start Instagram Following Collection"""
+        # Validate setup first
+        if not self.validate_setup("INS用户关注采集"):
+            return
         # Get usernames from UI
         doc: QTextDocument = self.ui.plainTextEditInsFollowingUsers.document()
         usernames = []
@@ -789,6 +910,9 @@ class MainWindow(QMainWindow):
 
     def on_ins_profile_spider_start(self):
         """Start Instagram Profile Collection"""
+        # Validate setup first
+        if not self.validate_setup("INS用户简介采集"):
+            return
         # Get usernames from UI
         doc: QTextDocument = self.ui.plainTextEditInsProfileUsers.document()
         usernames = []
@@ -827,6 +951,9 @@ class MainWindow(QMainWindow):
 
     def on_ins_reels_comments_spider_start(self):
         """Start Instagram Reels Comment Collection"""
+        # Validate setup first
+        if not self.validate_setup("INS-reels评论采集"):
+            return
         # Get Reels URLs from UI
         doc: QTextDocument = self.ui.plainTextEditInsReelsCommentsUrls.document()
         urls = []
