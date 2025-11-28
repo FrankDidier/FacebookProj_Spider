@@ -186,6 +186,28 @@ class Config(object):
     @property
     def service_app_path(self):
         return self.get_option('ads', 'service_app_path')
+    
+    @property
+    def browser_type(self):
+        try:
+            return self.get_option('ads', 'browser_type')
+        except:
+            return 'adspower'  # Default to AdsPower
+    
+    @property
+    def bitbrowser_port(self):
+        try:
+            return self.get_option('ads', 'bitbrowser_port')
+        except:
+            return '54345'  # Default BitBrowser port
+    
+    @property
+    def bitbrowser_api_url(self):
+        try:
+            return self.get_option('ads', 'bitbrowser_api_url')
+        except:
+            port = self.bitbrowser_port
+            return f'http://127.0.0.1:{port}'
 
     @property
     def greets_xpath_send_btn(self):
@@ -279,6 +301,378 @@ class Config(object):
             return int(self.get_option('instagram', 'max_scroll_count'))
         except:
             return 5
+
+    # Automation configuration
+    @property
+    def like_mode(self):
+        try:
+            return self.get_option('automation', 'like_mode')
+        except:
+            return 'all'
+
+    @property
+    def like_keywords(self):
+        try:
+            return json.loads(self.get_option('automation', 'like_keywords'))
+        except:
+            return []
+
+    @property
+    def like_groups(self):
+        try:
+            return json.loads(self.get_option('automation', 'like_groups'))
+        except:
+            return []
+
+    @property
+    def like_count(self):
+        try:
+            return int(self.get_option('automation', 'like_count'))
+        except:
+            return 10
+
+    @property
+    def like_interval(self):
+        try:
+            return int(self.get_option('automation', 'like_interval'))
+        except:
+            return 5
+
+    @property
+    def comment_mode(self):
+        try:
+            return self.get_option('automation', 'comment_mode')
+        except:
+            return 'keywords'
+
+    @property
+    def comment_keywords(self):
+        try:
+            return json.loads(self.get_option('automation', 'comment_keywords'))
+        except:
+            return []
+
+    @property
+    def comment_content(self):
+        try:
+            return json.loads(self.get_option('automation', 'comment_content'))
+        except:
+            return ["Nice post!", "Great content!"]
+
+    @property
+    def comment_count(self):
+        try:
+            return int(self.get_option('automation', 'comment_count'))
+        except:
+            return 5
+
+    @property
+    def comment_interval(self):
+        try:
+            return int(self.get_option('automation', 'comment_interval'))
+        except:
+            return 10
+
+    @property
+    def follow_mode(self):
+        try:
+            return self.get_option('automation', 'follow_mode')
+        except:
+            return 'fans'
+
+    @property
+    def follow_keywords(self):
+        try:
+            return json.loads(self.get_option('automation', 'follow_keywords'))
+        except:
+            return []
+
+    @property
+    def follow_count(self):
+        try:
+            return int(self.get_option('automation', 'follow_count'))
+        except:
+            return 10
+
+    @property
+    def follow_interval(self):
+        try:
+            return int(self.get_option('automation', 'follow_interval'))
+        except:
+            return 5
+
+    @property
+    def add_friend_mode(self):
+        try:
+            return self.get_option('automation', 'add_friend_mode')
+        except:
+            return 'random'
+
+    @property
+    def add_friend_count(self):
+        try:
+            return int(self.get_option('automation', 'add_friend_count'))
+        except:
+            return 10
+
+    @property
+    def add_friend_interval(self):
+        try:
+            return int(self.get_option('automation', 'add_friend_interval'))
+        except:
+            return 5
+
+    @property
+    def add_friend_location(self):
+        try:
+            return self.get_option('automation', 'add_friend_location')
+        except:
+            return ''
+
+    @property
+    def add_friend_single_url(self):
+        try:
+            return self.get_option('automation', 'add_friend_single_url')
+        except:
+            return ''
+
+    @property
+    def group_action(self):
+        try:
+            return self.get_option('automation', 'group_action')
+        except:
+            return 'join'
+
+    @property
+    def group_keywords(self):
+        try:
+            return json.loads(self.get_option('automation', 'group_keywords'))
+        except:
+            return []
+
+    @property
+    def group_join_count(self):
+        try:
+            return int(self.get_option('automation', 'group_join_count'))
+        except:
+            return 5
+
+    @property
+    def group_post_content(self):
+        try:
+            return json.loads(self.get_option('automation', 'group_post_content'))
+        except:
+            return []
+
+    @property
+    def group_post_images(self):
+        try:
+            return json.loads(self.get_option('automation', 'group_post_images'))
+        except:
+            return []
+
+    @property
+    def group_post_interval(self):
+        try:
+            return int(self.get_option('automation', 'group_post_interval'))
+        except:
+            return 30
+
+    @property
+    def group_post_public(self):
+        try:
+            return self.get_option('automation', 'group_post_public').lower() == 'true'
+        except:
+            return False
+
+    @property
+    def main_post_content(self):
+        try:
+            return json.loads(self.get_option('automation', 'main_post_content'))
+        except:
+            return ["Hello Facebook!"]
+
+    @property
+    def main_post_images(self):
+        try:
+            return json.loads(self.get_option('automation', 'main_post_images'))
+        except:
+            return []
+
+    @property
+    def main_post_count(self):
+        try:
+            return int(self.get_option('automation', 'main_post_count'))
+        except:
+            return 1
+
+    @property
+    def main_post_interval(self):
+        try:
+            return int(self.get_option('automation', 'main_post_interval'))
+        except:
+            return 60
+
+    @property
+    def main_post_public(self):
+        try:
+            return self.get_option('automation', 'main_post_public').lower() == 'true'
+        except:
+            return True
+
+    @property
+    def message_mode(self):
+        try:
+            return self.get_option('automation', 'message_mode')
+        except:
+            return 'all_friends'
+
+    @property
+    def advanced_message_content(self):
+        try:
+            return json.loads(self.get_option('automation', 'advanced_message_content'))
+        except:
+            return ["Hello!"]
+
+    @property
+    def advanced_message_images(self):
+        try:
+            return json.loads(self.get_option('automation', 'advanced_message_images'))
+        except:
+            return []
+
+    @property
+    def advanced_message_interval(self):
+        try:
+            return int(self.get_option('automation', 'advanced_message_interval'))
+        except:
+            return 5
+
+    @property
+    def advanced_message_count(self):
+        try:
+            return int(self.get_option('automation', 'advanced_message_count'))
+        except:
+            return 10
+
+    @property
+    def message_anti_ban(self):
+        try:
+            return self.get_option('automation', 'message_anti_ban').lower() == 'true'
+        except:
+            return False
+
+    @property
+    def message_cloud_backup(self):
+        try:
+            return self.get_option('automation', 'message_cloud_backup').lower() == 'true'
+        except:
+            return False
+
+    @property
+    def register_count(self):
+        try:
+            return int(self.get_option('automation', 'register_count'))
+        except:
+            return 1
+
+    @property
+    def register_name_lang(self):
+        try:
+            return self.get_option('automation', 'register_name_lang')
+        except:
+            return 'en'
+
+    @property
+    def register_country_code(self):
+        try:
+            return self.get_option('automation', 'register_country_code')
+        except:
+            return '+1'
+
+    @property
+    def register_sms_platform(self):
+        try:
+            return self.get_option('automation', 'register_sms_platform')
+        except:
+            return ''
+
+    @property
+    def register_sms_api(self):
+        try:
+            return self.get_option('automation', 'register_sms_api')
+        except:
+            return ''
+
+    @property
+    def register_old_version(self):
+        try:
+            return self.get_option('automation', 'register_old_version').lower() == 'true'
+        except:
+            return False
+
+    @property
+    def contact_action(self):
+        try:
+            return self.get_option('automation', 'contact_action')
+        except:
+            return 'generate'
+
+    @property
+    def contact_count(self):
+        try:
+            return int(self.get_option('automation', 'contact_count'))
+        except:
+            return 100
+
+    @property
+    def contact_region(self):
+        try:
+            return self.get_option('automation', 'contact_region')
+        except:
+            return 'US'
+
+    @property
+    def contact_language(self):
+        try:
+            return self.get_option('automation', 'contact_language')
+        except:
+            return 'en'
+
+    @property
+    def contact_country_code(self):
+        try:
+            return self.get_option('automation', 'contact_country_code')
+        except:
+            return '+1'
+
+    @property
+    def contact_area_code(self):
+        try:
+            return self.get_option('automation', 'contact_area_code')
+        except:
+            return ''
+
+    @property
+    def contact_sequential(self):
+        try:
+            return self.get_option('automation', 'contact_sequential').lower() == 'true'
+        except:
+            return False
+
+    @property
+    def contact_file_path(self):
+        try:
+            return self.get_option('automation', 'contact_file_path')
+        except:
+            return './contacts/contact_list.txt'
+
+    @property
+    def contact_import_file(self):
+        try:
+            return self.get_option('automation', 'contact_import_file')
+        except:
+            return ''
 
 
 config = Config()

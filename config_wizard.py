@@ -7,7 +7,7 @@ import pyside2_compat
 from PySide2.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QLabel, 
                                 QPushButton, QLineEdit, QTextEdit, QFileDialog,
                                 QMessageBox, QGroupBox, QProgressBar, QFrame,
-                                QScrollArea)
+                                QScrollArea, QComboBox)
 from PySide2.QtCore import Qt, QThread, Signal
 from PySide2.QtGui import QFont, QIcon
 import os
@@ -38,10 +38,16 @@ class ValidationThread(QThread):
             'dependencies': {'status': 'unknown', 'message': ''},
         }
         
-        # Check AdsPower service
-        self.status_update.emit("检查 AdsPower 服务...", "info")
+        # Check browser service (AdsPower or BitBrowser)
+        browser_type = getattr(config, 'browser_type', 'adspower') if hasattr(config, 'browser_type') else 'adspower'
+        browser_name = 'AdsPower' if browser_type == 'adspower' else 'BitBrowser' if browser_type == 'bitbrowser' else '指纹浏览器'
+        
+        self.status_update.emit(f"检查 {browser_name} 服务...", "info")
+        
+        # Try AdsPower first (port 50325)
+        ads_power_ok = False
         try:
-            response = requests.get("http://127.0.0.1:50325/api/v1/browser/list", timeout=3)
+            response = requests.get("http://127.0.0.1:50325/api/v1/browser/list", timeout=2)
             if response.status_code == 200:
                 data = response.json()
                 if data.get('code') == 0:
@@ -51,15 +57,48 @@ class ValidationThread(QThread):
                         results['accounts'] = {'status': 'success', 'message': f'{len(browsers)} 个 Facebook 账户已配置'}
                     else:
                         results['ads_power'] = {'status': 'success', 'message': 'AdsPower 运行正常'}
-                        results['accounts'] = {'status': 'warning', 'message': '未找到 Facebook 账户，请在 AdsPower 中添加账户'}
-                else:
-                    results['ads_power'] = {'status': 'error', 'message': f'AdsPower API 错误: {data.get("msg", "未知错误")}'}
-            else:
-                results['ads_power'] = {'status': 'error', 'message': f'无法连接到 AdsPower (HTTP {response.status_code})'}
-        except requests.exceptions.ConnectionError:
-            results['ads_power'] = {'status': 'error', 'message': 'AdsPower 服务未运行，请启动 AdsPower Global Browser'}
-        except Exception as e:
-            results['ads_power'] = {'status': 'error', 'message': f'检查失败: {str(e)}'}
+                        results['accounts'] = {'status': 'warning', 'message': '未找到 Facebook 账户，请添加账户'}
+                    ads_power_ok = True
+        except:
+            pass
+        
+        # Try BitBrowser (port 54345 or custom)
+        if not ads_power_ok:
+            bitbrowser_port = getattr(config, 'bitbrowser_port', '54345') if hasattr(config, 'bitbrowser_port') else '54345'
+            bitbrowser_api_url = getattr(config, 'bitbrowser_api_url', f'http://127.0.0.1:{bitbrowser_port}') if hasattr(config, 'bitbrowser_api_url') else f'http://127.0.0.1:{bitbrowser_port}'
+            
+            try:
+                # BitBrowser API endpoint (may vary, try common ones)
+                for endpoint in ['/api/v1/browser/list', '/api/browser/list', '/browser/list']:
+                    try:
+                        response = requests.get(f"{bitbrowser_api_url}{endpoint}", timeout=2)
+                        if response.status_code == 200:
+                            data = response.json()
+                            browsers = data.get('data', {}).get('list', []) if isinstance(data.get('data'), dict) else data.get('list', [])
+                            if isinstance(browsers, list) and len(browsers) > 0:
+                                results['ads_power'] = {'status': 'success', 'message': f'BitBrowser 运行正常，找到 {len(browsers)} 个账户'}
+                                results['accounts'] = {'status': 'success', 'message': f'{len(browsers)} 个 Facebook 账户已配置'}
+                                ads_power_ok = True
+                                break
+                    except:
+                        continue
+                
+                if not ads_power_ok:
+                    # Just check if service is reachable
+                    try:
+                        response = requests.get(bitbrowser_api_url, timeout=2)
+                        results['ads_power'] = {'status': 'success', 'message': f'BitBrowser 服务可访问 (API 密钥配置后即可使用)'}
+                        results['accounts'] = {'status': 'warning', 'message': '请配置 API 密钥并添加账户'}
+                        ads_power_ok = True
+                    except:
+                        pass
+            except:
+                pass
+        
+        # If neither works, make it a warning instead of error
+        if not ads_power_ok:
+            results['ads_power'] = {'status': 'warning', 'message': f'{browser_name} 服务未检测到，但只要有 API 密钥和浏览器打开即可使用'}
+            results['accounts'] = {'status': 'warning', 'message': '请确保浏览器已打开并配置 API 密钥'}
         
         # Check API key
         self.status_update.emit("检查 API 密钥...", "info")
@@ -149,20 +188,40 @@ class ConfigWizardPage(QWidget):
         config_group = QGroupBox("📋 基本配置")
         config_layout = QVBoxLayout()
         
-        # AdsPower Path
+        # Browser Type Selection
+        browser_type_layout = QVBoxLayout()
+        browser_type_row = QHBoxLayout()
+        browser_type_label = QLabel("浏览器类型:")
+        browser_type_label.setMinimumWidth(120)
+        
+        browser_type_info = QLabel("📌 <b>说明:</b> 选择您使用的指纹浏览器类型。支持 AdsPower、BitBrowser 或其他兼容的指纹浏览器。")
+        browser_type_info.setWordWrap(True)
+        browser_type_info.setStyleSheet("color: #666; font-size: 11px; padding: 8px; background-color: #f0f0f0; border-radius: 4px; margin-bottom: 5px;")
+        
+        self.browser_type_combo = QComboBox()
+        self.browser_type_combo.addItems(["AdsPower", "BitBrowser", "其他指纹浏览器"])
+        self.browser_type_combo.currentTextChanged.connect(self.on_browser_type_changed)
+        
+        browser_type_row.addWidget(browser_type_label)
+        browser_type_row.addWidget(self.browser_type_combo, 1)
+        browser_type_layout.addWidget(browser_type_info)
+        browser_type_layout.addLayout(browser_type_row)
+        config_layout.addLayout(browser_type_layout)
+        
+        # Browser Path (works for any browser)
         path_layout = QVBoxLayout()
         path_row = QHBoxLayout()
-        path_label = QLabel("AdsPower 路径:")
+        path_label = QLabel("浏览器路径:")
         path_label.setMinimumWidth(120)
         
         # Info box explaining why path is needed
-        path_info = QLabel("📌 <b>为什么需要:</b> 应用程序需要通过此路径启动和管理浏览器实例，控制自动化操作。")
+        path_info = QLabel("📌 <b>为什么需要:</b> 应用程序可能需要通过此路径启动浏览器实例（可选）。如果浏览器已打开且 API 密钥已配置，通常不需要设置此路径。")
         path_info.setWordWrap(True)
         path_info.setStyleSheet("color: #666; font-size: 11px; padding: 8px; background-color: #f0f0f0; border-radius: 4px; margin-bottom: 5px;")
         
         self.path_edit = QLineEdit()
-        self.path_edit.setPlaceholderText("选择 AdsPower Global Browser 安装路径")
-        self.path_edit.setToolTip("这是 AdsPower Global Browser 的安装路径。\n\n应用程序使用此路径来:\n• 启动浏览器实例\n• 管理多个账户\n• 控制浏览器自动化\n\n通常位于:\nWindows: C:/Program Files/AdsPower Global/AdsPower Global.exe\nmacOS: /Applications/AdsPower Global.app")
+        self.path_edit.setPlaceholderText("选择指纹浏览器安装路径（可选）")
+        self.path_edit.setToolTip("这是指纹浏览器的安装路径（可选）。\n\n应用程序使用此路径来:\n• 启动浏览器实例\n• 管理多个账户\n• 控制浏览器自动化\n\n通常位于:\nAdsPower: C:/Program Files/AdsPower Global/AdsPower Global.exe\nBitBrowser: C:/Program Files/BitBrowser/BitBrowser.exe\n\n⚠️ 注意: 如果浏览器已打开且 API 密钥已配置，此路径可选")
         
         self.path_browse_btn = QPushButton("浏览...")
         self.path_browse_btn.clicked.connect(self.browse_ads_power_path)
@@ -181,14 +240,14 @@ class ConfigWizardPage(QWidget):
         api_label.setMinimumWidth(120)
         
         # Info box explaining why API key is needed
-        api_info = QLabel("📌 <b>为什么需要:</b> API 密钥用于与 AdsPower 服务通信，获取账户列表、启动浏览器等操作。没有 API 密钥，应用程序无法与 AdsPower 通信。")
+        api_info = QLabel("📌 <b>为什么需要:</b> API 密钥用于与指纹浏览器服务通信，获取账户列表、启动浏览器等操作。没有 API 密钥，应用程序无法与浏览器通信。")
         api_info.setWordWrap(True)
         api_info.setStyleSheet("color: #666; font-size: 11px; padding: 8px; background-color: #f0f0f0; border-radius: 4px; margin-bottom: 5px;")
         
         self.api_key_edit = QLineEdit()
-        self.api_key_edit.setPlaceholderText("输入 AdsPower API 密钥")
+        self.api_key_edit.setPlaceholderText("输入指纹浏览器 API 密钥")
         self.api_key_edit.setEchoMode(QLineEdit.Password)
-        self.api_key_edit.setToolTip("这是 AdsPower 的 API 密钥，用于:\n• 获取账户列表\n• 启动和管理浏览器实例\n• 控制浏览器自动化\n• 访问 AdsPower 服务\n\n获取方法:\nAdsPower → 设置 → API → 复制密钥\n\n⚠️ 重要: 请妥善保管此密钥，不要泄露给他人")
+        self.api_key_edit.setToolTip("这是指纹浏览器的 API 密钥，用于:\n• 获取账户列表\n• 启动和管理浏览器实例\n• 控制浏览器自动化\n• 访问浏览器服务\n\n获取方法:\nAdsPower: 设置 → API → 复制密钥\nBitBrowser: 设置 → API → 复制密钥\n其他浏览器: 查看浏览器文档\n\n⚠️ 重要: 请妥善保管此密钥，不要泄露给他人")
         
         self.api_key_show_btn = QPushButton("显示")
         self.api_key_show_btn.clicked.connect(self.toggle_api_key_visibility)
@@ -254,9 +313,9 @@ class ConfigWizardPage(QWidget):
         # Validation status labels with descriptions
         self.status_labels = {}
         status_items = [
-            ('ads_power', 'AdsPower 服务', '检查 AdsPower 服务是否运行。服务必须运行才能启动浏览器和控制自动化。'),
-            ('api_key', 'API 密钥', '验证 API 密钥是否正确配置。API 密钥用于与 AdsPower 服务通信，是必需的。'),
-            ('accounts', 'Facebook 账户', '检查 AdsPower 中是否有可用的 Facebook 账户。至少需要一个账户才能执行采集任务。'),
+            ('ads_power', '浏览器服务', '检查指纹浏览器服务是否运行。如果浏览器已打开且 API 密钥已配置，通常可以正常使用。'),
+            ('api_key', 'API 密钥', '验证 API 密钥是否正确配置。API 密钥用于与浏览器服务通信，是必需的。'),
+            ('accounts', 'Facebook 账户', '检查浏览器中是否有可用的 Facebook 账户。至少需要一个账户才能执行采集任务。'),
             ('directories', '数据目录', '检查数据存储目录是否存在。用于保存采集的数据，如群组信息、成员信息等。'),
             ('dependencies', '依赖包', '检查必需的 Python 包是否已安装。缺少依赖包会导致功能无法正常使用。'),
         ]
@@ -311,35 +370,56 @@ class ConfigWizardPage(QWidget):
         help_text.setHtml("""
         <b>📋 配置说明 - 为什么需要这些设置？</b><br><br>
         
-        <b>1. AdsPower 路径:</b><br>
-        • <b>作用:</b> 应用程序需要知道 AdsPower 的安装位置<br>
+        <b>1. 浏览器类型:</b><br>
+        • <b>作用:</b> 选择您使用的指纹浏览器类型<br>
+        • <b>支持:</b> AdsPower、BitBrowser（比特浏览器）或其他兼容的指纹浏览器<br>
+        • <b>说明:</b> 应用程序支持多种指纹浏览器，不强制使用 AdsPower<br>
+        • <b>如何选择:</b> 根据您实际使用的浏览器选择对应类型<br><br>
+        
+        <b>2. 浏览器路径:</b><br>
+        • <b>作用:</b> 应用程序可能需要知道浏览器的安装位置（<b>可选</b>）<br>
         • <b>用途:</b> 启动浏览器实例、管理多个账户、控制自动化<br>
-        • <b>如何获取:</b> 点击"浏览"按钮选择 AdsPower Global.exe 文件<br>
-        • <b>常见位置:</b> C:/Program Files/AdsPower Global/ (Windows)<br><br>
+        • <b>如何获取:</b> 点击"浏览"按钮选择浏览器可执行文件<br>
+        • <b>常见位置:</b><br>
+          - AdsPower: C:/Program Files/AdsPower Global/AdsPower Global.exe<br>
+          - BitBrowser: C:/Program Files/BitBrowser/BitBrowser.exe<br>
+        • <b>⚠️ 注意:</b> 如果浏览器已打开且 API 密钥已配置，此路径通常不需要设置<br><br>
         
-        <b>2. API 密钥:</b><br>
-        • <b>作用:</b> 这是应用程序与 AdsPower 服务通信的"密码"<br>
+        <b>3. API 密钥:</b><br>
+        • <b>作用:</b> 这是应用程序与指纹浏览器服务通信的"密码"<br>
         • <b>用途:</b> 获取账户列表、启动浏览器、控制自动化操作<br>
-        • <b>如何获取:</b> AdsPower → 设置 → API → 复制密钥<br>
-        • <b>重要性:</b> ⚠️ 没有 API 密钥，应用程序无法与 AdsPower 通信<br><br>
+        • <b>如何获取:</b><br>
+          - <b>AdsPower:</b> 设置 → API → 复制密钥<br>
+          - <b>BitBrowser:</b> 设置 → API → 复制密钥<br>
+          - <b>其他浏览器:</b> 查看浏览器文档获取 API 密钥<br>
+        • <b>重要性:</b> ⚠️ 没有 API 密钥，应用程序无法与浏览器通信（<b>必需</b>）<br><br>
         
-        <b>3. 账户数量:</b><br>
+        <b>4. 账户数量:</b><br>
         • <b>作用:</b> 指定同时使用多少个 Facebook 账户<br>
         • <b>用途:</b> 控制并发任务、分配采集任务、提高效率<br>
         • <b>建议:</b> 根据您的账户数量和任务需求设置（通常 3-5 个）<br><br>
         
         <b>🚀 快速设置步骤:</b><br>
-        1. 安装并启动 AdsPower Global Browser<br>
-        2. 获取 API 密钥（设置 → API）<br>
-        3. 在 AdsPower 中添加 Facebook 账户<br>
-        4. 配置上方路径和 API 密钥<br>
-        5. 点击"保存配置"并"重新验证"<br>
-        6. 所有验证项显示 ✓ 后即可使用功能<br><br>
+        1. <b>选择浏览器类型</b>（AdsPower/BitBrowser/其他）<br>
+        2. <b>打开您的指纹浏览器</b>（确保浏览器正在运行）<br>
+        3. <b>获取 API 密钥</b>（浏览器设置 → API → 复制密钥）<br>
+        4. <b>在浏览器中添加 Facebook 账户</b>（至少添加一个账户）<br>
+        5. <b>配置上方 API 密钥</b>（路径可选，如果浏览器已打开）<br>
+        6. <b>点击"保存配置"并"重新验证"</b><br>
+        7. <b>开始使用功能</b>（即使验证显示警告，只要 API 密钥配置即可使用）<br><br>
+        
+        <b>💡 重要提示:</b><br>
+        • <b>API 密钥是必需的</b>，没有它无法使用功能<br>
+        • <b>浏览器路径是可选的</b>，如果浏览器已打开通常不需要<br>
+        • <b>验证显示警告是正常的</b>，只要 API 密钥已配置即可使用<br>
+        • <b>支持 BitBrowser</b>，选择"BitBrowser"类型并输入对应 API 密钥即可<br><br>
         
         <b>⚠️ 常见问题:</b><br>
-        • "AdsPower 服务未运行" → 请启动 AdsPower Global Browser<br>
-        • "API 密钥未配置" → 请在 AdsPower 中获取并输入密钥<br>
-        • "未找到账户" → 请在 AdsPower 中添加 Facebook 账户
+        • <b>"浏览器服务未检测到"</b> → 这是正常的！只要浏览器已打开且 API 密钥已配置即可使用<br>
+        • <b>"API 密钥未配置"</b> → 请在浏览器中获取并输入 API 密钥（设置 → API）<br>
+        • <b>"未找到账户"</b> → 请在浏览器中添加 Facebook 账户<br>
+        • <b>"使用 BitBrowser"</b> → 选择"BitBrowser"类型，输入 BitBrowser API 密钥即可<br>
+        • <b>"验证失败但想使用"</b> → 只要 API 密钥配置正确，功能仍然可以使用
         """)
         help_layout.addWidget(help_text)
         
@@ -361,17 +441,38 @@ class ConfigWizardPage(QWidget):
             self.api_key_edit.setEchoMode(QLineEdit.Password)
             self.api_key_show_btn.setText("显示")
     
+    def on_browser_type_changed(self, text):
+        """Update UI when browser type changes"""
+        # Update placeholder text based on browser type
+        if text == "AdsPower":
+            self.path_edit.setPlaceholderText("选择 AdsPower Global Browser 安装路径（可选）")
+        elif text == "BitBrowser":
+            self.path_edit.setPlaceholderText("选择 BitBrowser 安装路径（可选）")
+        else:
+            self.path_edit.setPlaceholderText("选择指纹浏览器安装路径（可选）")
+    
     def browse_ads_power_path(self):
-        """Browse for AdsPower executable"""
+        """Browse for browser executable"""
+        browser_type = self.browser_type_combo.currentText() if hasattr(self, 'browser_type_combo') else "AdsPower"
         if os.name == 'nt':  # Windows
+            if browser_type == "AdsPower":
+                default_path = "C:/Program Files/AdsPower Global/"
+                title = "选择 AdsPower Global Browser"
+            elif browser_type == "BitBrowser":
+                default_path = "C:/Program Files/BitBrowser/"
+                title = "选择 BitBrowser"
+            else:
+                default_path = "C:/Program Files/"
+                title = "选择指纹浏览器"
+            
             file_path, _ = QFileDialog.getOpenFileName(
-                self, "选择 AdsPower Global Browser", 
-                "C:/Program Files/AdsPower Global/",
+                self, title, 
+                default_path,
                 "Executable (*.exe);;All Files (*)"
             )
         else:  # macOS/Linux
             file_path, _ = QFileDialog.getOpenFileName(
-                self, "选择 AdsPower Global Browser",
+                self, "选择指纹浏览器",
                 "/Applications/",
                 "All Files (*)"
             )
@@ -386,7 +487,19 @@ class ConfigWizardPage(QWidget):
             if not hasattr(config, 'name') or not config.name:
                 config.name = 'config.ini'
             
-            # Load AdsPower path
+            # Load browser type
+            browser_type = config.get_option('ads', 'browser_type') if config.config.has_option('ads', 'browser_type') else 'adspower'
+            browser_type_map = {
+                'adspower': 'AdsPower',
+                'bitbrowser': 'BitBrowser',
+                'other': '其他指纹浏览器'
+            }
+            browser_type_text = browser_type_map.get(browser_type, 'AdsPower')
+            index = self.browser_type_combo.findText(browser_type_text)
+            if index >= 0:
+                self.browser_type_combo.setCurrentIndex(index)
+            
+            # Load browser path
             try:
                 ads_path = ads_api.get_service_exe()
                 if ads_path:
@@ -416,7 +529,22 @@ class ConfigWizardPage(QWidget):
             config_parser = configparser.ConfigParser()
             config_parser.read('config.ini', encoding='utf-8')
             
-            # Save AdsPower path
+            # Save browser type
+            try:
+                if hasattr(self, 'browser_type_combo') and self.browser_type_combo:
+                    browser_type_text = self.browser_type_combo.currentText()
+                    browser_type_map = {
+                        'AdsPower': 'adspower',
+                        'BitBrowser': 'bitbrowser',
+                        '其他指纹浏览器': 'other'
+                    }
+                    browser_type = browser_type_map.get(browser_type_text, 'adspower')
+                    config.set_option('ads', 'browser_type', browser_type)
+            except Exception as e:
+                log.debug(f"Could not save browser type: {e}")
+                pass
+            
+            # Save browser path
             path = self.path_edit.text().strip()
             if path:
                 if not config_parser.has_section('ads'):

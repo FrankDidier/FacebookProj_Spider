@@ -709,6 +709,62 @@ class Ui_MainWindow(object):
         self.sidebarList.addItem("INS-reels评论采集")
         # ========== END NEW FEATURES TABS ==========
         
+        # ========== AUTOMATION FEATURES TABS ==========
+        # Auto Like Tab
+        self.tabAutoLike = self._create_spider_tab("tabAutoLike", "lineEditAutoLikeThreadCount", "plainTextEditAutoLikeKeywords", "pushButtonAutoLikeStart", "pushButtonAutoLikeStop", "textBrowserAutoLike", "gridLayoutAutoLike")
+        self.tabWidget.addTab(self.tabAutoLike, "")
+        self.stackedPages.addWidget(self.tabAutoLike)
+        self.sidebarList.addItem("🤍 自动点赞")
+        
+        # Auto Comment Tab
+        self.tabAutoComment = self._create_spider_tab("tabAutoComment", "lineEditAutoCommentThreadCount", "plainTextEditAutoCommentKeywords", "pushButtonAutoCommentStart", "pushButtonAutoCommentStop", "textBrowserAutoComment", "gridLayoutAutoComment")
+        self.tabWidget.addTab(self.tabAutoComment, "")
+        self.stackedPages.addWidget(self.tabAutoComment)
+        self.sidebarList.addItem("💬 自动评论")
+        
+        # Auto Follow Tab
+        self.tabAutoFollow = self._create_spider_tab("tabAutoFollow", "lineEditAutoFollowThreadCount", "plainTextEditAutoFollowKeywords", "pushButtonAutoFollowStart", "pushButtonAutoFollowStop", "textBrowserAutoFollow", "gridLayoutAutoFollow")
+        self.tabWidget.addTab(self.tabAutoFollow, "")
+        self.stackedPages.addWidget(self.tabAutoFollow)
+        self.sidebarList.addItem("👥 自动关注")
+        
+        # Auto Add Friend Tab
+        self.tabAutoAddFriend = self._create_spider_tab("tabAutoAddFriend", "lineEditAutoAddFriendThreadCount", "plainTextEditAutoAddFriendSettings", "pushButtonAutoAddFriendStart", "pushButtonAutoAddFriendStop", "textBrowserAutoAddFriend", "gridLayoutAutoAddFriend")
+        self.tabWidget.addTab(self.tabAutoAddFriend, "")
+        self.stackedPages.addWidget(self.tabAutoAddFriend)
+        self.sidebarList.addItem("➕ 自动添加好友")
+        
+        # Auto Group Tab
+        self.tabAutoGroup = self._create_spider_tab("tabAutoGroup", "lineEditAutoGroupThreadCount", "plainTextEditAutoGroupKeywords", "pushButtonAutoGroupStart", "pushButtonAutoGroupStop", "textBrowserAutoGroup", "gridLayoutAutoGroup")
+        self.tabWidget.addTab(self.tabAutoGroup, "")
+        self.stackedPages.addWidget(self.tabAutoGroup)
+        self.sidebarList.addItem("👥 群组自动化")
+        
+        # Auto Post Tab
+        self.tabAutoPost = self._create_spider_tab("tabAutoPost", "lineEditAutoPostThreadCount", "plainTextEditAutoPostContent", "pushButtonAutoPostStart", "pushButtonAutoPostStop", "textBrowserAutoPost", "gridLayoutAutoPost")
+        self.tabWidget.addTab(self.tabAutoPost, "")
+        self.stackedPages.addWidget(self.tabAutoPost)
+        self.sidebarList.addItem("📝 自动发帖")
+        
+        # Advanced Messaging Tab
+        self.tabAdvancedMessaging = self._create_spider_tab("tabAdvancedMessaging", "lineEditAdvancedMessagingThreadCount", "plainTextEditAdvancedMessagingContent", "pushButtonAdvancedMessagingStart", "pushButtonAdvancedMessagingStop", "textBrowserAdvancedMessaging", "gridLayoutAdvancedMessaging")
+        self.tabWidget.addTab(self.tabAdvancedMessaging, "")
+        self.stackedPages.addWidget(self.tabAdvancedMessaging)
+        self.sidebarList.addItem("💌 高级私信")
+        
+        # Auto Register Tab
+        self.tabAutoRegister = self._create_spider_tab("tabAutoRegister", "lineEditAutoRegisterThreadCount", "plainTextEditAutoRegisterSettings", "pushButtonAutoRegisterStart", "pushButtonAutoRegisterStop", "textBrowserAutoRegister", "gridLayoutAutoRegister")
+        self.tabWidget.addTab(self.tabAutoRegister, "")
+        self.stackedPages.addWidget(self.tabAutoRegister)
+        self.sidebarList.addItem("📝 自动注册")
+        
+        # Contact List Tab
+        self.tabContactList = self._create_spider_tab("tabContactList", "lineEditContactListThreadCount", "plainTextEditContactListSettings", "pushButtonContactListStart", "pushButtonContactListStop", "textBrowserContactList", "gridLayoutContactList")
+        self.tabWidget.addTab(self.tabContactList, "")
+        self.stackedPages.addWidget(self.tabContactList)
+        self.sidebarList.addItem("📋 联系人列表")
+        # ========== END AUTOMATION FEATURES TABS ==========
+        
         self.tab = QWidget()
         self.tab.setObjectName(u"tab")
         self.verticalLayout_7 = QVBoxLayout(self.tab)
@@ -1066,6 +1122,79 @@ class Ui_MainWindow(object):
         plain_text = self.tabInsReelsComments.findChild(QPlainTextEdit, "plainTextEditInsReelsCommentsUrls")
         if plain_text:
             plain_text.setPlaceholderText(QCoreApplication.translate("MainWindow", u"请输入Instagram Reels URL，每行一个", None))
+        
+        # Automation features tab labels
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabAutoLike), QCoreApplication.translate("MainWindow", u"自动点赞", None))
+        label = self.tabAutoLike.findChild(QLabel, "label_tabAutoLike_input")
+        if label:
+            label.setText(QCoreApplication.translate("MainWindow", u"关键词", None))
+        plain_text = self.tabAutoLike.findChild(QPlainTextEdit, "plainTextEditAutoLikeKeywords")
+        if plain_text:
+            plain_text.setPlaceholderText(QCoreApplication.translate("MainWindow", u"请输入关键词（可选），每行一个", None))
+        
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabAutoComment), QCoreApplication.translate("MainWindow", u"自动评论", None))
+        label = self.tabAutoComment.findChild(QLabel, "label_tabAutoComment_input")
+        if label:
+            label.setText(QCoreApplication.translate("MainWindow", u"关键词", None))
+        plain_text = self.tabAutoComment.findChild(QPlainTextEdit, "plainTextEditAutoCommentKeywords")
+        if plain_text:
+            plain_text.setPlaceholderText(QCoreApplication.translate("MainWindow", u"请输入关键词，每行一个", None))
+        
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabAutoFollow), QCoreApplication.translate("MainWindow", u"自动关注", None))
+        label = self.tabAutoFollow.findChild(QLabel, "label_tabAutoFollow_input")
+        if label:
+            label.setText(QCoreApplication.translate("MainWindow", u"关键词", None))
+        plain_text = self.tabAutoFollow.findChild(QPlainTextEdit, "plainTextEditAutoFollowKeywords")
+        if plain_text:
+            plain_text.setPlaceholderText(QCoreApplication.translate("MainWindow", u"请输入搜索关键词（可选），每行一个", None))
+        
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabAutoAddFriend), QCoreApplication.translate("MainWindow", u"自动添加好友", None))
+        label = self.tabAutoAddFriend.findChild(QLabel, "label_tabAutoAddFriend_input")
+        if label:
+            label.setText(QCoreApplication.translate("MainWindow", u"设置", None))
+        plain_text = self.tabAutoAddFriend.findChild(QPlainTextEdit, "plainTextEditAutoAddFriendSettings")
+        if plain_text:
+            plain_text.setPlaceholderText(QCoreApplication.translate("MainWindow", u"配置在config.ini中设置", None))
+        
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabAutoGroup), QCoreApplication.translate("MainWindow", u"群组自动化", None))
+        label = self.tabAutoGroup.findChild(QLabel, "label_tabAutoGroup_input")
+        if label:
+            label.setText(QCoreApplication.translate("MainWindow", u"关键词", None))
+        plain_text = self.tabAutoGroup.findChild(QPlainTextEdit, "plainTextEditAutoGroupKeywords")
+        if plain_text:
+            plain_text.setPlaceholderText(QCoreApplication.translate("MainWindow", u"请输入群组关键词，每行一个", None))
+        
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabAutoPost), QCoreApplication.translate("MainWindow", u"自动发帖", None))
+        label = self.tabAutoPost.findChild(QLabel, "label_tabAutoPost_input")
+        if label:
+            label.setText(QCoreApplication.translate("MainWindow", u"内容", None))
+        plain_text = self.tabAutoPost.findChild(QPlainTextEdit, "plainTextEditAutoPostContent")
+        if plain_text:
+            plain_text.setPlaceholderText(QCoreApplication.translate("MainWindow", u"请输入发帖内容，每行一条", None))
+        
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabAdvancedMessaging), QCoreApplication.translate("MainWindow", u"高级私信", None))
+        label = self.tabAdvancedMessaging.findChild(QLabel, "label_tabAdvancedMessaging_input")
+        if label:
+            label.setText(QCoreApplication.translate("MainWindow", u"内容", None))
+        plain_text = self.tabAdvancedMessaging.findChild(QPlainTextEdit, "plainTextEditAdvancedMessagingContent")
+        if plain_text:
+            plain_text.setPlaceholderText(QCoreApplication.translate("MainWindow", u"请输入私信内容，每行一条", None))
+        
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabAutoRegister), QCoreApplication.translate("MainWindow", u"自动注册", None))
+        label = self.tabAutoRegister.findChild(QLabel, "label_tabAutoRegister_input")
+        if label:
+            label.setText(QCoreApplication.translate("MainWindow", u"设置", None))
+        plain_text = self.tabAutoRegister.findChild(QPlainTextEdit, "plainTextEditAutoRegisterSettings")
+        if plain_text:
+            plain_text.setPlaceholderText(QCoreApplication.translate("MainWindow", u"配置在config.ini中设置", None))
+        
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabContactList), QCoreApplication.translate("MainWindow", u"联系人列表", None))
+        label = self.tabContactList.findChild(QLabel, "label_tabContactList_input")
+        if label:
+            label.setText(QCoreApplication.translate("MainWindow", u"设置", None))
+        plain_text = self.tabContactList.findChild(QPlainTextEdit, "plainTextEditContactListSettings")
+        if plain_text:
+            plain_text.setPlaceholderText(QCoreApplication.translate("MainWindow", u"配置在config.ini中设置", None))
         
         self.label_11.setText(QCoreApplication.translate("MainWindow", u"\u66f4\u591a\u529f\u80fd\uff0c\u656c\u8bf7\u671f\u5f85", None))
         self.groupBox.setTitle(QCoreApplication.translate("MainWindow", u"\u8054\u7cfb\u6211\u4eec", None))

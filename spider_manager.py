@@ -13,6 +13,29 @@ from spider.ins_followers import InstagramFollowersSpider
 from spider.ins_following import InstagramFollowingSpider
 from spider.ins_profile import InstagramProfileSpider
 from spider.ins_reels_comments import InstagramReelsCommentsSpider
+
+# Import automation spiders
+try:
+    from spider.fb_auto_like import AutoLikeSpider
+    from spider.fb_auto_comment import AutoCommentSpider
+    from spider.fb_auto_follow import AutoFollowSpider
+    from spider.fb_auto_add_friend import AutoAddFriendSpider
+    from spider.fb_auto_group import AutoGroupSpider
+    from spider.fb_auto_post import AutoPostSpider
+    from spider.fb_advanced_messaging import AdvancedMessagingSpider
+    from spider.fb_auto_register import AutoRegisterSpider
+    from spider.fb_contact_list import ContactListSpider
+except ImportError as e:
+    # Automation spiders not available
+    AutoLikeSpider = None
+    AutoCommentSpider = None
+    AutoFollowSpider = None
+    AutoAddFriendSpider = None
+    AutoGroupSpider = None
+    AutoPostSpider = None
+    AdvancedMessagingSpider = None
+    AutoRegisterSpider = None
+    ContactListSpider = None
 from autoads.config import config
 from autoads import tools
 import threading
@@ -33,6 +56,16 @@ class SpiderManager:
         'ins_following': InstagramFollowingSpider,
         'ins_profile': InstagramProfileSpider,
         'ins_reels_comments': InstagramReelsCommentsSpider,
+        # Automation spiders
+        'auto_like': AutoLikeSpider,
+        'auto_comment': AutoCommentSpider,
+        'auto_follow': AutoFollowSpider,
+        'auto_add_friend': AutoAddFriendSpider,
+        'auto_group': AutoGroupSpider,
+        'auto_post': AutoPostSpider,
+        'advanced_messaging': AdvancedMessagingSpider,
+        'auto_register': AutoRegisterSpider,
+        'contact_list': ContactListSpider,
     }
     
     @staticmethod

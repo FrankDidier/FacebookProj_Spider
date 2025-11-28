@@ -274,6 +274,34 @@ class MainWindow(QMainWindow):
             
             self.ui.pushButtonInsReelsCommentsStart.clicked.connect(self.on_ins_reels_comments_spider_start)
             self.ui.pushButtonInsReelsCommentsStop.clicked.connect(self.on_ins_reels_comments_spider_stop)
+            
+            # Automation features button connections
+            self.ui.pushButtonAutoLikeStart.clicked.connect(self.on_auto_like_spider_start)
+            self.ui.pushButtonAutoLikeStop.clicked.connect(self.on_auto_like_spider_stop)
+            
+            self.ui.pushButtonAutoCommentStart.clicked.connect(self.on_auto_comment_spider_start)
+            self.ui.pushButtonAutoCommentStop.clicked.connect(self.on_auto_comment_spider_stop)
+            
+            self.ui.pushButtonAutoFollowStart.clicked.connect(self.on_auto_follow_spider_start)
+            self.ui.pushButtonAutoFollowStop.clicked.connect(self.on_auto_follow_spider_stop)
+            
+            self.ui.pushButtonAutoAddFriendStart.clicked.connect(self.on_auto_add_friend_spider_start)
+            self.ui.pushButtonAutoAddFriendStop.clicked.connect(self.on_auto_add_friend_spider_stop)
+            
+            self.ui.pushButtonAutoGroupStart.clicked.connect(self.on_auto_group_spider_start)
+            self.ui.pushButtonAutoGroupStop.clicked.connect(self.on_auto_group_spider_stop)
+            
+            self.ui.pushButtonAutoPostStart.clicked.connect(self.on_auto_post_spider_start)
+            self.ui.pushButtonAutoPostStop.clicked.connect(self.on_auto_post_spider_stop)
+            
+            self.ui.pushButtonAdvancedMessagingStart.clicked.connect(self.on_advanced_messaging_spider_start)
+            self.ui.pushButtonAdvancedMessagingStop.clicked.connect(self.on_advanced_messaging_spider_stop)
+            
+            self.ui.pushButtonAutoRegisterStart.clicked.connect(self.on_auto_register_spider_start)
+            self.ui.pushButtonAutoRegisterStop.clicked.connect(self.on_auto_register_spider_stop)
+            
+            self.ui.pushButtonContactListStart.clicked.connect(self.on_contact_list_spider_start)
+            self.ui.pushButtonContactListStop.clicked.connect(self.on_contact_list_spider_stop)
         except AttributeError as e:
             log.warning(f"Some UI elements not found: {e}. They will be created when tabs are accessed.")
 
@@ -483,33 +511,71 @@ class MainWindow(QMainWindow):
                 main_text_browser.clear()
 
     def validate_setup(self, feature_name="功能"):
-        """Validate setup before starting any feature"""
+        """Validate setup before starting any feature - Flexible for multiple browsers"""
         issues = []
         
-        # Check AdsPower service
-        try:
-            import requests
-            response = requests.get("http://127.0.0.1:50325/api/v1/browser/list", timeout=2)
-            if response.status_code != 200:
-                issues.append("AdsPower 服务未运行")
-        except:
-            issues.append("AdsPower 服务未运行，请启动 AdsPower Global Browser")
+        # Check browser type
+        browser_type = getattr(config, 'browser_type', 'adspower') if hasattr(config, 'browser_type') else 'adspower'
+        browser_name = 'AdsPower' if browser_type == 'adspower' else 'BitBrowser' if browser_type == 'bitbrowser' else '指纹浏览器'
         
-        # Check API key
+        # Check API key (most important - required for any browser)
         if not hasattr(config, 'ads_key') or not config.ads_key or config.ads_key.strip() == '':
-            issues.append("API 密钥未配置，请在配置向导中设置")
+            issues.append(f"API 密钥未配置，请在配置向导中设置 {browser_name} API 密钥")
+        else:
+            # If API key exists, try to check service (but don't fail if service check fails)
+            service_ok = False
+            
+            # Try AdsPower
+            if browser_type == 'adspower' or browser_type == '':
+                try:
+                    import requests
+                    response = requests.get("http://127.0.0.1:50325/api/v1/browser/list", timeout=2)
+                    if response.status_code == 200:
+                        data = response.json()
+                        if data.get('code') == 0:
+                            service_ok = True
+                except:
+                    pass
+            
+            # Try BitBrowser
+            if not service_ok:
+                try:
+                    import requests
+                    bitbrowser_port = getattr(config, 'bitbrowser_port', '54345') if hasattr(config, 'bitbrowser_port') else '54345'
+                    bitbrowser_api_url = getattr(config, 'bitbrowser_api_url', f'http://127.0.0.1:{bitbrowser_port}') if hasattr(config, 'bitbrowser_api_url') else f'http://127.0.0.1:{bitbrowser_port}'
+                    
+                    for endpoint in ['/api/v1/browser/list', '/api/browser/list', '/browser/list']:
+                        try:
+                            response = requests.get(f"{bitbrowser_api_url}{endpoint}", timeout=2)
+                            if response.status_code == 200:
+                                service_ok = True
+                                break
+                        except:
+                            continue
+                except:
+                    pass
+            
+            # If service check fails but API key exists, just warn (don't block)
+            if not service_ok:
+                # Don't add as error - just a warning that will be shown but won't block
+                pass
         
-        # Check accounts
+        # Check accounts (only if we can connect)
         try:
             ads_ids = tools.get_ads_id(1)  # Just check if we can get at least 1
             if len(ads_ids) == 0:
-                issues.append("未找到 Facebook 账户，请在 AdsPower 中添加账户")
-        except:
-            issues.append("无法获取账户列表，请检查 AdsPower 配置")
+                issues.append(f"未找到 Facebook 账户，请在 {browser_name} 中添加账户")
+        except Exception as e:
+            # Don't fail if we can't get accounts - might just need browser to be open
+            if "API" in str(e) or "key" in str(e).lower():
+                issues.append(f"无法获取账户列表，请检查 {browser_name} API 密钥配置")
         
         if issues:
+            browser_type = getattr(config, 'browser_type', 'adspower') if hasattr(config, 'browser_type') else 'adspower'
+            browser_name = 'AdsPower' if browser_type == 'adspower' else 'BitBrowser' if browser_type == 'bitbrowser' else '指纹浏览器'
+            
             msg = f"无法启动 {feature_name}:\n\n" + "\n".join(f"• {issue}" for issue in issues)
-            msg += "\n\n请前往「配置向导」页面完成设置。\n\n点击「确定」将自动跳转到配置向导。"
+            msg += f"\n\n请前往「配置向导」页面完成设置。\n\n💡 提示: 如果使用 {browser_name}，请确保:\n• 浏览器已打开\n• API 密钥已配置\n• 至少有一个 Facebook 账户"
             
             reply = QMessageBox.warning(self, "配置不完整", msg, 
                                        QMessageBox.Ok | QMessageBox.Cancel)
@@ -517,9 +583,19 @@ class MainWindow(QMainWindow):
             # Switch to config wizard if user clicks OK
             if reply == QMessageBox.Ok:
                 if hasattr(self.ui, 'sidebarList'):
-                    self.ui.sidebarList.setCurrentRow(0)  # Switch to config wizard
+                    # Find config wizard index
+                    for i in range(self.ui.sidebarList.count()):
+                        item = self.ui.sidebarList.item(i)
+                        if item and ("配置向导" in item.text() or "⚙️" in item.text()):
+                            self.ui.sidebarList.setCurrentRow(i)
+                            break
                 if hasattr(self.ui, 'stackedPages'):
-                    self.ui.stackedPages.setCurrentIndex(0)  # Ensure page is shown
+                    # Find config wizard page
+                    for i in range(self.ui.stackedPages.count()):
+                        widget = self.ui.stackedPages.widget(i)
+                        if widget and (hasattr(widget, 'objectName') and 'config' in widget.objectName().lower()):
+                            self.ui.stackedPages.setCurrentIndex(i)
+                            break
                 # Run validation in wizard if it exists
                 if hasattr(self.ui, 'configWizardPage') and self.ui.configWizardPage:
                     try:
@@ -1022,6 +1098,284 @@ class MainWindow(QMainWindow):
     def on_ins_reels_comments_spider_stop(self):
         if self.ins_reels_comments_stop_event:
             self.ins_reels_comments_stop_event.set()
+
+    # Automation feature handlers
+    def on_auto_like_spider_start(self):
+        """Start Auto Like"""
+        feature_name = "自动点赞"
+        if not self._validate_setup_and_start(feature_name, check_ads_power=True, check_accounts=True):
+            return
+        
+        try:
+            from spider.fb_auto_like import AutoLikeSpider
+            ads_ids = tools.get_ads_id(config.account_nums)
+            thread_count = tools.get_greet_threading_count(config_from_newest=config)
+            
+            self.auto_like_stop_event = threading.Event()
+            self.auto_like_spider = AutoLikeSpider(
+                thread_count=thread_count,
+                ads_ids=ads_ids,
+                config=config,
+                ui=self,
+                ms=self.ms,
+                tab_index=0,
+                stop_event=self.auto_like_stop_event
+            )
+            self.auto_like_spider.start()
+            tools.send_message_to_ui(self.ms, self.ui, "自动点赞已启动")
+        except Exception as e:
+            log.error(f"Error starting auto like: {e}")
+            QMessageBox.critical(self, "错误", f"启动自动点赞失败: {str(e)}")
+    
+    def on_auto_like_spider_stop(self):
+        if hasattr(self, 'auto_like_stop_event') and self.auto_like_stop_event:
+            self.auto_like_stop_event.set()
+    
+    def on_auto_comment_spider_start(self):
+        """Start Auto Comment"""
+        feature_name = "自动评论"
+        if not self._validate_setup_and_start(feature_name, check_ads_power=True, check_accounts=True):
+            return
+        
+        try:
+            from spider.fb_auto_comment import AutoCommentSpider
+            ads_ids = tools.get_ads_id(config.account_nums)
+            thread_count = tools.get_greet_threading_count(config_from_newest=config)
+            
+            self.auto_comment_stop_event = threading.Event()
+            self.auto_comment_spider = AutoCommentSpider(
+                thread_count=thread_count,
+                ads_ids=ads_ids,
+                config=config,
+                ui=self,
+                ms=self.ms,
+                tab_index=0,
+                stop_event=self.auto_comment_stop_event
+            )
+            self.auto_comment_spider.start()
+            tools.send_message_to_ui(self.ms, self.ui, "自动评论已启动")
+        except Exception as e:
+            log.error(f"Error starting auto comment: {e}")
+            QMessageBox.critical(self, "错误", f"启动自动评论失败: {str(e)}")
+    
+    def on_auto_comment_spider_stop(self):
+        if hasattr(self, 'auto_comment_stop_event') and self.auto_comment_stop_event:
+            self.auto_comment_stop_event.set()
+    
+    def on_auto_follow_spider_start(self):
+        """Start Auto Follow"""
+        feature_name = "自动关注"
+        if not self._validate_setup_and_start(feature_name, check_ads_power=True, check_accounts=True):
+            return
+        
+        try:
+            from spider.fb_auto_follow import AutoFollowSpider
+            ads_ids = tools.get_ads_id(config.account_nums)
+            thread_count = tools.get_greet_threading_count(config_from_newest=config)
+            
+            self.auto_follow_stop_event = threading.Event()
+            self.auto_follow_spider = AutoFollowSpider(
+                thread_count=thread_count,
+                ads_ids=ads_ids,
+                config=config,
+                ui=self,
+                ms=self.ms,
+                tab_index=0,
+                stop_event=self.auto_follow_stop_event
+            )
+            self.auto_follow_spider.start()
+            tools.send_message_to_ui(self.ms, self.ui, "自动关注已启动")
+        except Exception as e:
+            log.error(f"Error starting auto follow: {e}")
+            QMessageBox.critical(self, "错误", f"启动自动关注失败: {str(e)}")
+    
+    def on_auto_follow_spider_stop(self):
+        if hasattr(self, 'auto_follow_stop_event') and self.auto_follow_stop_event:
+            self.auto_follow_stop_event.set()
+    
+    def on_auto_add_friend_spider_start(self):
+        """Start Auto Add Friend"""
+        feature_name = "自动添加好友"
+        if not self._validate_setup_and_start(feature_name, check_ads_power=True, check_accounts=True):
+            return
+        
+        try:
+            from spider.fb_auto_add_friend import AutoAddFriendSpider
+            ads_ids = tools.get_ads_id(config.account_nums)
+            thread_count = tools.get_greet_threading_count(config_from_newest=config)
+            
+            self.auto_add_friend_stop_event = threading.Event()
+            self.auto_add_friend_spider = AutoAddFriendSpider(
+                thread_count=thread_count,
+                ads_ids=ads_ids,
+                config=config,
+                ui=self,
+                ms=self.ms,
+                tab_index=0,
+                stop_event=self.auto_add_friend_stop_event
+            )
+            self.auto_add_friend_spider.start()
+            tools.send_message_to_ui(self.ms, self.ui, "自动添加好友已启动")
+        except Exception as e:
+            log.error(f"Error starting auto add friend: {e}")
+            QMessageBox.critical(self, "错误", f"启动自动添加好友失败: {str(e)}")
+    
+    def on_auto_add_friend_spider_stop(self):
+        if hasattr(self, 'auto_add_friend_stop_event') and self.auto_add_friend_stop_event:
+            self.auto_add_friend_stop_event.set()
+    
+    def on_auto_group_spider_start(self):
+        """Start Auto Group"""
+        feature_name = "群组自动化"
+        if not self._validate_setup_and_start(feature_name, check_ads_power=True, check_accounts=True):
+            return
+        
+        try:
+            from spider.fb_auto_group import AutoGroupSpider
+            ads_ids = tools.get_ads_id(config.account_nums)
+            thread_count = tools.get_greet_threading_count(config_from_newest=config)
+            
+            self.auto_group_stop_event = threading.Event()
+            self.auto_group_spider = AutoGroupSpider(
+                thread_count=thread_count,
+                ads_ids=ads_ids,
+                config=config,
+                ui=self,
+                ms=self.ms,
+                tab_index=0,
+                stop_event=self.auto_group_stop_event
+            )
+            self.auto_group_spider.start()
+            tools.send_message_to_ui(self.ms, self.ui, "群组自动化已启动")
+        except Exception as e:
+            log.error(f"Error starting auto group: {e}")
+            QMessageBox.critical(self, "错误", f"启动群组自动化失败: {str(e)}")
+    
+    def on_auto_group_spider_stop(self):
+        if hasattr(self, 'auto_group_stop_event') and self.auto_group_stop_event:
+            self.auto_group_stop_event.set()
+    
+    def on_auto_post_spider_start(self):
+        """Start Auto Post"""
+        feature_name = "自动发帖"
+        if not self._validate_setup_and_start(feature_name, check_ads_power=True, check_accounts=True):
+            return
+        
+        try:
+            from spider.fb_auto_post import AutoPostSpider
+            ads_ids = tools.get_ads_id(config.account_nums)
+            thread_count = tools.get_greet_threading_count(config_from_newest=config)
+            
+            self.auto_post_stop_event = threading.Event()
+            self.auto_post_spider = AutoPostSpider(
+                thread_count=thread_count,
+                ads_ids=ads_ids,
+                config=config,
+                ui=self,
+                ms=self.ms,
+                tab_index=0,
+                stop_event=self.auto_post_stop_event
+            )
+            self.auto_post_spider.start()
+            tools.send_message_to_ui(self.ms, self.ui, "自动发帖已启动")
+        except Exception as e:
+            log.error(f"Error starting auto post: {e}")
+            QMessageBox.critical(self, "错误", f"启动自动发帖失败: {str(e)}")
+    
+    def on_auto_post_spider_stop(self):
+        if hasattr(self, 'auto_post_stop_event') and self.auto_post_stop_event:
+            self.auto_post_stop_event.set()
+    
+    def on_advanced_messaging_spider_start(self):
+        """Start Advanced Messaging"""
+        feature_name = "高级私信"
+        if not self._validate_setup_and_start(feature_name, check_ads_power=True, check_accounts=True):
+            return
+        
+        try:
+            from spider.fb_advanced_messaging import AdvancedMessagingSpider
+            ads_ids = tools.get_ads_id(config.account_nums)
+            thread_count = tools.get_greet_threading_count(config_from_newest=config)
+            
+            self.advanced_messaging_stop_event = threading.Event()
+            self.advanced_messaging_spider = AdvancedMessagingSpider(
+                thread_count=thread_count,
+                ads_ids=ads_ids,
+                config=config,
+                ui=self,
+                ms=self.ms,
+                tab_index=0,
+                stop_event=self.advanced_messaging_stop_event
+            )
+            self.advanced_messaging_spider.start()
+            tools.send_message_to_ui(self.ms, self.ui, "高级私信已启动")
+        except Exception as e:
+            log.error(f"Error starting advanced messaging: {e}")
+            QMessageBox.critical(self, "错误", f"启动高级私信失败: {str(e)}")
+    
+    def on_advanced_messaging_spider_stop(self):
+        if hasattr(self, 'advanced_messaging_stop_event') and self.advanced_messaging_stop_event:
+            self.advanced_messaging_stop_event.set()
+    
+    def on_auto_register_spider_start(self):
+        """Start Auto Register"""
+        feature_name = "自动注册"
+        if not self._validate_setup_and_start(feature_name, check_ads_power=True, check_accounts=False):
+            return
+        
+        try:
+            from spider.fb_auto_register import AutoRegisterSpider
+            ads_ids = tools.get_ads_id(config.account_nums)
+            thread_count = tools.get_greet_threading_count(config_from_newest=config)
+            
+            self.auto_register_stop_event = threading.Event()
+            self.auto_register_spider = AutoRegisterSpider(
+                thread_count=thread_count,
+                ads_ids=ads_ids,
+                config=config,
+                ui=self,
+                ms=self.ms,
+                tab_index=0,
+                stop_event=self.auto_register_stop_event
+            )
+            self.auto_register_spider.start()
+            tools.send_message_to_ui(self.ms, self.ui, "自动注册已启动")
+        except Exception as e:
+            log.error(f"Error starting auto register: {e}")
+            QMessageBox.critical(self, "错误", f"启动自动注册失败: {str(e)}")
+    
+    def on_auto_register_spider_stop(self):
+        if hasattr(self, 'auto_register_stop_event') and self.auto_register_stop_event:
+            self.auto_register_stop_event.set()
+    
+    def on_contact_list_spider_start(self):
+        """Start Contact List Generation"""
+        feature_name = "联系人列表"
+        # Contact list doesn't need AdsPower or accounts
+        try:
+            from spider.fb_contact_list import ContactListSpider
+            ads_ids = tools.get_ads_id(1)  # Just need one for initialization
+            thread_count = 1
+            
+            self.contact_list_stop_event = threading.Event()
+            self.contact_list_spider = ContactListSpider(
+                thread_count=thread_count,
+                ads_ids=ads_ids,
+                config=config,
+                ui=self,
+                ms=self.ms,
+                tab_index=0,
+                stop_event=self.contact_list_stop_event
+            )
+            self.contact_list_spider.start()
+            tools.send_message_to_ui(self.ms, self.ui, "联系人列表生成已启动")
+        except Exception as e:
+            log.error(f"Error starting contact list: {e}")
+            QMessageBox.critical(self, "错误", f"启动联系人列表生成失败: {str(e)}")
+    
+    def on_contact_list_spider_stop(self):
+        if hasattr(self, 'contact_list_stop_event') and self.contact_list_stop_event:
+            self.contact_list_stop_event.set()
 
     def bypass_activation(self):
         """Bypass activation and go directly to main app"""
