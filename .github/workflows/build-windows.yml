@@ -3,6 +3,9 @@ name: Build Windows Executable
 on:
   workflow_dispatch:  # Manual trigger - you can run it from GitHub UI
   push:
+    branches:
+      - main  # Trigger on push to main branch
+      - master  # Also trigger on master branch
     tags:
       - 'v*'  # Also trigger on version tags like v1.0.0
 
