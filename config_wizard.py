@@ -16,6 +16,7 @@ import configparser
 from autoads import ads_api
 from autoads.config import config
 from autoads import tools
+from autoads import bitbrowser_api
 from loguru import logger as log
 
 
@@ -240,12 +241,12 @@ class ConfigWizardPage(QWidget):
         api_label.setMinimumWidth(120)
         
         # Info box explaining why API key is needed
-        api_info = QLabel("📌 <b>为什么需要:</b> API 密钥用于与指纹浏览器服务通信，获取账户列表、启动浏览器等操作。没有 API 密钥，应用程序无法与浏览器通信。")
-        api_info.setWordWrap(True)
-        api_info.setStyleSheet("color: #666; font-size: 11px; padding: 8px; background-color: #f0f0f0; border-radius: 4px; margin-bottom: 5px;")
+        self.api_info_label = QLabel("📌 <b>为什么需要:</b> API 密钥用于与 AdsPower 服务通信，获取账户列表、启动浏览器等操作。<br><b>⚠️ BitBrowser 不需要 API 密钥</b>，使用本地 demo 模式。")
+        self.api_info_label.setWordWrap(True)
+        self.api_info_label.setStyleSheet("color: #666; font-size: 11px; padding: 8px; background-color: #f0f0f0; border-radius: 4px; margin-bottom: 5px;")
         
         self.api_key_edit = QLineEdit()
-        self.api_key_edit.setPlaceholderText("输入指纹浏览器 API 密钥")
+        self.api_key_edit.setPlaceholderText("输入 API 密钥 (AdsPower 需要，BitBrowser 不需要)")
         self.api_key_edit.setEchoMode(QLineEdit.Password)
         self.api_key_edit.setToolTip("这是指纹浏览器的 API 密钥，用于:\n• 获取账户列表\n• 启动和管理浏览器实例\n• 控制浏览器自动化\n• 访问浏览器服务\n\n获取方法:\nAdsPower: 设置 → API → 复制密钥\nBitBrowser: 设置 → API → 复制密钥\n其他浏览器: 查看浏览器文档\n\n⚠️ 重要: 请妥善保管此密钥，不要泄露给他人")
         
@@ -446,10 +447,26 @@ class ConfigWizardPage(QWidget):
         # Update placeholder text based on browser type
         if text == "AdsPower":
             self.path_edit.setPlaceholderText("选择 AdsPower Global Browser 安装路径（可选）")
+            # AdsPower requires API key
+            self.api_key_edit.setEnabled(True)
+            self.api_key_edit.setPlaceholderText("输入 API 密钥 (AdsPower 必需)")
+            self.api_info_label.setText("📌 <b>为什么需要:</b> AdsPower 需要 API 密钥进行通信。<br><b>如何获取:</b> AdsPower → 设置 → API → 复制密钥<br><b>重要性:</b> <span style='color: red;'>必需</span>")
+            self.api_info_label.setStyleSheet("color: #666; font-size: 11px; padding: 8px; background-color: #fff3cd; border-radius: 4px; margin-bottom: 5px;")
         elif text == "BitBrowser":
             self.path_edit.setPlaceholderText("选择 BitBrowser 安装路径（可选）")
+            # BitBrowser doesn't need API key
+            self.api_key_edit.setEnabled(False)
+            self.api_key_edit.setPlaceholderText("BitBrowser 不需要 API 密钥 - 使用本地 demo 模式 (http://127.0.0.1:54345)")
+            self.api_key_edit.clear()  # Clear any existing value
+            self.api_info_label.setText("📌 <b>BitBrowser 说明:</b> BitBrowser 不需要 API 密钥！它使用本地 demo 模式。<br><b>默认地址:</b> http://127.0.0.1:54345<br><b>重要性:</b> <span style='color: green;'>不需要 API 密钥</span>")
+            self.api_info_label.setStyleSheet("color: #666; font-size: 11px; padding: 8px; background-color: #d4edda; border-radius: 4px; margin-bottom: 5px;")
         else:
             self.path_edit.setPlaceholderText("选择指纹浏览器安装路径（可选）")
+            # Other browsers - API key may be needed
+            self.api_key_edit.setEnabled(True)
+            self.api_key_edit.setPlaceholderText("API 密钥 (视浏览器而定，可选)")
+            self.api_info_label.setText("📌 <b>说明:</b> 某些指纹浏览器需要 API 密钥，某些不需要。<br>请查看您的浏览器文档了解具体要求。<br><b>重要性:</b> <span style='color: orange;'>视浏览器而定</span>")
+            self.api_info_label.setStyleSheet("color: #666; font-size: 11px; padding: 8px; background-color: #f0f0f0; border-radius: 4px; margin-bottom: 5px;")
     
     def browse_ads_power_path(self):
         """Browse for browser executable"""
