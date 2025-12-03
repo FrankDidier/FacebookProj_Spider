@@ -256,7 +256,7 @@ class ConfigWizardPage(QWidget):
         api_row.addWidget(api_label)
         api_row.addWidget(self.api_key_edit, 1)
         api_row.addWidget(self.api_key_show_btn)
-        api_layout.addWidget(api_info)
+        api_layout.addWidget(self.api_info_label)
         api_layout.addLayout(api_row)
         config_layout.addLayout(api_layout)
         
