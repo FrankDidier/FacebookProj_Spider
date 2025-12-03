@@ -63,51 +63,47 @@ class ValidationThread(QThread):
         except:
             pass
         
-        # Try BitBrowser (port 54345 or custom)
+        # Try BitBrowser using proper API module
         if not ads_power_ok:
-            bitbrowser_port = getattr(config, 'bitbrowser_port', '54345') if hasattr(config, 'bitbrowser_port') else '54345'
-            bitbrowser_api_url = getattr(config, 'bitbrowser_api_url', f'http://127.0.0.1:{bitbrowser_port}') if hasattr(config, 'bitbrowser_api_url') else f'http://127.0.0.1:{bitbrowser_port}'
-            
             try:
-                # BitBrowser API endpoint (may vary, try common ones)
-                for endpoint in ['/api/v1/browser/list', '/api/browser/list', '/browser/list']:
-                    try:
-                        response = requests.get(f"{bitbrowser_api_url}{endpoint}", timeout=2)
-                        if response.status_code == 200:
-                            data = response.json()
-                            browsers = data.get('data', {}).get('list', []) if isinstance(data.get('data'), dict) else data.get('list', [])
-                            if isinstance(browsers, list) and len(browsers) > 0:
-                                results['ads_power'] = {'status': 'success', 'message': f'BitBrowser 运行正常，找到 {len(browsers)} 个账户'}
-                                results['accounts'] = {'status': 'success', 'message': f'{len(browsers)} 个 Facebook 账户已配置'}
-                                ads_power_ok = True
-                                break
-                    except:
-                        continue
+                from autoads import bitbrowser_api
                 
-                if not ads_power_ok:
-                    # Just check if service is reachable
-                    try:
-                        response = requests.get(bitbrowser_api_url, timeout=2)
-                        results['ads_power'] = {'status': 'success', 'message': f'BitBrowser 服务可访问 (API 密钥配置后即可使用)'}
-                        results['accounts'] = {'status': 'warning', 'message': '请配置 API 密钥并添加账户'}
+                # Use the proper BitBrowser API with rate limiting
+                bb_status = bitbrowser_api.get_full_status()
+                
+                if bb_status['service_running']:
+                    if bb_status['logged_in']:
+                        if bb_status['browser_count'] > 0:
+                            results['ads_power'] = {'status': 'success', 'message': f"BitBrowser 运行正常，找到 {bb_status['browser_count']} 个浏览器配置"}
+                            results['accounts'] = {'status': 'success', 'message': f"{bb_status['browser_count']} 个浏览器配置已就绪"}
+                        else:
+                            results['ads_power'] = {'status': 'success', 'message': 'BitBrowser 运行正常，已登录'}
+                            results['accounts'] = {'status': 'warning', 'message': '未找到浏览器配置，请在 BitBrowser 中添加'}
                         ads_power_ok = True
-                    except:
-                        pass
-            except:
-                pass
+                    else:
+                        results['ads_power'] = {'status': 'warning', 'message': 'BitBrowser 服务运行中，请登录 BitBrowser'}
+                        results['accounts'] = {'status': 'warning', 'message': '请先登录 BitBrowser'}
+                        ads_power_ok = True
+            except Exception as e:
+                log.debug(f"BitBrowser check error: {e}")
         
         # If neither works, make it a warning instead of error
         if not ads_power_ok:
             results['ads_power'] = {'status': 'warning', 'message': f'{browser_name} 服务未检测到，但只要有 API 密钥和浏览器打开即可使用'}
             results['accounts'] = {'status': 'warning', 'message': '请确保浏览器已打开并配置 API 密钥'}
         
-        # Check API key
+        # Check API key (BitBrowser doesn't need one)
         self.status_update.emit("检查 API 密钥...", "info")
+        browser_type = getattr(config, 'browser_type', 'adspower') if hasattr(config, 'browser_type') else 'adspower'
         api_key = config.ads_key if hasattr(config, 'ads_key') else ''
-        if api_key and api_key.strip():
+        
+        if browser_type == 'bitbrowser':
+            # BitBrowser doesn't need API key
+            results['api_key'] = {'status': 'success', 'message': 'BitBrowser 不需要 API 密钥'}
+        elif api_key and api_key.strip():
             results['api_key'] = {'status': 'success', 'message': 'API 密钥已配置'}
         else:
-            results['api_key'] = {'status': 'error', 'message': 'API 密钥未配置'}
+            results['api_key'] = {'status': 'error', 'message': 'API 密钥未配置 (AdsPower 需要)'}
         
         # Check directories
         self.status_update.emit("检查数据目录...", "info")

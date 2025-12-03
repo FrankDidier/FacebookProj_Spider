@@ -2,13 +2,30 @@
 # -*- coding: utf-8 -*-
 """
 BitBrowser API - 比特浏览器 API 适配器
-BitBrowser 不需要 API 密钥，使用本地 demo 模式
+BitBrowser 使用本地服务模式，需要用户登录
+
+注意: 免费用户 API 调用频率不超过 2次/秒
 """
 import os
+import time
 import requests
 import json
 from autoads.log import log
 from autoads.config import config
+
+# Rate limiting for free users (max 2 requests per second)
+_last_request_time = 0
+_request_interval = 0.6  # seconds between requests
+
+
+def _rate_limit():
+    """Enforce rate limiting to avoid 'Frequent requests' error"""
+    global _last_request_time
+    now = time.time()
+    elapsed = now - _last_request_time
+    if elapsed < _request_interval:
+        time.sleep(_request_interval - elapsed)
+    _last_request_time = time.time()
 
 
 def get_bitbrowser_url():
@@ -22,83 +39,122 @@ def get_bitbrowser_url():
 
 
 def test_connection():
-    """测试 BitBrowser 连接"""
+    """测试 BitBrowser 连接 - 使用 POST /health 端点"""
     try:
         base_url = get_bitbrowser_url()
-        # Try multiple common endpoints
-        endpoints = [
-            '/api/v1/browser/list',
-            '/api/browser/list',
-            '/browser/list',
-            '/'
-        ]
+        headers = {"Content-Type": "application/json"}
         
-        for endpoint in endpoints:
-            try:
-                response = requests.get(f"{base_url}{endpoint}", timeout=2)
-                if response.status_code == 200:
-                    log.info(f"BitBrowser 连接成功: {base_url}{endpoint}")
+        # 使用 /health 端点测试连接
+        try:
+            response = requests.post(f"{base_url}/health", headers=headers, json={}, timeout=3)
+            if response.status_code == 200:
+                data = response.json()
+                if data.get('success') == True:
+                    log.info(f"BitBrowser 服务运行正常: {base_url}")
                     return True
-            except:
-                continue
+        except:
+            pass
         
-        log.warning(f"BitBrowser 连接失败: {base_url}")
+        # 备用方案：尝试 GET 请求
+        try:
+            response = requests.get(f"{base_url}/", timeout=2)
+            if response.status_code == 200:
+                log.info(f"BitBrowser 服务可访问: {base_url}")
+                return True
+        except:
+            pass
+        
+        log.warning(f"BitBrowser 服务未检测到: {base_url}")
         return False
     except Exception as e:
         log.error(f"测试 BitBrowser 连接失败: {e}")
         return False
 
 
-def get_browser_list():
-    """获取浏览器列表 - 不需要 API 密钥"""
+def check_login_status():
+    """检查用户是否已登录 BitBrowser"""
     try:
+        _rate_limit()  # Avoid rate limiting
         base_url = get_bitbrowser_url()
-        endpoints = [
-            '/api/v1/browser/list',
-            '/api/browser/list',
-            '/browser/list'
-        ]
+        headers = {"Content-Type": "application/json"}
+        
+        # 使用正确的参数格式尝试获取浏览器列表
+        body = {"page": 1, "pageSize": 10}
+        
+        response = requests.post(f"{base_url}/browser/list", headers=headers, json=body, timeout=3)
+        if response.status_code == 200:
+            data = response.json()
+            if data.get('success') == True:
+                return True, "已登录"
+            
+            msg = str(data.get('msg', ''))
+            # 检查是否是 token/登录相关错误
+            if 'token' in msg.lower() or '登录' in msg or 'login' in msg.lower():
+                return False, "请先登录 BitBrowser"
+            # 其他错误可能表示服务正常但配置问题
+            return False, msg if msg else "未知错误"
+        return False, f"HTTP 错误: {response.status_code}"
+    except Exception as e:
+        log.error(f"检查 BitBrowser 登录状态失败: {e}")
+        return False, str(e)
+
+
+def get_browser_list(page=1, page_size=100):
+    """获取浏览器列表 - 需要用户已登录 BitBrowser
+    
+    Returns:
+        list: 浏览器列表，如果未登录或失败返回空列表
+    """
+    try:
+        _rate_limit()  # Avoid rate limiting
+        base_url = get_bitbrowser_url()
+        headers = {"Content-Type": "application/json"}
+        
+        # BitBrowser 使用 POST 请求，JSON body 格式
+        # 确保参数是整数类型
+        body = {
+            "page": int(page),
+            "pageSize": int(page_size)
+        }
+        
+        # 主要端点
+        endpoints = ['/browser/list', '/api/browser/list', '/api/v1/browser/list']
         
         for endpoint in endpoints:
             try:
-                # BitBrowser 使用 POST 请求，JSON body 格式
-                headers = {
-                    "Content-Type": "application/json"
-                }
-                # 尝试 GET 和 POST
-                for method in ['GET', 'POST']:
-                    try:
-                        if method == 'GET':
-                            response = requests.get(f"{base_url}{endpoint}", headers=headers, timeout=5)
-                        else:
-                            response = requests.post(f"{base_url}{endpoint}", headers=headers, json={}, timeout=5)
-                        
-                        if response.status_code == 200:
-                            data = response.json()
-                            # 尝试不同的数据结构
-                            browsers = []
-                            if isinstance(data, dict):
-                                if 'data' in data:
-                                    if isinstance(data['data'], dict) and 'list' in data['data']:
-                                        browsers = data['data']['list']
-                                    elif isinstance(data['data'], list):
-                                        browsers = data['data']
-                                elif 'list' in data:
-                                    browsers = data['list']
-                                elif 'rows' in data:
-                                    browsers = data['rows']
-                            elif isinstance(data, list):
-                                browsers = data
-                            
-                            if browsers:
-                                log.info(f"获取到 {len(browsers)} 个 BitBrowser 浏览器")
-                                return browsers
-                    except:
+                response = requests.post(f"{base_url}{endpoint}", headers=headers, json=body, timeout=5)
+                
+                if response.status_code == 200:
+                    data = response.json()
+                    
+                    # 检查是否需要登录
+                    if data.get('success') == False:
+                        msg = str(data.get('msg', ''))
+                        if 'token' in msg.lower() or '登录' in msg or 'login' in msg.lower():
+                            log.warning(f"BitBrowser 需要登录: {msg}")
+                            return []
+                        log.warning(f"BitBrowser API 错误: {msg}")
                         continue
-            except:
+                    
+                    # 成功获取列表
+                    if data.get('success') == True:
+                        browsers = []
+                        if 'data' in data:
+                            if isinstance(data['data'], dict) and 'list' in data['data']:
+                                browsers = data['data']['list']
+                            elif isinstance(data['data'], list):
+                                browsers = data['data']
+                        elif 'list' in data:
+                            browsers = data['list']
+                        
+                        log.info(f"获取到 {len(browsers)} 个 BitBrowser 浏览器")
+                        return browsers
+                        
+            except Exception as e:
+                log.debug(f"尝试 {endpoint} 失败: {e}")
                 continue
         
-        log.warning("未能获取 BitBrowser 浏览器列表")
+        log.warning("未能获取 BitBrowser 浏览器列表，请确保已登录 BitBrowser")
         return []
     except Exception as e:
         log.error(f"获取 BitBrowser 浏览器列表失败: {e}")
@@ -119,6 +175,7 @@ def start_browser(browser_id, proxy_config=None):
             }
     """
     try:
+        _rate_limit()  # Avoid rate limiting
         base_url = get_bitbrowser_url()
         endpoints = [
             '/api/v1/browser/start',
@@ -158,6 +215,7 @@ def start_browser(browser_id, proxy_config=None):
 def stop_browser(browser_id):
     """停止浏览器"""
     try:
+        _rate_limit()  # Avoid rate limiting
         base_url = get_bitbrowser_url()
         endpoints = [
             '/api/v1/browser/stop',
@@ -213,4 +271,49 @@ def get_browser_ids(count=100):
 def check_service():
     """检查 BitBrowser 服务是否运行"""
     return test_connection()
+
+
+def get_full_status():
+    """获取 BitBrowser 完整状态
+    
+    Returns:
+        dict: {
+            'service_running': bool,
+            'logged_in': bool,
+            'browser_count': int,
+            'message': str
+        }
+    """
+    status = {
+        'service_running': False,
+        'logged_in': False,
+        'browser_count': 0,
+        'message': ''
+    }
+    
+    # 检查服务是否运行
+    if not test_connection():
+        status['message'] = 'BitBrowser 服务未运行，请启动 BitBrowser'
+        return status
+    
+    status['service_running'] = True
+    
+    # 检查登录状态
+    logged_in, login_msg = check_login_status()
+    if not logged_in:
+        status['message'] = f'BitBrowser 服务运行中，但 {login_msg}'
+        return status
+    
+    status['logged_in'] = True
+    
+    # 获取浏览器数量
+    browsers = get_browser_list()
+    status['browser_count'] = len(browsers)
+    
+    if status['browser_count'] > 0:
+        status['message'] = f'BitBrowser 正常运行，已登录，找到 {status["browser_count"]} 个浏览器配置'
+    else:
+        status['message'] = 'BitBrowser 正常运行，已登录，但未找到浏览器配置，请在 BitBrowser 中添加浏览器'
+    
+    return status
 
