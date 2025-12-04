@@ -78,8 +78,8 @@ def check_login_status():
         base_url = get_bitbrowser_url()
         headers = {"Content-Type": "application/json"}
         
-        # 使用正确的参数格式尝试获取浏览器列表
-        body = {"page": 1, "pageSize": 10}
+        # 使用正确的参数格式尝试获取浏览器列表 (BitBrowser uses 0-based pages)
+        body = {"page": 0, "pageSize": 10}
         
         response = requests.post(f"{base_url}/browser/list", headers=headers, json=body, timeout=3)
         if response.status_code == 200:
@@ -99,7 +99,7 @@ def check_login_status():
         return False, str(e)
 
 
-def get_browser_list(page=1, page_size=100):
+def get_browser_list(page=0, page_size=100):
     """获取浏览器列表 - 需要用户已登录 BitBrowser
     
     Returns:
