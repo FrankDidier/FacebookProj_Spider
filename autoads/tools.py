@@ -258,7 +258,21 @@ def make_safe_filename(s):
 
 
 def get_single_ads(ignore=[]):
-    return ads_api.get_ads_id(ignore=ignore)
+    """获取单个浏览器 ID，支持 AdsPower 和 BitBrowser"""
+    browser_type = getattr(config, 'browser_type', 'adspower') if hasattr(config, 'browser_type') else 'adspower'
+    
+    if browser_type == 'bitbrowser':
+        try:
+            from autoads import bitbrowser_api
+            browser_ids = bitbrowser_api.get_browser_ids(count=1)
+            # Filter out ignored IDs
+            browser_ids = [bid for bid in browser_ids if bid not in ignore]
+            return browser_ids[0] if browser_ids else ''
+        except Exception as e:
+            log.error(f"BitBrowser get_single_ads error: {e}")
+            return ''
+    else:
+        return ads_api.get_ads_id(ignore=ignore)
 
 
 def get_greet_threading_count(config_from_newest=None):
@@ -277,41 +291,51 @@ def get_greet_threading_count(config_from_newest=None):
 def get_ads_id(size=1000):
     """
     获取配置中可用浏览器的信息
-    :param self:
-    :param size:
-    :return:
+    支持 AdsPower 和 BitBrowser
+    :param size: 最大数量
+    :return: 浏览器 ID 列表
     """
-    # 如果没有配置地址，就直接调用方法
-    # ads_service_url = config.ads_service_url
-    # if ads_service_url:
-    #     url = f'{config.ads_service_url}/adsid?size={size}'
-    #
-    #     header = {
-    #         "User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36",
-    #         "Content-Type": "application/json"
-    #     }
-    #
-    #     res = requests.get(url, headers=header)
-    #
-    #     if res.status_code == 200:
-    #         return json.loads(res.text)
-    #     else:
-    #         return []
-    # else:
-    user_ids = ads_api.request_list()
-
-    if len(user_ids) > int(size):
-        return user_ids[:int(size)]
+    # Check browser type to use correct API
+    browser_type = getattr(config, 'browser_type', 'adspower') if hasattr(config, 'browser_type') else 'adspower'
+    
+    if browser_type == 'bitbrowser':
+        # Use BitBrowser API
+        try:
+            from autoads import bitbrowser_api
+            browser_ids = bitbrowser_api.get_browser_ids(count=int(size))
+            return browser_ids
+        except Exception as e:
+            log.error(f"BitBrowser get_ads_id error: {e}")
+            return []
     else:
-        return user_ids
+        # Use AdsPower API
+        user_ids = ads_api.request_list()
+
+        if len(user_ids) > int(size):
+            return user_ids[:int(size)]
+        else:
+            return user_ids
 
 
 def valid_ads_service_key():
-    service_url = ads_api.start_service()
-    if service_url and service_url.find('http') > -1:
-        return {'status': 0, 'message': '浏览器进程启动成功'}
+    """验证浏览器服务，支持 AdsPower 和 BitBrowser"""
+    browser_type = getattr(config, 'browser_type', 'adspower') if hasattr(config, 'browser_type') else 'adspower'
+    
+    if browser_type == 'bitbrowser':
+        try:
+            from autoads import bitbrowser_api
+            if bitbrowser_api.test_connection():
+                return {'status': 0, 'message': 'BitBrowser 服务运行正常'}
+            else:
+                return {'status': -1, 'message': 'BitBrowser 服务未检测到，请确保 BitBrowser 已打开并登录'}
+        except Exception as e:
+            return {'status': -1, 'message': f'BitBrowser 连接失败: {str(e)}'}
     else:
-        return {'status': -1, 'message': f'异常信息[{service_url}]'}
+        service_url = ads_api.start_service()
+        if service_url and service_url.find('http') > -1:
+            return {'status': 0, 'message': '浏览器进程启动成功'}
+        else:
+            return {'status': -1, 'message': f'异常信息[{service_url}]'}
 
 
 # def ping_net(address):
@@ -322,37 +346,65 @@ def scroll_element_into_middle(driver,element):
     driver.execute_script(scroll_element_into_middle,element)
 
 def get_ads_by_module(module, page_no, page_size=5):
+    """获取分页的浏览器列表，支持 AdsPower 和 BitBrowser"""
     if module == 'fb':
         domain_name = 'facebook.com'
     if module == 'tk':
         domain_name = 'tiktok.com'
 
-    user_ids = ads_api.get_ads_list(count=0)
+    browser_type = getattr(config, 'browser_type', 'adspower') if hasattr(config, 'browser_type') else 'adspower'
+    
+    if browser_type == 'bitbrowser':
+        try:
+            from autoads import bitbrowser_api
+            browsers = bitbrowser_api.get_browser_list()
+            # BitBrowser doesn't have domain_name, return all browsers
+            total = (len(browsers) // page_size) + 1
+            temp = browsers[(page_no - 1) * page_size:page_no * page_size]
+            return {
+                'total_page': total,
+                'datas': temp
+            }
+        except Exception as e:
+            log.error(f"BitBrowser get_ads_by_module error: {e}")
+            return {'total_page': 0, 'datas': []}
+    else:
+        user_ids = ads_api.get_ads_list(count=0)
+        user_ids.sort(key=lambda k: int(k.get('serial_number')))
+        user_ids = [item for item in user_ids if domain_name == item['domain_name']]
 
-    user_ids.sort(key=lambda k: int(k.get('serial_number')))
-    user_ids = [item for item in user_ids if domain_name == item['domain_name']]
+        total = (len(user_ids) // page_size) + 1
+        temp = user_ids[(page_no - 1) * page_size:page_no * page_size]
 
-    total = (len(user_ids) // page_size) + 1
-    temp = user_ids[(page_no - 1) * page_size:page_no * page_size]
-
-    return {
-        'total_page': total,
-        'datas': temp
-    }
+        return {
+            'total_page': total,
+            'datas': temp
+        }
 
 
 def get_all_ads(module):
+    """获取所有浏览器列表，支持 AdsPower 和 BitBrowser"""
     if module == 'fb':
         domain_name = 'facebook.com'
     if module == 'tk':
         domain_name = 'tiktok.com'
 
-    user_ids = ads_api.get_ads_list(count=0)
+    browser_type = getattr(config, 'browser_type', 'adspower') if hasattr(config, 'browser_type') else 'adspower'
+    
+    if browser_type == 'bitbrowser':
+        try:
+            from autoads import bitbrowser_api
+            browsers = bitbrowser_api.get_browser_list()
+            return browsers
+        except Exception as e:
+            log.error(f"BitBrowser get_all_ads error: {e}")
+            return []
+    else:
+        user_ids = ads_api.get_ads_list(count=0)
+        user_ids.sort(key=lambda k: int(k.get('serial_number')))
+        user_ids = [item for item in user_ids if domain_name == item['domain_name']]
 
-    user_ids.sort(key=lambda k: int(k.get('serial_number')))
-    user_ids = [item for item in user_ids if domain_name == item['domain_name']]
-
-    return user_ids
+        return user_ids
 
 
 def filter_by(data, **kwargs):

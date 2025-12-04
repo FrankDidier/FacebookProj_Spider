@@ -560,15 +560,21 @@ class MainWindow(QMainWindow):
                 issues.append(f"未找到 Facebook 账户，请在 {browser_name} 中添加账户")
         except Exception as e:
             # Don't fail if we can't get accounts - might just need browser to be open
-            if "API" in str(e) or "key" in str(e).lower():
-                issues.append(f"无法获取账户列表，请检查 {browser_name} API 密钥配置")
+            if browser_type != 'bitbrowser':  # Only show API key error for non-BitBrowser
+                if "API" in str(e) or "key" in str(e).lower():
+                    issues.append(f"无法获取账户列表，请检查 {browser_name} API 密钥配置")
         
         if issues:
             browser_type = getattr(config, 'browser_type', 'adspower') if hasattr(config, 'browser_type') else 'adspower'
             browser_name = 'AdsPower' if browser_type == 'adspower' else 'BitBrowser' if browser_type == 'bitbrowser' else '指纹浏览器'
             
             msg = f"无法启动 {feature_name}:\n\n" + "\n".join(f"• {issue}" for issue in issues)
-            msg += f"\n\n请前往「配置向导」页面完成设置。\n\n💡 提示: 如果使用 {browser_name}，请确保:\n• 浏览器已打开\n• API 密钥已配置\n• 至少有一个 Facebook 账户"
+            
+            # Different tips for different browsers
+            if browser_type == 'bitbrowser':
+                msg += f"\n\n请前往「配置向导」页面完成设置。\n\n💡 提示: 使用 BitBrowser 请确保:\n• BitBrowser 已打开并登录\n• 至少有一个浏览器配置\n• 至少有一个 Facebook 账户"
+            else:
+                msg += f"\n\n请前往「配置向导」页面完成设置。\n\n💡 提示: 使用 {browser_name} 请确保:\n• 浏览器已打开\n• API 密钥已配置\n• 至少有一个 Facebook 账户"
             
             reply = QMessageBox.warning(self, "配置不完整", msg, 
                                        QMessageBox.Ok | QMessageBox.Cancel)

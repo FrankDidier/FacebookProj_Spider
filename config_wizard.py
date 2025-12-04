@@ -89,8 +89,12 @@ class ValidationThread(QThread):
         
         # If neither works, make it a warning instead of error
         if not ads_power_ok:
-            results['ads_power'] = {'status': 'warning', 'message': f'{browser_name} 服务未检测到，但只要有 API 密钥和浏览器打开即可使用'}
-            results['accounts'] = {'status': 'warning', 'message': '请确保浏览器已打开并配置 API 密钥'}
+            if browser_type == 'bitbrowser':
+                results['ads_power'] = {'status': 'warning', 'message': 'BitBrowser 服务未检测到，请确保 BitBrowser 已打开并登录'}
+                results['accounts'] = {'status': 'warning', 'message': '请确保 BitBrowser 已打开并登录'}
+            else:
+                results['ads_power'] = {'status': 'warning', 'message': f'{browser_name} 服务未检测到，但只要有 API 密钥和浏览器打开即可使用'}
+                results['accounts'] = {'status': 'warning', 'message': '请确保浏览器已打开并配置 API 密钥'}
         
         # Check API key (BitBrowser doesn't need one)
         self.status_update.emit("检查 API 密钥...", "info")
@@ -386,10 +390,10 @@ class ConfigWizardPage(QWidget):
         • <b>作用:</b> 这是应用程序与指纹浏览器服务通信的"密码"<br>
         • <b>用途:</b> 获取账户列表、启动浏览器、控制自动化操作<br>
         • <b>如何获取:</b><br>
-          - <b>AdsPower:</b> 设置 → API → 复制密钥<br>
-          - <b>BitBrowser:</b> 设置 → API → 复制密钥<br>
-          - <b>其他浏览器:</b> 查看浏览器文档获取 API 密钥<br>
-        • <b>重要性:</b> ⚠️ 没有 API 密钥，应用程序无法与浏览器通信（<b>必需</b>）<br><br>
+          - <b>AdsPower:</b> 设置 → API → 复制密钥 (<span style='color: red;'>必需</span>)<br>
+          - <b>BitBrowser:</b> <span style='color: green;'>不需要 API 密钥！</span> 使用本地 demo 模式<br>
+          - <b>其他浏览器:</b> 查看浏览器文档<br>
+        • <b>重要性:</b> AdsPower 必需，<span style='color: green;'>BitBrowser 不需要</span><br><br>
         
         <b>4. 账户数量:</b><br>
         • <b>作用:</b> 指定同时使用多少个 Facebook 账户<br>
@@ -397,26 +401,30 @@ class ConfigWizardPage(QWidget):
         • <b>建议:</b> 根据您的账户数量和任务需求设置（通常 3-5 个）<br><br>
         
         <b>🚀 快速设置步骤:</b><br>
-        1. <b>选择浏览器类型</b>（AdsPower/BitBrowser/其他）<br>
-        2. <b>打开您的指纹浏览器</b>（确保浏览器正在运行）<br>
-        3. <b>获取 API 密钥</b>（浏览器设置 → API → 复制密钥）<br>
-        4. <b>在浏览器中添加 Facebook 账户</b>（至少添加一个账户）<br>
-        5. <b>配置上方 API 密钥</b>（路径可选，如果浏览器已打开）<br>
-        6. <b>点击"保存配置"并"重新验证"</b><br>
-        7. <b>开始使用功能</b>（即使验证显示警告，只要 API 密钥配置即可使用）<br><br>
+        <b>📱 BitBrowser 用户:</b><br>
+        1. 选择浏览器类型为 "BitBrowser"<br>
+        2. 打开 BitBrowser 并登录<br>
+        3. 在 BitBrowser 中添加浏览器配置<br>
+        4. 点击"保存配置"并"重新验证"<br>
+        5. 开始使用功能！<br><br>
+        
+        <b>📱 AdsPower 用户:</b><br>
+        1. 选择浏览器类型为 "AdsPower"<br>
+        2. 打开 AdsPower 并获取 API 密钥（设置 → API）<br>
+        3. 在上方输入 API 密钥<br>
+        4. 点击"保存配置"并"重新验证"<br>
+        5. 开始使用功能！<br><br>
         
         <b>💡 重要提示:</b><br>
-        • <b>API 密钥是必需的</b>，没有它无法使用功能<br>
-        • <b>浏览器路径是可选的</b>，如果浏览器已打开通常不需要<br>
-        • <b>验证显示警告是正常的</b>，只要 API 密钥已配置即可使用<br>
-        • <b>支持 BitBrowser</b>，选择"BitBrowser"类型并输入对应 API 密钥即可<br><br>
+        • <b>BitBrowser 不需要 API 密钥</b>，只需打开并登录即可<br>
+        • <b>AdsPower 需要 API 密钥</b>，请在设置中获取<br>
+        • <b>浏览器路径是可选的</b>，如果浏览器已打开通常不需要<br><br>
         
         <b>⚠️ 常见问题:</b><br>
-        • <b>"浏览器服务未检测到"</b> → 这是正常的！只要浏览器已打开且 API 密钥已配置即可使用<br>
-        • <b>"API 密钥未配置"</b> → 请在浏览器中获取并输入 API 密钥（设置 → API）<br>
+        • <b>"浏览器服务未检测到"</b> → 请确保浏览器已打开<br>
+        • <b>"API 密钥未配置"</b> → 仅 AdsPower 需要，BitBrowser 不需要<br>
         • <b>"未找到账户"</b> → 请在浏览器中添加 Facebook 账户<br>
-        • <b>"使用 BitBrowser"</b> → 选择"BitBrowser"类型，输入 BitBrowser API 密钥即可<br>
-        • <b>"验证失败但想使用"</b> → 只要 API 密钥配置正确，功能仍然可以使用
+        • <b>"BitBrowser 登录"</b> → 确保 BitBrowser 已打开并登录账户
         """)
         help_layout.addWidget(help_text)
         
