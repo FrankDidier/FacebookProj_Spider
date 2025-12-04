@@ -177,10 +177,12 @@ def start_browser(browser_id, proxy_config=None):
     try:
         _rate_limit()  # Avoid rate limiting
         base_url = get_bitbrowser_url()
+        # BitBrowser uses /browser/open, not /browser/start
         endpoints = [
-            '/api/v1/browser/start',
-            '/api/browser/start',
-            '/browser/start'
+            '/browser/open',
+            '/browser/start',
+            '/api/browser/open',
+            '/api/v1/browser/open'
         ]
         
         headers = {
@@ -197,15 +199,25 @@ def start_browser(browser_id, proxy_config=None):
         
         for endpoint in endpoints:
             try:
-                response = requests.post(f"{base_url}{endpoint}", headers=headers, json=body, timeout=10)
+                log.info(f"尝试 BitBrowser API: {base_url}{endpoint}")
+                # Longer timeout because browser startup can take time
+                response = requests.post(f"{base_url}{endpoint}", headers=headers, json=body, timeout=120)
+                log.info(f"BitBrowser API 响应状态: {response.status_code}")
                 if response.status_code == 200:
                     data = response.json()
-                    log.info(f"BitBrowser 启动成功: {browser_id}")
-                    return data
-            except:
+                    log.info(f"BitBrowser 启动响应: {data}")
+                    if data.get('success'):
+                        log.info(f"BitBrowser 启动成功: {browser_id}")
+                        return data
+                    else:
+                        log.warning(f"BitBrowser 启动返回失败: {data.get('msg', 'Unknown')}")
+                        # If first endpoint fails with proper response, try others
+                        continue
+            except Exception as e:
+                log.debug(f"BitBrowser API 端点 {endpoint} 失败: {e}")
                 continue
         
-        log.error(f"BitBrowser 启动失败: {browser_id}")
+        log.error(f"BitBrowser 启动失败: {browser_id} - 所有端点都失败")
         return None
     except Exception as e:
         log.error(f"启动 BitBrowser 失败: {e}")
@@ -217,10 +229,12 @@ def stop_browser(browser_id):
     try:
         _rate_limit()  # Avoid rate limiting
         base_url = get_bitbrowser_url()
+        # BitBrowser uses /browser/close, not /browser/stop
         endpoints = [
-            '/api/v1/browser/stop',
-            '/api/browser/stop',
-            '/browser/stop'
+            '/browser/close',
+            '/browser/stop',
+            '/api/browser/close',
+            '/api/v1/browser/close'
         ]
         
         headers = {

@@ -28,6 +28,8 @@ from autoads.log import log
 import requests
 from autoads.tools import Singleton
 from autoads import tools
+from autoads.config import config
+from autoads import bitbrowser_api
 from autoads.memory_db import MemoryDB
 from autoads import ads_api
 
@@ -126,31 +128,99 @@ class WebDriver(RemoteWebDriver):
         return self.driver
 
     def get_remote_driver(self):
-        open_url = f"{self._service_url}/api/v1/browser/start?user_id={self._ads_id}&open_tabs=1"
+        # Check browser type to use correct API
+        browser_type = getattr(config, 'browser_type', 'adspower') if hasattr(config, 'browser_type') else 'adspower'
+        
         tools.delay_time(2)
-        log.info(f'线程{threading.current_thread().name}正在访问url:{open_url}来开启浏览器{self._ads_id}')
+        log.info(f'线程{threading.current_thread().name}正在开启浏览器{self._ads_id}')
         tools.send_message_to_ui(ms=self.ms, ui=self.ui, message=f'获取远程浏览器{self._ads_id}启动参数中...')
-        # print(f'event_set={self.stop_event.isSet()}')
+        
         if not (self.stop_event and self.stop_event.isSet()):
-            resp = requests.get(open_url).json()
-            log.info(f'开启浏览器结果={resp}')
-            if resp["code"] != 0:
-                if resp['code'] == 'ETIMEDOUT':
-                    msg = resp["message"]
-                    log.error(msg)
+            try:
+                if browser_type == 'bitbrowser':
+                    # BitBrowser uses POST with JSON body
+                    log.info(f'使用 BitBrowser API 启动浏览器 {self._ads_id}')
+                    result = bitbrowser_api.start_browser(self._ads_id)
+                    log.info(f'BitBrowser API 返回: {result}')
+                    
+                    if result and result.get('success'):
+                        data = result.get('data', {})
+                        # BitBrowser returns format like:
+                        # {"success":true,"data":{"http":"127.0.0.1:9222","ws":"ws://127.0.0.1:9222/devtools/browser/xxx","driver":"C:\\xxx\\chromedriver.exe"}}
+                        
+                        # Get WebSocket address - BitBrowser uses 'http' or direct IP:port for debugging
+                        ws_address = data.get('http', '')  # Like "127.0.0.1:9222"
+                        if not ws_address:
+                            # Try alternative format
+                            ws_address = data.get('ws', '').replace('ws://', '').split('/devtools')[0] if data.get('ws') else ''
+                        
+                        # Get chromedriver path
+                        driver_path = data.get('driver', '') or data.get('webdriver', '')
+                        
+                        if ws_address and driver_path:
+                            resp = {
+                                'code': 0,
+                                'data': {
+                                    'ws': {
+                                        'selenium': ws_address
+                                    },
+                                    'webdriver': driver_path
+                                }
+                            }
+                            tools.send_message_to_ui(ms=self.ms, ui=self.ui, message=f'获取远程浏览器{self._ads_id}启动参数 | 成功！')
+                            log.info(f'BitBrowser 开启浏览器结果={resp}')
+                            return resp
+                        else:
+                            log.warning(f'BitBrowser 返回数据不完整: ws={ws_address}, driver={driver_path}')
+                            # Still try to return what we got
+                            resp = {
+                                'code': 0,
+                                'data': {
+                                    'ws': {
+                                        'selenium': ws_address or data.get('http', '') or '127.0.0.1:9222'
+                                    },
+                                    'webdriver': driver_path or 'chromedriver'
+                                }
+                            }
+                            return resp
+                    else:
+                        msg = result.get('msg', 'Unknown error') if result else 'Failed to start browser'
+                        log.error(f'BitBrowser 启动失败: {msg}')
+                        tools.send_message_to_ui(ms=self.ms, ui=self.ui,
+                                                message=f'获取远程浏览器{self._ads_id}启动参数 | 失败 | {msg} | 再次尝试！')
+                        if self.retry_times < 3:
+                            self.retry_times += 1
+                            return self.get_remote_driver()
+                        return None
                 else:
-                    msg = resp['msg']
-                    log.error(msg)
+                    # AdsPower uses GET with query parameters
+                    open_url = f"{self._service_url}/api/v1/browser/start?user_id={self._ads_id}&open_tabs=1"
+                    log.info(f'使用 AdsPower API 启动浏览器: {open_url}')
+                    resp = requests.get(open_url).json()
+                    log.info(f'开启浏览器结果={resp}')
+                    if resp["code"] != 0:
+                        if resp['code'] == 'ETIMEDOUT':
+                            msg = resp["message"]
+                            log.error(msg)
+                        else:
+                            msg = resp['msg']
+                            log.error(msg)
+                        tools.send_message_to_ui(ms=self.ms, ui=self.ui,
+                                                message=f'获取远程浏览器{self._ads_id}启动参数 | 失败 | {msg} | 再次尝试！')
+                        if self.retry_times < 3:
+                            self.retry_times += 1
+                            return self.get_remote_driver()
+                    else:
+                        tools.send_message_to_ui(ms=self.ms, ui=self.ui, message=f'获取远程浏览器{self._ads_id}启动参数 | 成功！')
+                        return resp
+            except Exception as e:
+                log.error(f'启动浏览器异常: {e}')
                 tools.send_message_to_ui(ms=self.ms, ui=self.ui,
-                                         message=f'获取远程浏览器{self._ads_id}启动参数 | 失败 | {msg} | 再次尝试！')
+                                        message=f'获取远程浏览器{self._ads_id}启动参数 | 异常 | {str(e)}')
                 if self.retry_times < 3:
                     self.retry_times += 1
-                    self.get_remote_driver()
-            else:
-                tools.send_message_to_ui(ms=self.ms, ui=self.ui, message=f'获取远程浏览器{self._ads_id}启动参数 | 成功！')
-                return resp
-        else:
-            return None
+                    return self.get_remote_driver()
+        return None
 
     def chrome_driver(self):
 
@@ -240,7 +310,13 @@ class WebDriverPool:
         self.queue_size_param = MemoryDB()
         self.queue_expried_ads = []
         self.queue_drop_res = {}
-        self.service_url = ads_api.start_service()  # 开启ads power global 进程
+        
+        # Check browser type and get appropriate service URL
+        self.browser_type = getattr(config, 'browser_type', 'adspower') if hasattr(config, 'browser_type') else 'adspower'
+        if self.browser_type == 'bitbrowser':
+            self.service_url = bitbrowser_api.get_bitbrowser_url()
+        else:
+            self.service_url = ads_api.start_service()  # 开启ads power global 进程
 
     def get_size(self, ads_id, driver_count):
         if ads_id in self.queue_chrome:
@@ -349,22 +425,35 @@ class WebDriverPool:
 
             if ads_id in self.queue.keys():
                 driver = self.queue.pop(ads_id)
-                close_url = f"{self.service_url}/api/v1/browser/stop?user_id={ads_id}"
 
                 if driver.get_driver():
                     driver.quit()
 
+                # Close browser via appropriate API
+                browser_type = getattr(config, 'browser_type', 'adspower') if hasattr(config, 'browser_type') else 'adspower'
+                
                 close_times = 0
                 while close_times < 2:
                     try:
-                        res = requests.get(close_url).json()
-                        if 'code' in res and res['code'] == 0:
-                            break
+                        if browser_type == 'bitbrowser':
+                            # BitBrowser uses POST with JSON body
+                            result = bitbrowser_api.stop_browser(ads_id)
+                            if result:
+                                break
+                            else:
+                                close_times += 1
+                                tools.delay_time(2)
+                                log.info(f'close BitBrowser browser_id: {ads_id}')
                         else:
-                            close_times += 1
-                            tools.delay_time(2)  # 有可能是并发导致关闭不成功
-
-                            log.info('close ads_id:' + ads_id + '|' + json.dumps(res))
+                            # AdsPower uses GET
+                            close_url = f"{self.service_url}/api/v1/browser/stop?user_id={ads_id}"
+                            res = requests.get(close_url).json()
+                            if 'code' in res and res['code'] == 0:
+                                break
+                            else:
+                                close_times += 1
+                                tools.delay_time(2)
+                                log.info('close ads_id:' + ads_id + '|' + json.dumps(res))
                     except Exception as e:
                         close_times += 1
                         log.error(e)
