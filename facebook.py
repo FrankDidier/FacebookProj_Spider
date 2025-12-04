@@ -518,47 +518,40 @@ class MainWindow(QMainWindow):
         browser_type = getattr(config, 'browser_type', 'adspower') if hasattr(config, 'browser_type') else 'adspower'
         browser_name = 'AdsPower' if browser_type == 'adspower' else 'BitBrowser' if browser_type == 'bitbrowser' else '指纹浏览器'
         
-        # Check API key (most important - required for any browser)
-        if not hasattr(config, 'ads_key') or not config.ads_key or config.ads_key.strip() == '':
-            issues.append(f"API 密钥未配置，请在配置向导中设置 {browser_name} API 密钥")
-        else:
-            # If API key exists, try to check service (but don't fail if service check fails)
+        # Check API key - ONLY required for AdsPower, NOT for BitBrowser
+        if browser_type == 'bitbrowser':
+            # BitBrowser doesn't need API key - check service directly
             service_ok = False
-            
-            # Try AdsPower
-            if browser_type == 'adspower' or browser_type == '':
+            try:
+                from autoads import bitbrowser_api
+                service_ok = bitbrowser_api.test_connection()
+                if service_ok:
+                    # Check if logged in
+                    logged_in, msg = bitbrowser_api.check_login_status()
+                    if not logged_in:
+                        issues.append(f"请登录 BitBrowser（{msg}）")
+            except Exception as e:
+                # If we can't check, just try to proceed
+                pass
+        elif browser_type == 'adspower':
+            # AdsPower requires API key
+            if not hasattr(config, 'ads_key') or not config.ads_key or config.ads_key.strip() == '':
+                issues.append(f"API 密钥未配置，请在配置向导中设置 AdsPower API 密钥")
+            else:
+                # Check AdsPower service
                 try:
                     import requests
                     response = requests.get("http://127.0.0.1:50325/api/v1/browser/list", timeout=2)
                     if response.status_code == 200:
                         data = response.json()
-                        if data.get('code') == 0:
-                            service_ok = True
+                        if data.get('code') != 0:
+                            issues.append("AdsPower API 返回错误，请检查 API 密钥")
                 except:
+                    # Don't block if service check fails
                     pass
-            
-            # Try BitBrowser
-            if not service_ok:
-                try:
-                    import requests
-                    bitbrowser_port = getattr(config, 'bitbrowser_port', '54345') if hasattr(config, 'bitbrowser_port') else '54345'
-                    bitbrowser_api_url = getattr(config, 'bitbrowser_api_url', f'http://127.0.0.1:{bitbrowser_port}') if hasattr(config, 'bitbrowser_api_url') else f'http://127.0.0.1:{bitbrowser_port}'
-                    
-                    for endpoint in ['/api/v1/browser/list', '/api/browser/list', '/browser/list']:
-                        try:
-                            response = requests.get(f"{bitbrowser_api_url}{endpoint}", timeout=2)
-                            if response.status_code == 200:
-                                service_ok = True
-                                break
-                        except:
-                            continue
-                except:
-                    pass
-            
-            # If service check fails but API key exists, just warn (don't block)
-            if not service_ok:
-                # Don't add as error - just a warning that will be shown but won't block
-                pass
+        else:
+            # Other browsers - API key optional, just check if service is available
+            pass
         
         # Check accounts (only if we can connect)
         try:
