@@ -520,18 +520,17 @@ class MainWindow(QMainWindow):
         
         # Check API key - ONLY required for AdsPower, NOT for BitBrowser
         if browser_type == 'bitbrowser':
-            # BitBrowser doesn't need API key - check service directly
-            service_ok = False
+            # BitBrowser doesn't need API key - just check if service is running
+            # Don't do additional checks to avoid rate limiting
             try:
                 from autoads import bitbrowser_api
                 service_ok = bitbrowser_api.test_connection()
-                if service_ok:
-                    # Check if logged in
-                    logged_in, msg = bitbrowser_api.check_login_status()
-                    if not logged_in:
-                        issues.append(f"请登录 BitBrowser（{msg}）")
+                if not service_ok:
+                    issues.append("BitBrowser 服务未检测到，请确保 BitBrowser 已打开并登录")
+                # Skip login check to avoid rate limiting - service running is enough
             except Exception as e:
                 # If we can't check, just try to proceed
+                log.warning(f"BitBrowser connection check failed: {e}")
                 pass
         elif browser_type == 'adspower':
             # AdsPower requires API key
@@ -554,15 +553,23 @@ class MainWindow(QMainWindow):
             pass
         
         # Check accounts (only if we can connect)
+        # Add delay for BitBrowser to avoid rate limiting
+        if browser_type == 'bitbrowser':
+            import time
+            time.sleep(0.7)  # Wait to avoid API rate limiting
+        
         try:
             ads_ids = tools.get_ads_id(1)  # Just check if we can get at least 1
             if len(ads_ids) == 0:
-                issues.append(f"未找到 Facebook 账户，请在 {browser_name} 中添加账户")
+                issues.append(f"未找到浏览器配置，请在 {browser_name} 中添加浏览器")
         except Exception as e:
             # Don't fail if we can't get accounts - might just need browser to be open
             if browser_type != 'bitbrowser':  # Only show API key error for non-BitBrowser
                 if "API" in str(e) or "key" in str(e).lower():
                     issues.append(f"无法获取账户列表，请检查 {browser_name} API 密钥配置")
+            else:
+                # For BitBrowser, just log the error but don't block
+                log.warning(f"BitBrowser account check: {e}")
         
         if issues:
             browser_type = getattr(config, 'browser_type', 'adspower') if hasattr(config, 'browser_type') else 'adspower'
