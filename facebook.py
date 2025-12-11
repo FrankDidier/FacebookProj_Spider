@@ -1972,6 +1972,135 @@ class MainWindow(QMainWindow):
         # if self.queue is not None:
         #     Thread(target=check_data, daemon=True).start()
 
+    def closeEvent(self, event):
+        """Handle application close - save logs with user choice"""
+        from PySide2.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QFileDialog
+        from PySide2.QtCore import Qt
+        
+        app_logger.log_action("APP_CLOSE", "用户请求关闭应用")
+        
+        # Get session summary
+        summary = app_logger.get_session_summary()
+        
+        # Create custom dialog
+        dialog = QDialog(self)
+        dialog.setWindowTitle("💾 保存日志 - Save Logs")
+        dialog.setMinimumWidth(500)
+        dialog.setStyleSheet("""
+            QDialog {
+                background-color: #f5f5f5;
+            }
+            QLabel {
+                color: #333;
+            }
+            QPushButton {
+                padding: 10px 20px;
+                border-radius: 5px;
+                font-weight: bold;
+            }
+        """)
+        
+        layout = QVBoxLayout(dialog)
+        
+        # Header
+        header = QLabel("📊 会话日志已生成 - Session Logs Generated")
+        header.setStyleSheet("font-size: 16px; font-weight: bold; color: #1976d2; margin-bottom: 10px;")
+        layout.addWidget(header)
+        
+        # Session info
+        info_text = f"""
+        <b>会话ID:</b> {summary['session_id']}<br>
+        <b>运行时长:</b> {summary['duration_formatted']}<br>
+        <b>总操作数:</b> {summary['total_actions']}<br>
+        <b>错误数量:</b> {summary['total_errors']}<br>
+        <b>终端输出:</b> {summary['total_terminal_output']} 行
+        """
+        info_label = QLabel(info_text)
+        info_label.setStyleSheet("background-color: white; padding: 15px; border-radius: 5px; margin: 10px 0;")
+        layout.addWidget(info_label)
+        
+        # Explanation
+        explain_label = QLabel("日志文件可以帮助我们诊断问题。请选择保存位置:")
+        explain_label.setStyleSheet("color: #666; margin: 10px 0;")
+        layout.addWidget(explain_label)
+        
+        # Default location info
+        default_label = QLabel(f"默认位置: {app_logger.default_log_dir}")
+        default_label.setStyleSheet("color: #888; font-size: 11px;")
+        layout.addWidget(default_label)
+        
+        # Buttons
+        btn_layout = QHBoxLayout()
+        
+        # Save to default location
+        btn_default = QPushButton("💾 保存到默认位置")
+        btn_default.setStyleSheet("background-color: #4caf50; color: white;")
+        btn_default.clicked.connect(lambda: self._save_logs_and_close(dialog, None, event))
+        btn_layout.addWidget(btn_default)
+        
+        # Choose location
+        btn_choose = QPushButton("📁 选择保存位置...")
+        btn_choose.setStyleSheet("background-color: #2196f3; color: white;")
+        btn_choose.clicked.connect(lambda: self._choose_save_location(dialog, event))
+        btn_layout.addWidget(btn_choose)
+        
+        # Don't save
+        btn_skip = QPushButton("❌ 不保存")
+        btn_skip.setStyleSheet("background-color: #f44336; color: white;")
+        btn_skip.clicked.connect(lambda: self._skip_save_and_close(dialog, event))
+        btn_layout.addWidget(btn_skip)
+        
+        layout.addLayout(btn_layout)
+        
+        dialog.exec_()
+    
+    def _save_logs_and_close(self, dialog, save_path, event):
+        """Save logs and close the application"""
+        try:
+            log_file, json_file = app_logger.save_logs(save_path)
+            
+            # Show success message
+            QMessageBox.information(
+                self,
+                "日志已保存",
+                f"日志文件已保存:\n\n📄 {log_file}\n📄 {json_file}\n\n请将这些文件发送给技术支持以帮助诊断问题。"
+            )
+            
+            app_logger.log_action("LOGS_SAVED", f"日志保存成功", {"path": save_path or app_logger.default_log_dir})
+        except Exception as e:
+            QMessageBox.warning(self, "保存失败", f"保存日志时出错:\n{str(e)}")
+            app_logger.log_error("SAVE_ERROR", "保存日志失败", e)
+        
+        dialog.close()
+        event.accept()
+    
+    def _choose_save_location(self, dialog, event):
+        """Let user choose save location"""
+        save_path = QFileDialog.getExistingDirectory(
+            self,
+            "选择日志保存位置",
+            os.path.expanduser("~"),
+            QFileDialog.ShowDirsOnly
+        )
+        
+        if save_path:
+            self._save_logs_and_close(dialog, save_path, event)
+        # If user cancels, dialog stays open
+    
+    def _skip_save_and_close(self, dialog, event):
+        """Close without saving logs"""
+        reply = QMessageBox.question(
+            self,
+            "确认不保存",
+            "确定不保存日志吗?\n\n如果遇到问题，日志文件可以帮助我们诊断。",
+            QMessageBox.Yes | QMessageBox.No
+        )
+        
+        if reply == QMessageBox.Yes:
+            app_logger.log_action("LOGS_SKIPPED", "用户选择不保存日志")
+            dialog.close()
+            event.accept()
+
 
 # 程序入口
 if __name__ == "__main__":
