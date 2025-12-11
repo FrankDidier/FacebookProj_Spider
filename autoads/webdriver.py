@@ -35,6 +35,9 @@ from autoads import ads_api
 
 
 class NoConsoleService(Service):
+    # Compatibility fix for newer Selenium versions
+    start_error_message = "Please check that the chromedriver is installed and in PATH."
+    
     def start(self):
         try:
             cmd = [self.path]
@@ -58,22 +61,24 @@ class NoConsoleService(Service):
         except TypeError:
             raise
         except OSError as err:
+            error_msg = getattr(self, 'start_error_message', 'Check chromedriver installation.')
             if err.errno == errno.ENOENT:
                 raise WebDriverException(
                     "'%s' executable needs to be in PATH. %s" % (
-                        os.path.basename(self.path), self.start_error_message)
+                        os.path.basename(self.path), error_msg)
                 )
             elif err.errno == errno.EACCES:
                 raise WebDriverException(
                     "'%s' executable may have wrong permissions. %s" % (
-                        os.path.basename(self.path), self.start_error_message)
+                        os.path.basename(self.path), error_msg)
                 )
             else:
                 raise
         except Exception as e:
+            error_msg = getattr(self, 'start_error_message', 'Check chromedriver installation.')
             raise WebDriverException(
                 "The executable %s needs to be available in the path. %s\n%s" %
-                (os.path.basename(self.path), self.start_error_message, str(e)))
+                (os.path.basename(self.path), error_msg, str(e)))
         count = 0
         while True:
             self.assert_process_still_running()
@@ -240,33 +245,49 @@ class WebDriver(RemoteWebDriver):
             resp = self.get_remote_driver()
             log.info(resp)
             if resp:
-                chrome_driver = resp["data"]["webdriver"]
+                chrome_driver_path = resp["data"]["webdriver"]
+                debugger_address = resp["data"]["ws"]["selenium"]
+                
                 chrome_options = Options()
-                chrome_options.add_experimental_option("debuggerAddress", resp["data"]["ws"]["selenium"])
+                chrome_options.add_experimental_option("debuggerAddress", debugger_address)
 
-                s = NoConsoleService(chrome_driver)
-                # s=Service(chrome_driver)
-                log.info('连接并开启浏览器中。。。')
+                log.info(f'连接并开启浏览器中... driver={chrome_driver_path}, debugger={debugger_address}')
                 tools.send_message_to_ui(ms=self.ms, ui=self.ui,
-                                         message=f'连接并开启远程[{resp["data"]["ws"]["selenium"]}]浏览器中...')
+                                         message=f'连接并开启远程[{debugger_address}]浏览器中...')
+                
                 try_times = 0
                 while try_times < 2:  # 连接远程浏览器，尝试2次之后就直接放弃
                     try:
                         if not (self.stop_event and self.stop_event.isSet()):
-                            driver = webdriver.Chrome(service=s, options=chrome_options)
-                            driver.execute_cdp_cmd('Page.addScriptToEvaluateOnNewDocument', {
-                                'source': 'Object.defineProperty(navigator, "webdriver", {get: () => undefined})'
-                            })
+                            # Try NoConsoleService first, fall back to regular Service
+                            try:
+                                s = NoConsoleService(chrome_driver_path)
+                                driver = webdriver.Chrome(service=s, options=chrome_options)
+                            except Exception as service_err:
+                                log.warning(f'NoConsoleService failed, trying regular Service: {service_err}')
+                                s = Service(chrome_driver_path)
+                                driver = webdriver.Chrome(service=s, options=chrome_options)
+                            
+                            # Hide webdriver detection
+                            try:
+                                driver.execute_cdp_cmd('Page.addScriptToEvaluateOnNewDocument', {
+                                    'source': 'Object.defineProperty(navigator, "webdriver", {get: () => undefined})'
+                                })
+                            except:
+                                pass  # Not critical if this fails
+                            
                             tools.send_message_to_ui(ms=self.ms, ui=self.ui,
                                                      message=f'开启远程浏览器{self._ads_id} | 成功')
+                            log.info(f'成功连接到浏览器 {self._ads_id}')
                             break
                         else:
                             break
                     except Exception as e:
-                        log.error(e)
+                        log.error(f'连接浏览器失败: {e}')
                         tools.send_message_to_ui(ms=self.ms, ui=self.ui,
                                                  message=f'开启远程浏览器{self._ads_id} | 失败，再次尝试 | {str(e)}')
                         try_times += 1
+                        time.sleep(1)  # Wait before retry
 
                 # print(f'_window_size-->{self._window_size}')
 
