@@ -362,6 +362,114 @@ class MainWindow(QMainWindow):
         
         # BYPASS ACTIVATION: Automatically skip to main app page
         self.bypass_activation()
+        
+        # Initialize file selectors
+        self._init_file_selectors()
+
+    def _init_file_selectors(self):
+        """Initialize file selector comboboxes and connect buttons"""
+        try:
+            # Member page - select group files
+            if hasattr(self.ui, 'comboBoxMemberGroupFile'):
+                self._refresh_member_group_files()
+                if hasattr(self.ui, 'pushButtonMemberRefreshFiles'):
+                    self.ui.pushButtonMemberRefreshFiles.clicked.connect(self._refresh_member_group_files)
+                if hasattr(self.ui, 'pushButtonMemberBrowseFile'):
+                    self.ui.pushButtonMemberBrowseFile.clicked.connect(self._browse_member_group_file)
+            
+            # Greets page - select member files  
+            if hasattr(self.ui, 'comboBoxGreetsMemberFile'):
+                self._refresh_greets_member_files()
+                if hasattr(self.ui, 'pushButtonGreetsRefreshFiles'):
+                    self.ui.pushButtonGreetsRefreshFiles.clicked.connect(self._refresh_greets_member_files)
+                if hasattr(self.ui, 'pushButtonGreetsBrowseFile'):
+                    self.ui.pushButtonGreetsBrowseFile.clicked.connect(self._browse_greets_member_file)
+        except Exception as e:
+            log.warning(f"File selector init warning: {e}")
+
+    def _refresh_member_group_files(self):
+        """Refresh the group files list for member collection"""
+        try:
+            combo = self.ui.comboBoxMemberGroupFile
+            combo.clear()
+            combo.addItem("使用默认采集结果")  # Default option
+            
+            group_dir = './group'
+            if os.path.exists(group_dir):
+                for f in sorted(os.listdir(group_dir)):
+                    if f.endswith('.txt') or f.endswith('.csv') or f.endswith('.json'):
+                        combo.addItem(f"group/{f}")
+            
+            # Also check for any txt files in current directory
+            for f in sorted(os.listdir('.')):
+                if f.endswith('.txt') and 'group' in f.lower():
+                    combo.addItem(f)
+        except Exception as e:
+            log.warning(f"Error refreshing group files: {e}")
+
+    def _browse_member_group_file(self):
+        """Browse for a group links file"""
+        file_name, _ = QFileDialog.getOpenFileName(
+            self, '选择群组链接文件', '.', 
+            '文本文件 (*.txt);;CSV文件 (*.csv);;JSON文件 (*.json);;所有文件 (*.*)'
+        )
+        if file_name:
+            combo = self.ui.comboBoxMemberGroupFile
+            combo.addItem(file_name)
+            combo.setCurrentText(file_name)
+
+    def _refresh_greets_member_files(self):
+        """Refresh the member files list for private messaging"""
+        try:
+            combo = self.ui.comboBoxGreetsMemberFile
+            combo.clear()
+            combo.addItem("使用默认采集结果")  # Default option
+            
+            member_dir = './member'
+            if os.path.exists(member_dir):
+                for f in sorted(os.listdir(member_dir)):
+                    if f.endswith('.txt') or f.endswith('.csv') or f.endswith('.json'):
+                        combo.addItem(f"member/{f}")
+            
+            # Also check for any txt files in current directory
+            for f in sorted(os.listdir('.')):
+                if f.endswith('.txt') and 'member' in f.lower():
+                    combo.addItem(f)
+        except Exception as e:
+            log.warning(f"Error refreshing member files: {e}")
+
+    def _browse_greets_member_file(self):
+        """Browse for a member data file"""
+        file_name, _ = QFileDialog.getOpenFileName(
+            self, '选择成员数据文件', '.', 
+            '文本文件 (*.txt);;CSV文件 (*.csv);;JSON文件 (*.json);;所有文件 (*.*)'
+        )
+        if file_name:
+            combo = self.ui.comboBoxGreetsMemberFile
+            combo.addItem(file_name)
+            combo.setCurrentText(file_name)
+
+    def get_selected_group_file(self):
+        """Get the selected group file path, or None for default"""
+        try:
+            if hasattr(self.ui, 'comboBoxMemberGroupFile'):
+                text = self.ui.comboBoxMemberGroupFile.currentText()
+                if text and text != "使用默认采集结果":
+                    return text
+        except:
+            pass
+        return None
+
+    def get_selected_member_file(self):
+        """Get the selected member file path, or None for default"""
+        try:
+            if hasattr(self.ui, 'comboBoxGreetsMemberFile'):
+                text = self.ui.comboBoxGreetsMemberFile.currentText()
+                if text and text != "使用默认采集结果":
+                    return text
+        except:
+            pass
+        return None
 
     def on_select_file(self):
         file_name = QFileDialog.getOpenFileName(self, caption='选择文件', dir='.', filter='*.exe')
@@ -424,17 +532,21 @@ class MainWindow(QMainWindow):
         stop, index = args
         tabs: QTabWidget = self.ui.tabWidget
         
+        log.info(f"update_control_enabled called: stop={stop}, index={index}")
+        
         # Get tab widget, use stacked widget if tab widget doesn't have it
         tab = tabs.widget(index)
         if not tab and hasattr(self.ui, 'stackedPages'):
             tab = self.ui.stackedPages.widget(index)
         
         if not tab:
+            log.warning(f"No tab found for index {index}")
             return
             
         spider_name = tab.objectName().replace('tab', '')
+        log.info(f"Spider name from tab: {spider_name}")
         
-        # Map tab names to button names
+        # Map tab names to button names - extended list
         button_name_map = {
             'GroupSpider': 'GroupSpider',
             'MembersSpider': 'MembersSpider',
@@ -447,17 +559,56 @@ class MainWindow(QMainWindow):
             'InsFollowing': 'InsFollowing',
             'InsProfile': 'InsProfile',
             'InsReelsComments': 'InsReelsComments',
+            'AutoLike': 'AutoLike',
+            'AutoComment': 'AutoComment',
+            'AutoFollow': 'AutoFollow',
+            'AutoAddFriend': 'AutoAddFriend',
+            'AutoGroup': 'AutoGroup',
+            'AutoPost': 'AutoPost',
+            'AdvancedMessaging': 'AdvancedMessaging',
+            'AutoRegister': 'AutoRegister',
+            'ContactList': 'ContactList',
         }
         
         button_base = button_name_map.get(spider_name, spider_name)
         buttons_start = self.findChildren(QPushButton, f'pushButton{button_base}Start')
         buttons_stop = self.findChildren(QPushButton, f'pushButton{button_base}Stop')
         
+        log.info(f"Looking for buttons: pushButton{button_base}Start, pushButton{button_base}Stop")
+        log.info(f"Found start buttons: {len(buttons_start)}, stop buttons: {len(buttons_stop)}")
+        
         if not buttons_start or not buttons_stop:
-            return
+            # Try to find buttons within the current tab widget
+            if tab:
+                buttons_start = tab.findChildren(QPushButton)
+                for btn in buttons_start:
+                    if 'start' in btn.objectName().lower() or btn.text() == '启动':
+                        buttons_start = [btn]
+                        break
+                for btn in tab.findChildren(QPushButton):
+                    if 'stop' in btn.objectName().lower() or btn.text() == '停止':
+                        buttons_stop = [btn]
+                        break
+            
+            if not buttons_start or not buttons_stop:
+                log.warning(f"Buttons not found for {spider_name}, but trying to re-enable all buttons")
+                # If stop=True and buttons not found, try to enable all relevant buttons
+                if stop:
+                    # Re-enable all start buttons on the page
+                    if tab:
+                        for btn in tab.findChildren(QPushButton):
+                            btn_name = btn.objectName().lower()
+                            if 'start' in btn_name or btn.text() == '启动':
+                                btn.setEnabled(True)
+                            elif 'stop' in btn_name or btn.text() == '停止':
+                                btn.setEnabled(False)
+                return
         
         button_start: QPushButton = buttons_start[0]
         button_stop: QPushButton = buttons_stop[0]
+        
+        log.info(f"Setting button states: start.enabled={stop}, stop.enabled={not stop}")
+        
         if stop:
             # 让启动按钮可用，停止按钮不可用
             button_start.setEnabled(True)

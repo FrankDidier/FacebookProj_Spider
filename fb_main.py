@@ -395,6 +395,34 @@ class Ui_MainWindow(object):
         self.tabMembersSpider.setObjectName(u"tabMembersSpider")
         self.verticalLayout_10 = QVBoxLayout(self.tabMembersSpider)
         self.verticalLayout_10.setObjectName(u"verticalLayout_10")
+        
+        # File selector row for loading group links
+        self.horizontalLayout_MemberFile = QHBoxLayout()
+        self.horizontalLayout_MemberFile.setObjectName(u"horizontalLayout_MemberFile")
+        self.label_MemberFile = QLabel(self.tabMembersSpider)
+        self.label_MemberFile.setObjectName(u"label_MemberFile")
+        self.label_MemberFile.setText("群组链接文件:")
+        self.label_MemberFile.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.horizontalLayout_MemberFile.addWidget(self.label_MemberFile)
+        
+        self.comboBoxMemberGroupFile = QComboBox(self.tabMembersSpider)
+        self.comboBoxMemberGroupFile.setObjectName(u"comboBoxMemberGroupFile")
+        self.comboBoxMemberGroupFile.setMinimumWidth(200)
+        self.horizontalLayout_MemberFile.addWidget(self.comboBoxMemberGroupFile)
+        
+        self.pushButtonMemberRefreshFiles = QPushButton(self.tabMembersSpider)
+        self.pushButtonMemberRefreshFiles.setObjectName(u"pushButtonMemberRefreshFiles")
+        self.pushButtonMemberRefreshFiles.setText("刷新")
+        self.horizontalLayout_MemberFile.addWidget(self.pushButtonMemberRefreshFiles)
+        
+        self.pushButtonMemberBrowseFile = QPushButton(self.tabMembersSpider)
+        self.pushButtonMemberBrowseFile.setObjectName(u"pushButtonMemberBrowseFile")
+        self.pushButtonMemberBrowseFile.setText("浏览...")
+        self.horizontalLayout_MemberFile.addWidget(self.pushButtonMemberBrowseFile)
+        
+        self.horizontalLayout_MemberFile.addItem(QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum))
+        self.verticalLayout_10.addLayout(self.horizontalLayout_MemberFile)
+        
         self.horizontalLayout_18 = QHBoxLayout()
         self.horizontalLayout_18.setObjectName(u"horizontalLayout_18")
         self.label_3 = QLabel(self.tabMembersSpider)
@@ -499,6 +527,34 @@ class Ui_MainWindow(object):
         self.tabGreetsSpider.setObjectName(u"tabGreetsSpider")
         self.verticalLayout_11 = QVBoxLayout(self.tabGreetsSpider)
         self.verticalLayout_11.setObjectName(u"verticalLayout_11")
+        
+        # File selector row for loading member data
+        self.horizontalLayout_GreetsFile = QHBoxLayout()
+        self.horizontalLayout_GreetsFile.setObjectName(u"horizontalLayout_GreetsFile")
+        self.label_GreetsFile = QLabel(self.tabGreetsSpider)
+        self.label_GreetsFile.setObjectName(u"label_GreetsFile")
+        self.label_GreetsFile.setText("成员数据文件:")
+        self.label_GreetsFile.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.horizontalLayout_GreetsFile.addWidget(self.label_GreetsFile)
+        
+        self.comboBoxGreetsMemberFile = QComboBox(self.tabGreetsSpider)
+        self.comboBoxGreetsMemberFile.setObjectName(u"comboBoxGreetsMemberFile")
+        self.comboBoxGreetsMemberFile.setMinimumWidth(200)
+        self.horizontalLayout_GreetsFile.addWidget(self.comboBoxGreetsMemberFile)
+        
+        self.pushButtonGreetsRefreshFiles = QPushButton(self.tabGreetsSpider)
+        self.pushButtonGreetsRefreshFiles.setObjectName(u"pushButtonGreetsRefreshFiles")
+        self.pushButtonGreetsRefreshFiles.setText("刷新")
+        self.horizontalLayout_GreetsFile.addWidget(self.pushButtonGreetsRefreshFiles)
+        
+        self.pushButtonGreetsBrowseFile = QPushButton(self.tabGreetsSpider)
+        self.pushButtonGreetsBrowseFile.setObjectName(u"pushButtonGreetsBrowseFile")
+        self.pushButtonGreetsBrowseFile.setText("浏览...")
+        self.horizontalLayout_GreetsFile.addWidget(self.pushButtonGreetsBrowseFile)
+        
+        self.horizontalLayout_GreetsFile.addItem(QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum))
+        self.verticalLayout_11.addLayout(self.horizontalLayout_GreetsFile)
+        
         self.horizontalLayout_6 = QHBoxLayout()
         self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
         self.label_5 = QLabel(self.tabGreetsSpider)
