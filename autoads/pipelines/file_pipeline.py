@@ -111,9 +111,12 @@ class FilePipeline(BasePipeline):
         :return:
         """
         table = tools.abspath(item.table_name)  # 这里只是一个目录，我们需要把目录中的文件都要过滤一遍来获取到请求
-        files = glob.glob(table + '\*.txt')
+        files = glob.glob(table + '/*.txt') + glob.glob(table + '\\*.txt')
         index = 1
         for table in files:
+            # Skip clean links files
+            if table.endswith('_links.txt'):
+                continue
             with open(table, encoding="utf-8") as f:
                 while True:
                     content = f.readline()
@@ -123,6 +126,30 @@ class FilePipeline(BasePipeline):
                         yield content  # 消费一条
 
                     index += 1
+
+    def load_items_from_file(self, item: Item, file_path, begin=0):
+        """
+        从指定的文件加载数据
+        Load items from a specific file
+        :param item: Item template
+        :param file_path: Path to the file to load
+        :param begin: Starting index
+        :return: Generator of file lines
+        """
+        file_path = tools.abspath(file_path)
+        if not os.path.exists(file_path):
+            log.warning(f'File not found: {file_path}')
+            return
+        
+        index = 1
+        with open(file_path, encoding="utf-8") as f:
+            while True:
+                content = f.readline()
+                if not content:
+                    break
+                if index > begin:
+                    yield content  # 消费一条
+                index += 1
 
     def close(self):
         if callable(self.__pre_close__):

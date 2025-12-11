@@ -907,6 +907,15 @@ class MainWindow(QMainWindow):
         config.set_option('main', 'account_nums', self.ui.lineEditGreetsMaxThreadCount.text())
         config.set_option('main', 'members_nums', self.ui.lineEditGreetsCount.text())
         config.set_option('main', 'member_timeout', self.ui.lineEditGreetsTimeout.text())
+        
+        # Get selected member file from UI
+        selected_member_file = self.get_selected_member_file()
+        if selected_member_file:
+            # Save the selected file path to config for spider to use
+            config.set_option('members', 'selected_file', selected_member_file)
+            self.print_to_tui(self.ui.textBrowserGreetsSpider, f'使用选择的成员文件: {selected_member_file}')
+        else:
+            config.set_option('members', 'selected_file', '')
 
         # 确定需要开启多少个线程来处理请求
         thread_count = tools.get_greet_threading_count(config_from_newest=config)
@@ -942,23 +951,68 @@ class MainWindow(QMainWindow):
     def on_group_spider_stop(self):
         if self.group_stop_event:
             self.group_stop_event.set()
-            # Immediately re-enable UI
-            QTimer.singleShot(500, lambda: self._force_re_enable_buttons(1))
             self.print_to_tui(self.ui.textBrowserGroupSpider, '正在停止...')
+            # Delay re-enable to allow spider to finish, then clear stop_event
+            QTimer.singleShot(1000, lambda: self._cleanup_after_stop(1, 'group'))
 
     def on_member_spider_stop(self):
         if self.member_stop_event:
             self.member_stop_event.set()
-            # Immediately re-enable UI
-            QTimer.singleShot(500, lambda: self._force_re_enable_buttons(2))
             self.print_to_tui(self.ui.textBrowserMembersSpider, '正在停止...')
+            # Delay re-enable to allow spider to finish, then clear stop_event
+            QTimer.singleShot(1000, lambda: self._cleanup_after_stop(2, 'member'))
 
     def on_greets_spider_stop(self):
         if self.greets_stop_event:
             self.greets_stop_event.set()
-            # Immediately re-enable UI
-            QTimer.singleShot(500, lambda: self._force_re_enable_buttons(3))
             self.print_to_tui(self.ui.textBrowserGreetsSpider, '正在停止...')
+            # Delay re-enable to allow spider to finish, then clear stop_event
+            QTimer.singleShot(1000, lambda: self._cleanup_after_stop(3, 'greets'))
+    
+    def _cleanup_after_stop(self, tab_index, spider_type):
+        """Cleanup after spider stop - re-enable buttons and clear stop_event"""
+        try:
+            # Clear the stop_event so spider can start again
+            if spider_type == 'group' and self.group_stop_event:
+                self.group_stop_event.clear()
+                self.group_stop_event = None
+                log.info("Cleared group_stop_event")
+            elif spider_type == 'member' and self.member_stop_event:
+                self.member_stop_event.clear()
+                self.member_stop_event = None
+                log.info("Cleared member_stop_event")
+            elif spider_type == 'greets' and self.greets_stop_event:
+                self.greets_stop_event.clear()
+                self.greets_stop_event = None
+                log.info("Cleared greets_stop_event")
+            
+            # Clear grid layout widgets
+            self._clear_grid_layout(tab_index)
+            
+            # Re-enable buttons
+            self._force_re_enable_buttons(tab_index)
+            
+            log.info(f"Cleanup completed for {spider_type} spider")
+        except Exception as e:
+            log.error(f"Error in cleanup_after_stop: {e}")
+    
+    def _clear_grid_layout(self, tab_index):
+        """Clear all widgets from grid layout"""
+        try:
+            # Calculate grid index (subtract 1 for ConfigWizardPage at index 0)
+            grid_index = tab_index - 1 if tab_index > 0 else 0
+            grid_layouts = self.findChildren(QGridLayout, f'gridLayout_{grid_index}')
+            
+            if grid_layouts:
+                grid_layout = grid_layouts[0]
+                # Remove all widgets from grid layout
+                while grid_layout.count():
+                    item = grid_layout.takeAt(0)
+                    if item.widget():
+                        item.widget().deleteLater()
+                log.info(f"Cleared grid layout {grid_index}")
+        except Exception as e:
+            log.error(f"Error clearing grid layout: {e}")
     
     def _force_re_enable_buttons(self, tab_index):
         """Force re-enable buttons after stop is clicked"""
@@ -976,6 +1030,7 @@ class MainWindow(QMainWindow):
                     btn_text = btn.text()
                     if 'start' in btn_name or btn_text == '启动':
                         btn.setEnabled(True)
+                        log.info(f"Re-enabled button: {btn.objectName()}")
                     elif 'stop' in btn_name or btn_text == '停止':
                         btn.setEnabled(False)
             
@@ -985,6 +1040,11 @@ class MainWindow(QMainWindow):
                     item = self.ui.sidebarList.item(i)
                     if item:
                         item.setFlags(item.flags() | Qt.ItemIsEnabled)
+            
+            # Also enable tab widget if present
+            if hasattr(self.ui, 'tabWidget'):
+                for i in range(self.ui.tabWidget.count()):
+                    self.ui.tabWidget.setTabEnabled(i, True)
             
             log.info(f"Force re-enabled buttons for tab index {tab_index}")
         except Exception as e:

@@ -349,6 +349,22 @@ class MembersSpider(autoads.AirSpider):
 
                     log.info(f'线程{threading.current_thread().name}中浏览器{request.ads_id}已经完成滚动！')
                     tools.send_message_to_ui(ms=self.ms, ui=self.ui, message='群成员采集结束，页面停止滚动')
+                    
+                    # 自动删除已采集完成的群组 - Auto-delete the collected group
+                    try:
+                        group_files = os.listdir(tools.abspath(self.config.groups_table))
+                        for gf in group_files:
+                            if gf.endswith('.txt') and not gf.endswith('_links.txt'):
+                                group_file_path = os.path.join(tools.abspath(self.config.groups_table), gf)
+                                deleted = tools.delete_entry_from_file(group_file_path, 'group_link', group.group_link)
+                                if deleted:
+                                    tools.send_message_to_ui(ms=self.ms, ui=self.ui, 
+                                        message=f'群组 {group.group_name} 采集完成，已从列表中删除')
+                                    log.info(f'Deleted group {group.group_link} from {group_file_path}')
+                                    break
+                    except Exception as e:
+                        log.error(f'Error deleting group after collection: {e}')
+                    
                     if request.finished_nums == self.config.groups_nums - 1:
                         log.info(f'线程{threading.current_thread().name}中浏览器{request.ads_id}已经全部处理完请求，准备关闭浏览器！')
                         # 已经全部处理完了，那么这个ads_id就必须要关掉了，但是线程不关闭，此线程就要去处理别的ads_id的请求

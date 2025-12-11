@@ -30,12 +30,20 @@ import threading
 
 class GreetsSpider(autoads.AirSpider):
     pipeline = None
+    selected_member_file = None  # Path to selected member file from UI
 
     def start_requests(self):
 
         self.pipeline = self._item_buffer._pipelines[0]
         member_template = MemberItem()
-        members = self.pipeline.load_items(member_template)
+        
+        # Check if a specific file was selected in UI
+        if hasattr(self.config, 'members_selected_file') and self.config.members_selected_file:
+            self.selected_member_file = self.config.members_selected_file
+            log.info(f'Using selected member file: {self.selected_member_file}')
+            members = self.pipeline.load_items_from_file(member_template, self.selected_member_file)
+        else:
+            members = self.pipeline.load_items(member_template)
 
         ads_ids = tools.get_ads_id()
 
@@ -201,8 +209,14 @@ class GreetsSpider(autoads.AirSpider):
 
                             # 直接更新这条记录status=send
                             member: MemberItem = request.member
-                            member_file = self.config.members_table + tools.make_safe_filename(
-                                member.group_name) + '.txt'
+                            
+                            # Determine the correct member file to update/delete from
+                            if self.selected_member_file:
+                                member_file = self.selected_member_file
+                            else:
+                                member_file = self.config.members_table + tools.make_safe_filename(
+                                    member.group_name) + '.txt'
+                            
                             member.__table_name__ = member_file
                             member.status = 'send'
                             yield member.to_UpdateItem()
@@ -238,10 +252,16 @@ class GreetsSpider(autoads.AirSpider):
                     f'线程{threading.current_thread().name}中浏览器{request.ads_id}处理的请求{request.url}页面中没有发消息按钮，不发送消息，保存已处理记录')
                 # self.abandom_request(request)
                 if hasattr(request, 'member') and request.member:
-                    tools.send_message_to_ui(ms=self.ms, ui=self.ui, message=f'此成员不能发消息，放弃发送！')
+                    tools.send_message_to_ui(ms=self.ms, ui=self.ui, message=f'此成员不能发消息，放弃发送！已从列表中删除')
                     member: MemberItem = request.member
-                    member_file = self.config.members_table + tools.make_safe_filename(
-                        member.group_name) + '.txt'
+                    
+                    # Determine the correct member file
+                    if self.selected_member_file:
+                        member_file = self.selected_member_file
+                    else:
+                        member_file = self.config.members_table + tools.make_safe_filename(
+                            member.group_name) + '.txt'
+                    
                     member.__table_name__ = member_file
                     member.status = 'send'
                     yield member.to_UpdateItem()
@@ -293,10 +313,16 @@ class GreetsSpider(autoads.AirSpider):
                 log.info(
                     f'线程{threading.current_thread().name}中浏览器{request.ads_id}处理的请求{request.url}发生了跳转，有可能是服务商，不发送消息，保存已处理记录')
                 if hasattr(request, 'member') and request.member:
-                    tools.send_message_to_ui(ms=self.ms, ui=self.ui, message=f'此成员有可能是服务商，不能发消息，放弃发送！')
+                    tools.send_message_to_ui(ms=self.ms, ui=self.ui, message=f'此成员有可能是服务商，不能发消息，放弃发送！已从列表中删除')
                     member: MemberItem = request.member
-                    member_file = self.config.members_table + tools.make_safe_filename(
-                        member.group_name) + '.txt'
+                    
+                    # Determine the correct member file
+                    if self.selected_member_file:
+                        member_file = self.selected_member_file
+                    else:
+                        member_file = self.config.members_table + tools.make_safe_filename(
+                            member.group_name) + '.txt'
+                    
                     member.__table_name__ = member_file
                     member.status = 'send'
                     yield member.to_UpdateItem()

@@ -782,5 +782,19 @@ class Config(object):
         except:
             return True
 
+    @property
+    def members_selected_file(self):
+        try:
+            return self.get_option('members', 'selected_file')
+        except:
+            return ''
+
+    @property
+    def groups_selected_file(self):
+        try:
+            return self.get_option('groups', 'selected_file')
+        except:
+            return ''
+
 
 config = Config()
