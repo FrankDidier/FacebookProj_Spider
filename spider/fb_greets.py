@@ -11,6 +11,7 @@ import autoads
 from autoads.items.member_item import MemberItem
 from autoads.log import log
 from autoads.action_control import Action
+from autoads.app_logger import app_logger
 from datetime import datetime
 from autoads import tools
 from autoads.config import config
@@ -224,11 +225,14 @@ class GreetsSpider(autoads.AirSpider):
                             # 自动删除已发送的条目，避免重复发送
                             # Auto-delete the sent entry to prevent duplicate sending
                             tools.delete_entry_from_file(member_file, 'member_link', member.member_link)
+                            app_logger.log_file_operation("DELETE", member_file, True, {"member": member.member_name})
                             
                             # 云端去重标记 - Mark as processed in cloud dedup
                             if cloud_dedup.enabled:
                                 cloud_dedup.mark_processed(member.member_link, 'message', request.ads_id)
 
+                            # 记录私信发送成功
+                            app_logger.log_message_send(member.member_name, member.member_link, True, "发送成功")
                             tools.send_message_to_ui(ms=self.ms, ui=self.ui, message=f'私信发送成功！已从列表中删除')
                             tools.delay_time(3)
 
@@ -255,6 +259,9 @@ class GreetsSpider(autoads.AirSpider):
                     tools.send_message_to_ui(ms=self.ms, ui=self.ui, message=f'此成员不能发消息，放弃发送！已从列表中删除')
                     member: MemberItem = request.member
                     
+                    # 记录无法发送
+                    app_logger.log_message_send(member.member_name, member.member_link, False, "没有发消息按钮")
+                    
                     # Determine the correct member file
                     if self.selected_member_file:
                         member_file = self.selected_member_file
@@ -269,6 +276,7 @@ class GreetsSpider(autoads.AirSpider):
                     # 自动删除不能发消息的成员，避免重复处理
                     # Auto-delete members who can't receive messages
                     tools.delete_entry_from_file(member_file, 'member_link', member.member_link)
+                    app_logger.log_file_operation("DELETE", member_file, True, {"member": member.member_name, "reason": "不能发消息"})
 
                     # member.table_name = self.config.members_finished + datetime.now().strftime(
                     #     "%Y-%m-%d") + '/' + request.ads_id + '.txt'

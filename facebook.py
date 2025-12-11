@@ -40,6 +40,7 @@ from spider.ins_profile import InstagramProfileSpider
 from spider.ins_reels_comments import InstagramReelsCommentsSpider
 from urllib import parse
 from autoads.log import log
+from autoads.app_logger import app_logger, log_button
 from fb_main import Ui_MainWindow
 from functools import partial
 from autoads import ads_api
@@ -663,11 +664,13 @@ class MainWindow(QMainWindow):
 
     def validate_setup(self, feature_name="功能"):
         """Validate setup before starting any feature - Flexible for multiple browsers"""
+        app_logger.log_action("VALIDATION", f"开始验证配置 - {feature_name}")
         issues = []
         
         # Check browser type
         browser_type = getattr(config, 'browser_type', 'adspower') if hasattr(config, 'browser_type') else 'adspower'
         browser_name = 'AdsPower' if browser_type == 'adspower' else 'BitBrowser' if browser_type == 'bitbrowser' else '指纹浏览器'
+        app_logger.log_action("VALIDATION", f"浏览器类型: {browser_name}", {"browser_type": browser_type})
         
         # Check API key - ONLY required for AdsPower, NOT for BitBrowser
         if browser_type == 'bitbrowser':
@@ -771,9 +774,13 @@ class MainWindow(QMainWindow):
         动态添加每个采集器对应的信息展示控件
         :return:
         """
+        app_logger.log_button_click("采集群组-启动", "GroupSpider页面")
+        
         # Validate setup first
         if not self.validate_setup("采集群组"):
+            app_logger.log_validation("采集群组-配置检查", False, "配置验证失败")
             return
+        app_logger.log_validation("采集群组-配置检查", True)
         doc: QTextDocument = self.ui.plainTextEditGroupWords.document()
         words = []
         # 搜集采集的关键词，如果采集过了，就不再采集了
@@ -839,13 +846,19 @@ class MainWindow(QMainWindow):
             stop_event=self.group_stop_event, grid_layout=grid_layout[0]).start()
 
     def on_member_spider_start(self):
+        app_logger.log_button_click("采集成员-启动", "MembersSpider页面")
+        
         # Validate setup first
         if not self.validate_setup("采集成员"):
+            app_logger.log_validation("采集成员-配置检查", False, "配置验证失败")
             return
+        app_logger.log_validation("采集成员-配置检查", True)
         
         # 收集页面中输入的参数，并保存到配置文件中
         config.set_option('main', 'account_nums', self.ui.lineEditMemberMaxThreadCount.text())
         config.set_option('main', 'group_nums', self.ui.lineEditGroupCount.text())
+        app_logger.log_config_change('main', 'account_nums', '', self.ui.lineEditMemberMaxThreadCount.text())
+        app_logger.log_config_change('main', 'group_nums', '', self.ui.lineEditGroupCount.text())
 
         # 获取可用的外部浏览器个数
         # ads_ids = tools.get_ads_id(config.account_nums)
@@ -881,9 +894,13 @@ class MainWindow(QMainWindow):
             stop_event=self.member_stop_event, grid_layout=grid_layout[0]).start()
 
     def on_greets_spider_start(self):
+        app_logger.log_button_click("私信成员-启动", "GreetsSpider页面")
+        
         # Validate setup first
         if not self.validate_setup("私信成员"):
+            app_logger.log_validation("私信成员-配置检查", False, "配置验证失败")
             return
+        app_logger.log_validation("私信成员-配置检查", True)
         
         doc: QTextDocument = self.ui.plainTextEditGreetsContent.document()
         greets_content = []
@@ -949,42 +966,55 @@ class MainWindow(QMainWindow):
             stop_event=self.greets_stop_event, grid_layout=grid_layout[0], is_use_interval_timeout=True).start()
 
     def on_group_spider_stop(self):
+        app_logger.log_button_click("采集群组-停止", "GroupSpider页面")
         if self.group_stop_event:
             self.group_stop_event.set()
+            app_logger.log_spider_stop("GroupSpider", "用户点击停止")
             self.print_to_tui(self.ui.textBrowserGroupSpider, '正在停止...')
             # Delay re-enable to allow spider to finish, then clear stop_event
             QTimer.singleShot(1000, lambda: self._cleanup_after_stop(1, 'group'))
+        else:
+            app_logger.log_error("BUTTON_ERROR", "group_stop_event 为 None，无法停止")
 
     def on_member_spider_stop(self):
+        app_logger.log_button_click("采集成员-停止", "MembersSpider页面")
         if self.member_stop_event:
             self.member_stop_event.set()
+            app_logger.log_spider_stop("MembersSpider", "用户点击停止")
             self.print_to_tui(self.ui.textBrowserMembersSpider, '正在停止...')
             # Delay re-enable to allow spider to finish, then clear stop_event
             QTimer.singleShot(1000, lambda: self._cleanup_after_stop(2, 'member'))
+        else:
+            app_logger.log_error("BUTTON_ERROR", "member_stop_event 为 None，无法停止")
 
     def on_greets_spider_stop(self):
+        app_logger.log_button_click("私信成员-停止", "GreetsSpider页面")
         if self.greets_stop_event:
             self.greets_stop_event.set()
+            app_logger.log_spider_stop("GreetsSpider", "用户点击停止")
             self.print_to_tui(self.ui.textBrowserGreetsSpider, '正在停止...')
             # Delay re-enable to allow spider to finish, then clear stop_event
             QTimer.singleShot(1000, lambda: self._cleanup_after_stop(3, 'greets'))
+        else:
+            app_logger.log_error("BUTTON_ERROR", "greets_stop_event 为 None，无法停止")
     
     def _cleanup_after_stop(self, tab_index, spider_type):
         """Cleanup after spider stop - re-enable buttons and clear stop_event"""
+        app_logger.log_action("CLEANUP", f"开始清理 {spider_type} spider", {"tab_index": tab_index})
         try:
             # Clear the stop_event so spider can start again
             if spider_type == 'group' and self.group_stop_event:
                 self.group_stop_event.clear()
                 self.group_stop_event = None
-                log.info("Cleared group_stop_event")
+                app_logger.log_action("CLEANUP", "已清理 group_stop_event")
             elif spider_type == 'member' and self.member_stop_event:
                 self.member_stop_event.clear()
                 self.member_stop_event = None
-                log.info("Cleared member_stop_event")
+                app_logger.log_action("CLEANUP", "已清理 member_stop_event")
             elif spider_type == 'greets' and self.greets_stop_event:
                 self.greets_stop_event.clear()
                 self.greets_stop_event = None
-                log.info("Cleared greets_stop_event")
+                app_logger.log_action("CLEANUP", "已清理 greets_stop_event")
             
             # Clear grid layout widgets
             self._clear_grid_layout(tab_index)
@@ -992,9 +1022,9 @@ class MainWindow(QMainWindow):
             # Re-enable buttons
             self._force_re_enable_buttons(tab_index)
             
-            log.info(f"Cleanup completed for {spider_type} spider")
+            app_logger.log_action("CLEANUP", f"清理完成 {spider_type} spider", {"success": True})
         except Exception as e:
-            log.error(f"Error in cleanup_after_stop: {e}")
+            app_logger.log_error("CLEANUP_ERROR", f"清理 {spider_type} 失败", e, {"tab_index": tab_index})
     
     def _clear_grid_layout(self, tab_index):
         """Clear all widgets from grid layout"""
@@ -1838,6 +1868,12 @@ class MainWindow(QMainWindow):
 
     def on_sidebar_changed(self, index):
         """Handle sidebar list selection change"""
+        # Get page name for logging
+        page_name = "Unknown"
+        if hasattr(self.ui, 'sidebarList') and self.ui.sidebarList.item(index):
+            page_name = self.ui.sidebarList.item(index).text()
+        app_logger.log_ui_event("PAGE_CHANGE", page_name, {"index": index})
+        
         # Update both stacked widget and tab widget for compatibility
         if hasattr(self.ui, 'stackedPages'):
             self.ui.stackedPages.setCurrentIndex(index)
