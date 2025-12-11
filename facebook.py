@@ -658,7 +658,18 @@ class MainWindow(QMainWindow):
         # 确定需要开启多少个线程来处理请求
         thread_count = len(ads_ids) if len(ads_ids) < len(config.groups_words) else len(config.groups_words)
 
-        grid_layout = self.findChildren(QGridLayout, f'gridLayout_{str(self.ui.tabWidget.currentIndex())}')
+        # Subtract 1 because ConfigWizardPage is at index 0
+        grid_index = self.ui.stackedPages.currentIndex() - 1
+        grid_layout = self.findChildren(QGridLayout, f'gridLayout_{str(grid_index)}')
+        
+        # Safety check
+        if not grid_layout:
+            log.warning(f"Grid layout not found for index {grid_index}, trying gridLayout_0")
+            grid_layout = self.findChildren(QGridLayout, 'gridLayout_0')
+        
+        if not grid_layout:
+            QMessageBox.warning(self, "错误", "无法找到布局组件，请重启应用")
+            return
 
         # 给每个处理请求的线程配置对应的流程展示控件，实时监控到请求被处理到哪一步了
         for i in range(thread_count):
@@ -669,11 +680,11 @@ class MainWindow(QMainWindow):
 
         self.group_stop_event = threading.Event()
 
-        self.ms.update_control_status.emit([False, self.ui.tabWidget.currentIndex()])
+        self.ms.update_control_status.emit([False, self.ui.stackedPages.currentIndex()])
 
         GroupSpider(
             thread_count=thread_count, ads_ids=ads_ids, config=config, ui=self, ms=self.ms,
-            tab_index=self.ui.tabWidget.currentIndex(),
+            tab_index=self.ui.stackedPages.currentIndex(),
             stop_event=self.group_stop_event, grid_layout=grid_layout[0]).start()
 
     def on_member_spider_start(self):
@@ -690,7 +701,18 @@ class MainWindow(QMainWindow):
 
         # 确定需要开启多少个线程来处理请求
         thread_count = tools.get_greet_threading_count(config_from_newest=config)
-        grid_layout = self.findChildren(QGridLayout, f'gridLayout_{str(self.ui.tabWidget.currentIndex())}')
+        # Subtract 1 because ConfigWizardPage is at index 0
+        grid_index = self.ui.stackedPages.currentIndex() - 1
+        grid_layout = self.findChildren(QGridLayout, f'gridLayout_{str(grid_index)}')
+        
+        # Safety check
+        if not grid_layout:
+            log.warning(f"Grid layout not found for index {grid_index}, trying gridLayout_1")
+            grid_layout = self.findChildren(QGridLayout, 'gridLayout_1')
+        
+        if not grid_layout:
+            QMessageBox.warning(self, "错误", "无法找到布局组件，请重启应用")
+            return
 
         # 给每个处理请求的线程配置对应的流程展示控件，实时监控到请求被处理到哪一步了
         for i in range(thread_count):
@@ -700,11 +722,11 @@ class MainWindow(QMainWindow):
             grid_layout[0].addWidget(item, row, column)
 
         self.member_stop_event = threading.Event()
-        self.ms.update_control_status.emit([False, self.ui.tabWidget.currentIndex()])
+        self.ms.update_control_status.emit([False, self.ui.stackedPages.currentIndex()])
 
         MembersSpider(
             thread_count=thread_count, config=config, ui=self, ms=self.ms,
-            tab_index=self.ui.tabWidget.currentIndex(),
+            tab_index=self.ui.stackedPages.currentIndex(),
             stop_event=self.member_stop_event, grid_layout=grid_layout[0]).start()
 
     def on_greets_spider_start(self):
@@ -738,7 +760,18 @@ class MainWindow(QMainWindow):
         # 确定需要开启多少个线程来处理请求
         thread_count = tools.get_greet_threading_count(config_from_newest=config)
 
-        grid_layout = self.findChildren(QGridLayout, f'gridLayout_{str(self.ui.tabWidget.currentIndex())}')
+        # Subtract 1 because ConfigWizardPage is at index 0
+        grid_index = self.ui.stackedPages.currentIndex() - 1
+        grid_layout = self.findChildren(QGridLayout, f'gridLayout_{str(grid_index)}')
+        
+        # Safety check
+        if not grid_layout:
+            log.warning(f"Grid layout not found for index {grid_index}, trying gridLayout_2")
+            grid_layout = self.findChildren(QGridLayout, 'gridLayout_2')
+        
+        if not grid_layout:
+            QMessageBox.warning(self, "错误", "无法找到布局组件，请重启应用")
+            return
 
         # 给每个处理请求的线程配置对应的流程展示控件，实时监控到请求被处理到哪一步了
         for i in range(thread_count):
@@ -748,11 +781,11 @@ class MainWindow(QMainWindow):
             grid_layout[0].addWidget(item, row, column)
 
         self.greets_stop_event = threading.Event()
-        self.ms.update_control_status.emit([False, self.ui.tabWidget.currentIndex()])
+        self.ms.update_control_status.emit([False, self.ui.stackedPages.currentIndex()])
 
         GreetsSpider(
             thread_count=thread_count, config=config, ui=self, ms=self.ms,
-            tab_index=self.ui.tabWidget.currentIndex(),
+            tab_index=self.ui.stackedPages.currentIndex(),
             stop_event=self.greets_stop_event, grid_layout=grid_layout[0], is_use_interval_timeout=True).start()
 
     def on_group_spider_stop(self):
@@ -1571,8 +1604,8 @@ class MainWindow(QMainWindow):
         else:
             self.current_tab_index = index
 
-        # print(f'current_index:{str(self.ui.tabWidget.currentIndex())}')
-        if self.ui.tabWidget.currentIndex() == 2:
+        # print(f'current_index:{str(self.ui.stackedPages.currentIndex())}')
+        if self.ui.stackedPages.currentIndex() == 2:
             # 执行清理重复成员链接的功能
             def run():
                 tools.unique_member(dir=config.members_table, unique_key='member_link')
