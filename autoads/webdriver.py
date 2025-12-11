@@ -151,12 +151,25 @@ class WebDriver(RemoteWebDriver):
         log.info(f'线程{threading.current_thread().name}正在开启浏览器{self._ads_id}')
         tools.send_message_to_ui(ms=self.ms, ui=self.ui, message=f'获取远程浏览器{self._ads_id}启动参数中...')
         
+        # Get proxy from IP pool if enabled
+        proxy_config = None
+        try:
+            from autoads.ip_pool import ip_pool
+            if ip_pool.is_enabled():
+                proxy_config = ip_pool.get_proxy_for_browser(self._ads_id)
+                if proxy_config:
+                    log.info(f'使用代理 IP: {proxy_config.get("proxy_host")}:{proxy_config.get("proxy_port")}')
+                    tools.send_message_to_ui(ms=self.ms, ui=self.ui, 
+                        message=f'使用代理: {proxy_config.get("proxy_host")}:{proxy_config.get("proxy_port")}')
+        except Exception as e:
+            log.warning(f'IP Pool error: {e}')
+        
         if not (self.stop_event and self.stop_event.isSet()):
             try:
                 if browser_type == 'bitbrowser':
                     # BitBrowser uses POST with JSON body
                     log.info(f'使用 BitBrowser API 启动浏览器 {self._ads_id}')
-                    result = bitbrowser_api.start_browser(self._ads_id)
+                    result = bitbrowser_api.start_browser(self._ads_id, proxy_config=proxy_config)
                     log.info(f'BitBrowser API 返回: {result}')
                     
                     if result and result.get('success'):

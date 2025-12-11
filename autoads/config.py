@@ -209,6 +209,56 @@ class Config(object):
             port = self.bitbrowser_port
             return f'http://127.0.0.1:{port}'
 
+    # IP Pool properties
+    @property
+    def ip_pool_enabled(self):
+        try:
+            return self.get_option('ip_pool', 'enabled').lower() == 'true'
+        except:
+            return False
+    
+    @property
+    def ip_pool_proxy_type(self):
+        try:
+            return self.get_option('ip_pool', 'proxy_type')
+        except:
+            return 'http'
+    
+    @property
+    def ip_pool_proxies(self):
+        try:
+            return json.loads(self.get_option('ip_pool', 'proxies'))
+        except:
+            return []
+    
+    @property
+    def ip_pool_assignment_mode(self):
+        try:
+            return self.get_option('ip_pool', 'assignment_mode')
+        except:
+            return 'round_robin'
+    
+    @property
+    def ip_pool_rotate_after_requests(self):
+        try:
+            return int(self.get_option('ip_pool', 'rotate_after_requests'))
+        except:
+            return 0
+    
+    @property
+    def ip_pool_test_before_use(self):
+        try:
+            return self.get_option('ip_pool', 'test_before_use').lower() == 'true'
+        except:
+            return True
+    
+    @property
+    def ip_pool_timeout(self):
+        try:
+            return int(self.get_option('ip_pool', 'timeout'))
+        except:
+            return 10
+
     @property
     def greets_xpath_send_btn(self):
         return json.loads(self.get_option('greets', 'xpath_send_btn'))
