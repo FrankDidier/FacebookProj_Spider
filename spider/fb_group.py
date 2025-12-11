@@ -84,6 +84,8 @@ class GroupSpider(autoads.AirSpider):
 
                 group_table = self.config.groups_table + tools.make_safe_filename(
                     request.word) + '.txt'  # 搜集的群组按照关键词保存到指定的文件夹中
+                # Clean links file (just URLs)
+                clean_links_file = group_table.replace('.txt', '_links.txt')
                 log.info(f'保存的地址-->{group_table}')
                 for i in range(len(group_link_page)):
                     # for item in group_link_page:
@@ -92,12 +94,15 @@ class GroupSpider(autoads.AirSpider):
                     insert_item.__table_name__ = group_table  # 重新设置保存的文件地址
                     insert_item.group_name = item.get_attribute('aria-label')
                     temp_link = item.get_attribute('href')
-                    insert_item.group_link = temp_link[:temp_link.rfind('?')]
+                    group_link = temp_link[:temp_link.rfind('?')]
+                    insert_item.group_link = group_link
                     insert_item.create_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                     insert_item.ads_id = request.ads_id
                     insert_item.word = request.word
                     # print(insert_item.group_link)
                     yield insert_item
+                    # Also save clean link to separate file
+                    tools.save_clean_link(clean_links_file, group_link)
 
                 if items_count-request.index>0:
                     tools.send_message_to_ui(self.ms, self.ui, f'采集到[新{items_count-request.index}/总{items_count}]个群组')

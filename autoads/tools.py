@@ -2848,3 +2848,118 @@ def delete_entries_batch(file_path, unique_key, unique_values):
     except Exception as e:
         log.error(f"Error batch deleting entries: {e}")
         return 0
+
+
+def export_clean_links(source_file, target_file=None, link_key='member_link'):
+    """
+    从JSON数据文件导出干净的链接列表
+    Export clean links from JSON data file
+    
+    :param source_file: 源文件路径 (JSON格式)
+    :param target_file: 目标文件路径 (如果为None，则在源文件旁边创建_links.txt)
+    :param link_key: 要提取的链接字段名
+    :return: 导出的链接数量
+    """
+    try:
+        source_file = abspath(source_file)
+        if not os.path.exists(source_file):
+            log.warning(f"Source file not found: {source_file}")
+            return 0
+        
+        if target_file is None:
+            split_index = source_file.rfind('.')
+            target_file = source_file[:split_index] + '_links' + source_file[split_index:]
+        
+        target_file = abspath(target_file)
+        
+        links = []
+        with codecs.open(source_file, 'r', encoding='utf-8') as fi:
+            for line in fi:
+                if not line.strip():
+                    continue
+                try:
+                    dictobj = json.loads(line)
+                    link = dictobj.get(link_key)
+                    if link:
+                        links.append(link)
+                except json.JSONDecodeError:
+                    continue
+        
+        # Write clean links to file
+        with codecs.open(target_file, 'w', encoding='utf-8') as fo:
+            for link in links:
+                fo.write(link + '\n')
+        
+        log.info(f"Exported {len(links)} clean links to {target_file}")
+        return len(links)
+    except Exception as e:
+        log.error(f"Error exporting clean links: {e}")
+        return 0
+
+
+def export_all_member_links(member_dir='./fb/member/', output_file='./member_links.txt'):
+    """
+    从所有成员文件导出干净的链接列表到单个文件
+    Export all member links from member directory to a single file
+    
+    :param member_dir: 成员文件目录
+    :param output_file: 输出文件路径
+    :return: 导出的链接总数
+    """
+    try:
+        member_dir = abspath(member_dir)
+        output_file = abspath(output_file)
+        
+        if not os.path.exists(member_dir):
+            log.warning(f"Member directory not found: {member_dir}")
+            return 0
+        
+        all_links = []
+        files = glob.glob(member_dir + '/*.txt') + glob.glob(member_dir + '\\*.txt')
+        
+        for file_path in files:
+            if '_links' in file_path:  # Skip already exported link files
+                continue
+            with codecs.open(file_path, 'r', encoding='utf-8') as fi:
+                for line in fi:
+                    if not line.strip():
+                        continue
+                    try:
+                        dictobj = json.loads(line)
+                        link = dictobj.get('member_link')
+                        if link and link not in all_links:
+                            all_links.append(link)
+                    except json.JSONDecodeError:
+                        continue
+        
+        # Write all links to output file
+        with codecs.open(output_file, 'w', encoding='utf-8') as fo:
+            for link in all_links:
+                fo.write(link + '\n')
+        
+        log.info(f"Exported {len(all_links)} unique member links to {output_file}")
+        return len(all_links)
+    except Exception as e:
+        log.error(f"Error exporting all member links: {e}")
+        return 0
+
+
+def save_clean_link(file_path, link):
+    """
+    保存单个干净链接到文件
+    Save a single clean link to file
+    
+    :param file_path: 文件路径
+    :param link: 链接URL
+    """
+    try:
+        file_path = abspath(file_path)
+        file_dir = os.path.split(file_path)[0]
+        
+        if not os.path.isdir(file_dir):
+            os.makedirs(file_dir)
+        
+        with codecs.open(file_path, 'a+', encoding='utf-8') as f:
+            f.write(link + '\n')
+    except Exception as e:
+        log.error(f"Error saving clean link: {e}")

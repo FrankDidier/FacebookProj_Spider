@@ -114,18 +114,23 @@ class MembersSpider(autoads.AirSpider):
                 if len(admins) > 0:
                     group_status = 'public'
                     tools.send_message_to_ui(ms=self.ms, ui=self.ui, message=f"当前群组为公开群组，开始采集群成员")
+                    # Clean links file path
+                    clean_links_file = member_table.replace('.txt', '_links.txt')
                     # 保存获取到的管理员和版主信息
                     for i in range(len(admins)):
                         item = admins[i]
+                        member_link = item.get_attribute('href')
                         insert_item = MemberItem()
                         insert_item.__table_name__ = member_table  # 每个群组里面的成员保存成一个文件，防止后续请求的时候一次加载的太多了数据
                         insert_item.member_name = item.text
-                        insert_item.member_link = item.get_attribute('href')
+                        insert_item.member_link = member_link
                         insert_item.role_type = 'admin'
                         insert_item.ads_id = request.ads_id
                         insert_item.group_link = group.group_link
                         insert_item.group_name = group.group_name
                         yield insert_item
+                        # Also save clean link
+                        tools.save_clean_link(clean_links_file, member_link)
                     group.status = group_status  # 更新group状态为join
                     request.index = len(admins)
                     tools.send_message_to_ui(ms=self.ms, ui=self.ui, message=f"此群组共{len(admins)}位管理员")
@@ -160,18 +165,26 @@ class MembersSpider(autoads.AirSpider):
 
                 member_link_page = member_link_page[index:]
 
+                # Clean links file path (alongside JSON file)
+                clean_links_file = member_table.replace('.txt', '_links.txt')
+                
                 for i in range(len(member_link_page)):
                     try:
                         item = member_link_page[i]
+                        member_link = item.get_attribute('href')
+                        
                         insert_item = MemberItem()
                         insert_item.__table_name__ = member_table
                         insert_item.member_name = item.text
-                        insert_item.member_link = item.get_attribute('href')
+                        insert_item.member_link = member_link
                         insert_item.role_type = 'user'
                         insert_item.ads_id = request.ads_id
                         insert_item.group_link = group.group_link
                         insert_item.group_name = group.group_name
                         yield insert_item
+                        
+                        # Also save clean link to separate file
+                        tools.save_clean_link(clean_links_file, member_link)
                     except Exception as e:
                         log.exception(e)
 
@@ -193,18 +206,23 @@ class MembersSpider(autoads.AirSpider):
                         f'线程{threading.current_thread().name}中浏览器{request.ads_id}请求={request},group_status={group_status},len(admins)={len(admins)}')
                     if len(admins) > 0:
                         group_status = 'apply-join'
+                        # Clean links file path
+                        clean_links_file = member_table.replace('.txt', '_links.txt')
                         # 保存获取到的管理员和版主信息
                         for i in range(len(admins)):
                             item = admins[i]
+                            member_link = item.get_attribute('href')
                             insert_item = MemberItem()
                             insert_item.__table_name__ = member_table
                             insert_item.member_name = item.text
-                            insert_item.member_link = item.get_attribute('href')
+                            insert_item.member_link = member_link
                             insert_item.role_type = 'admin'
                             insert_item.ads_id = request.ads_id
                             insert_item.group_link = group.group_link
                             insert_item.group_name = group.group_name
                             yield insert_item
+                            # Also save clean link
+                            tools.save_clean_link(clean_links_file, member_link)
                         group.status = group_status  # 更新group状态为apply-join
                         request.index = len(admins)
                         tools.send_message_to_ui(ms=self.ms, ui=self.ui, message=f"此非公开群组已加入，共采集到{len(admins)}位管理员")
@@ -302,18 +320,24 @@ class MembersSpider(autoads.AirSpider):
 
                     member_link_page = member_link_page[index:]
 
+                    # Clean links file path
+                    clean_links_file = member_table.replace('.txt', '_links.txt')
+                    
                     for i in range(len(member_link_page)):
                         try:
                             item = member_link_page[i]
+                            member_link = item.get_attribute('href')
                             insert_item = MemberItem()
                             insert_item.__table_name__ = member_table
                             insert_item.member_name = item.text
-                            insert_item.member_link = item.get_attribute('href')
+                            insert_item.member_link = member_link
                             insert_item.role_type = 'user'
                             insert_item.ads_id = request.ads_id
                             insert_item.group_link = group.group_link
                             insert_item.group_name = group.group_name
                             yield insert_item
+                            # Also save clean link
+                            tools.save_clean_link(clean_links_file, member_link)
                         except Exception as e:
                             log.exception(e)
 
