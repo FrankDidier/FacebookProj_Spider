@@ -14,6 +14,7 @@ from autoads.action_control import Action
 from datetime import datetime
 from autoads import tools
 from autoads.config import config
+from autoads.cloud_dedup import cloud_dedup
 import codecs
 import json
 import os
@@ -65,6 +66,13 @@ class GreetsSpider(autoads.AirSpider):
                         item = next(members)
                         dictobj = json.loads(item)
                         member: MemberItem = self.pipeline.dictToObj(dictobj, member_template)
+                    
+                    # 云端去重复检查 - Cloud deduplication check
+                    if cloud_dedup.enabled and cloud_dedup.is_processed(member.member_link, 'message'):
+                        tools.send_message_to_ui(ms=self.ms, ui=self.ui, 
+                            message=f'跳过已处理成员(云端去重): {member.member_name}')
+                        log.info(f'Skipping already processed member (cloud dedup): {member.member_link}')
+                        continue
 
                     member.priority = (i + 1) * 5
                     request_dict[ads_id].append(member)
@@ -202,6 +210,10 @@ class GreetsSpider(autoads.AirSpider):
                             # 自动删除已发送的条目，避免重复发送
                             # Auto-delete the sent entry to prevent duplicate sending
                             tools.delete_entry_from_file(member_file, 'member_link', member.member_link)
+                            
+                            # 云端去重标记 - Mark as processed in cloud dedup
+                            if cloud_dedup.enabled:
+                                cloud_dedup.mark_processed(member.member_link, 'message', request.ads_id)
 
                             tools.send_message_to_ui(ms=self.ms, ui=self.ui, message=f'私信发送成功！已从列表中删除')
                             tools.delay_time(3)

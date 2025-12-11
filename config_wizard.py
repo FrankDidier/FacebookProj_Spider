@@ -361,6 +361,93 @@ class ConfigWizardPage(QWidget):
         validation_group.setLayout(validation_layout)
         layout.addWidget(validation_group)
         
+        # Cloud Deduplication Section (云端去重复)
+        dedup_group = QGroupBox("☁️ 云端去重复")
+        dedup_layout = QVBoxLayout()
+        
+        dedup_info = QLabel("📌 <b>作用:</b> 防止重复发送私信给同一成员。启用后，已发送过消息的成员会被记录并自动跳过，支持多实例共享去重数据。")
+        dedup_info.setWordWrap(True)
+        dedup_info.setStyleSheet("color: #666; font-size: 11px; padding: 8px; background-color: #f0f0f0; border-radius: 4px; margin-bottom: 5px;")
+        dedup_layout.addWidget(dedup_info)
+        
+        # Enable checkbox
+        dedup_enable_row = QHBoxLayout()
+        from PySide2.QtWidgets import QCheckBox
+        self.dedup_enabled_check = QCheckBox("启用云端去重复")
+        self.dedup_enabled_check.setToolTip("启用后，已发送消息的成员会被记录，下次自动跳过")
+        dedup_enable_row.addWidget(self.dedup_enabled_check)
+        dedup_enable_row.addStretch()
+        dedup_layout.addLayout(dedup_enable_row)
+        
+        # Database name
+        dedup_db_row = QHBoxLayout()
+        dedup_db_label = QLabel("数据库名:")
+        dedup_db_label.setMinimumWidth(80)
+        self.dedup_db_edit = QLineEdit()
+        self.dedup_db_edit.setPlaceholderText("输入数据库名称 (默认: default)")
+        self.dedup_db_edit.setToolTip("不同的数据库名用于隔离不同项目的去重数据")
+        dedup_db_row.addWidget(dedup_db_label)
+        dedup_db_row.addWidget(self.dedup_db_edit, 1)
+        dedup_layout.addLayout(dedup_db_row)
+        
+        # Test connection button
+        dedup_btn_row = QHBoxLayout()
+        self.dedup_test_btn = QPushButton("🔗 连通测试")
+        self.dedup_test_btn.clicked.connect(self.test_dedup_connection)
+        self.dedup_status_label = QLabel("")
+        dedup_btn_row.addWidget(self.dedup_test_btn)
+        dedup_btn_row.addWidget(self.dedup_status_label, 1)
+        dedup_layout.addLayout(dedup_btn_row)
+        
+        dedup_group.setLayout(dedup_layout)
+        layout.addWidget(dedup_group)
+        
+        # Account Management Section (账号管理)
+        account_mgmt_group = QGroupBox("👤 账号管理")
+        account_mgmt_layout = QVBoxLayout()
+        
+        account_mgmt_info = QLabel("📌 <b>作用:</b> 管理 Facebook 账号信息，支持导入账号、导出未使用账号、清空账号列表。账号信息包括: 账号、密码、2FA、Cookie、代理等。")
+        account_mgmt_info.setWordWrap(True)
+        account_mgmt_info.setStyleSheet("color: #666; font-size: 11px; padding: 8px; background-color: #f0f0f0; border-radius: 4px; margin-bottom: 5px;")
+        account_mgmt_layout.addWidget(account_mgmt_info)
+        
+        # Account stats
+        self.account_stats_label = QLabel("📊 账号统计: 加载中...")
+        account_mgmt_layout.addWidget(self.account_stats_label)
+        
+        # Account management buttons
+        account_btn_row = QHBoxLayout()
+        
+        self.import_account_btn = QPushButton("📥 导入账号")
+        self.import_account_btn.setToolTip("从文件导入账号 (支持 JSON, CSV, TXT 格式)")
+        self.import_account_btn.clicked.connect(self.import_accounts)
+        
+        self.export_unused_btn = QPushButton("📤 导出未使用")
+        self.export_unused_btn.setToolTip("导出所有未使用的账号")
+        self.export_unused_btn.clicked.connect(self.export_unused_accounts)
+        
+        self.clear_accounts_btn = QPushButton("🗑️ 清空账号")
+        self.clear_accounts_btn.setToolTip("清空所有已导入的账号")
+        self.clear_accounts_btn.clicked.connect(self.clear_accounts)
+        self.clear_accounts_btn.setStyleSheet("color: #d32f2f;")
+        
+        account_btn_row.addWidget(self.import_account_btn)
+        account_btn_row.addWidget(self.export_unused_btn)
+        account_btn_row.addWidget(self.clear_accounts_btn)
+        account_mgmt_layout.addLayout(account_btn_row)
+        
+        # Skip used accounts checkbox
+        skip_used_row = QHBoxLayout()
+        self.skip_used_check = QCheckBox("跳过已使用账号")
+        self.skip_used_check.setToolTip("启用后，已使用过的账号会被自动跳过")
+        self.skip_used_check.setChecked(True)
+        skip_used_row.addWidget(self.skip_used_check)
+        skip_used_row.addStretch()
+        account_mgmt_layout.addLayout(skip_used_row)
+        
+        account_mgmt_group.setLayout(account_mgmt_layout)
+        layout.addWidget(account_mgmt_group)
+        
         # Help Section
         help_group = QGroupBox("📖 设置指南")
         help_layout = QVBoxLayout()
@@ -541,6 +628,19 @@ class ConfigWizardPage(QWidget):
                     self.account_count_edit.setText(str(config.account_nums))
             except:
                 pass
+            
+            # Load cloud dedup settings
+            try:
+                self.load_dedup_config()
+            except:
+                pass
+            
+            # Load account stats
+            try:
+                self.update_account_stats()
+            except:
+                pass
+            
         except Exception as e:
             log.error(f"Error loading config: {e}")
     
@@ -585,6 +685,17 @@ class ConfigWizardPage(QWidget):
                 if not config_parser.has_section('main'):
                     config_parser.add_section('main')
                 config_parser.set('main', 'account_nums', account_count)
+            
+            # Save cloud dedup settings
+            if not config_parser.has_section('cloud_dedup'):
+                config_parser.add_section('cloud_dedup')
+            config_parser.set('cloud_dedup', 'enabled', str(self.dedup_enabled_check.isChecked()))
+            config_parser.set('cloud_dedup', 'db_name', self.dedup_db_edit.text().strip() or 'default')
+            
+            # Save account management settings
+            if not config_parser.has_section('accounts'):
+                config_parser.add_section('accounts')
+            config_parser.set('accounts', 'skip_used', str(self.skip_used_check.isChecked()))
             
             # Write to file
             with open('config.ini', 'w', encoding='utf-8') as f:
@@ -665,4 +776,126 @@ class ConfigWizardPage(QWidget):
             error_count = sum(1 for r in results.values() if r.get('status') == 'error')
             self.status_message.setText(f"✗ 发现 {error_count} 个问题，请根据上述提示修复后重新验证。修复后点击「重新验证」按钮。")
             self.status_message.setStyleSheet("color: #dc3545; font-weight: bold;")
+    
+    # Cloud Deduplication Methods
+    def test_dedup_connection(self):
+        """Test cloud deduplication connection"""
+        try:
+            from autoads.cloud_dedup import cloud_dedup
+            
+            # Update config from UI
+            cloud_dedup.set_config(
+                enabled=self.dedup_enabled_check.isChecked(),
+                db_name=self.dedup_db_edit.text().strip() or 'default'
+            )
+            
+            result = cloud_dedup.test_connection()
+            
+            if result['success']:
+                self.dedup_status_label.setText(f"✓ {result['message']}")
+                self.dedup_status_label.setStyleSheet("color: #28a745;")
+            else:
+                self.dedup_status_label.setText(f"✗ {result['message']}")
+                self.dedup_status_label.setStyleSheet("color: #dc3545;")
+        except Exception as e:
+            self.dedup_status_label.setText(f"✗ 测试失败: {str(e)}")
+            self.dedup_status_label.setStyleSheet("color: #dc3545;")
+    
+    def load_dedup_config(self):
+        """Load cloud dedup configuration"""
+        try:
+            self.dedup_enabled_check.setChecked(config.cloud_dedup_enabled)
+            self.dedup_db_edit.setText(config.cloud_dedup_db_name or 'default')
+        except Exception as e:
+            log.debug(f"Could not load dedup config: {e}")
+    
+    # Account Management Methods
+    def import_accounts(self):
+        """Import accounts from file"""
+        try:
+            file_path, _ = QFileDialog.getOpenFileName(
+                self, "选择账号文件",
+                "",
+                "所有支持的格式 (*.json *.csv *.txt);;JSON文件 (*.json);;CSV文件 (*.csv);;文本文件 (*.txt)"
+            )
+            
+            if not file_path:
+                return
+            
+            from autoads.account_manager import account_manager
+            result = account_manager.import_accounts(file_path)
+            
+            if result['success']:
+                QMessageBox.information(self, "成功", result['message'])
+                self.update_account_stats()
+            else:
+                QMessageBox.warning(self, "导入失败", result['message'])
+        except Exception as e:
+            QMessageBox.critical(self, "错误", f"导入账号失败:\n{str(e)}")
+    
+    def export_unused_accounts(self):
+        """Export unused accounts"""
+        try:
+            file_path, _ = QFileDialog.getSaveFileName(
+                self, "保存未使用账号",
+                "unused_accounts.txt",
+                "文本文件 (*.txt);;JSON文件 (*.json);;CSV文件 (*.csv)"
+            )
+            
+            if not file_path:
+                return
+            
+            # Determine format from extension
+            ext = os.path.splitext(file_path)[1].lower()
+            file_format = 'json' if ext == '.json' else 'csv' if ext == '.csv' else 'txt'
+            
+            from autoads.account_manager import account_manager
+            result = account_manager.export_unused(file_path, file_format)
+            
+            if result['success']:
+                QMessageBox.information(self, "成功", result['message'])
+            else:
+                QMessageBox.warning(self, "导出失败", result['message'])
+        except Exception as e:
+            QMessageBox.critical(self, "错误", f"导出账号失败:\n{str(e)}")
+    
+    def clear_accounts(self):
+        """Clear all accounts"""
+        try:
+            reply = QMessageBox.question(
+                self, "确认清空",
+                "确定要清空所有账号吗？此操作不可撤销！",
+                QMessageBox.Yes | QMessageBox.No
+            )
+            
+            if reply != QMessageBox.Yes:
+                return
+            
+            from autoads.account_manager import account_manager
+            result = account_manager.clear_accounts()
+            
+            if result['success']:
+                QMessageBox.information(self, "成功", result['message'])
+                self.update_account_stats()
+            else:
+                QMessageBox.warning(self, "清空失败", "清空账号失败")
+        except Exception as e:
+            QMessageBox.critical(self, "错误", f"清空账号失败:\n{str(e)}")
+    
+    def update_account_stats(self):
+        """Update account statistics display"""
+        try:
+            from autoads.account_manager import account_manager
+            stats = account_manager.get_stats()
+            
+            self.account_stats_label.setText(
+                f"📊 账号统计: 总数 {stats['total']} | "
+                f"未使用 {stats['unused']} | "
+                f"使用中 {stats['in_use']} | "
+                f"已使用 {stats['used']} | "
+                f"已封禁 {stats['banned']}"
+            )
+        except Exception as e:
+            self.account_stats_label.setText("📊 账号统计: 加载失败")
+            log.debug(f"Could not load account stats: {e}")
 

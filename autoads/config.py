@@ -724,5 +724,63 @@ class Config(object):
         except:
             return ''
 
+    # Cloud Deduplication properties
+    @property
+    def cloud_dedup_enabled(self):
+        try:
+            return self.get_option('cloud_dedup', 'enabled').lower() == 'true'
+        except:
+            return False
+
+    @property
+    def cloud_dedup_db_name(self):
+        try:
+            return self.get_option('cloud_dedup', 'db_name')
+        except:
+            return 'default'
+
+    @property
+    def cloud_dedup_mode(self):
+        try:
+            return self.get_option('cloud_dedup', 'mode')
+        except:
+            return 'local'
+
+    @property
+    def cloud_dedup_remote_url(self):
+        try:
+            return self.get_option('cloud_dedup', 'remote_url')
+        except:
+            return ''
+
+    @property
+    def cloud_dedup_local_db_path(self):
+        try:
+            return self.get_option('cloud_dedup', 'local_db_path')
+        except:
+            return './dedup_cache/'
+
+    # Account Management properties
+    @property
+    def accounts_file(self):
+        try:
+            return self.get_option('accounts', 'accounts_file')
+        except:
+            return './accounts.json'
+
+    @property
+    def accounts_skip_used(self):
+        try:
+            return self.get_option('accounts', 'skip_used').lower() == 'true'
+        except:
+            return True
+
+    @property
+    def accounts_auto_mark_used(self):
+        try:
+            return self.get_option('accounts', 'auto_mark_used').lower() == 'true'
+        except:
+            return True
+
 
 config = Config()
