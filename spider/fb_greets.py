@@ -143,14 +143,36 @@ class GreetsSpider(autoads.AirSpider):
                 if len(pics) > 0 or text:
                     if len(pics) > 0:
                         try:
+                            # 尝试多种方式上传图片
+                            # Try multiple ways to upload images
                             filebtns = tools.get_page_data_mutilxpath(browser, self.config.greets_xpath_mwchat_file)
+                            
+                            if len(filebtns) == 0:
+                                # 尝试点击添加图片按钮来触发文件选择
+                                add_photo_btn = browser.find_elements('xpath', 
+                                    "//div[@aria-label='Attach a photo or video' or @aria-label='添加照片或视频' or @aria-label='附加照片或影片']")
+                                if add_photo_btn:
+                                    add_photo_btn[0].click()
+                                    tools.delay_time(1)
+                                    filebtns = tools.get_page_data_mutilxpath(browser, self.config.greets_xpath_mwchat_file)
+                            
                             if len(filebtns) > 0:
                                 for pic in pics:
-                                    log.info(f'线程{threading.current_thread().name}中浏览器{request.ads_id}上传图片-->{pic}')
-                                    filebtns[0].send_keys(pic)
-                                    tools.delay_time(2)
+                                    # 确保图片路径是绝对路径
+                                    pic_path = os.path.abspath(pic) if not os.path.isabs(pic) else pic
+                                    if os.path.exists(pic_path):
+                                        log.info(f'线程{threading.current_thread().name}中浏览器{request.ads_id}上传图片-->{pic_path}')
+                                        filebtns[0].send_keys(pic_path)
+                                        tools.delay_time(3)  # 等待图片上传完成
+                                        tools.send_message_to_ui(ms=self.ms, ui=self.ui, message=f'图片上传成功: {pic}')
+                                    else:
+                                        log.warning(f'图片文件不存在: {pic_path}')
+                                        tools.send_message_to_ui(ms=self.ms, ui=self.ui, message=f'图片文件不存在: {pic}')
+                            else:
+                                log.warning(f'未找到文件上传控件')
+                                tools.send_message_to_ui(ms=self.ms, ui=self.ui, message=f'未找到图片上传按钮')
                         except Exception as e:
-                            tools.send_message_to_ui(ms=self.ms, ui=self.ui, message=f'上传图片 | 异常')
+                            tools.send_message_to_ui(ms=self.ms, ui=self.ui, message=f'上传图片 | 异常: {str(e)}')
                             log.error(e)
                     try:
                         textbox = tools.get_page_data_mutilxpath(browser, self.config.greets_xpath_mwchat_textbox)
@@ -171,18 +193,17 @@ class GreetsSpider(autoads.AirSpider):
 
                             # 直接更新这条记录status=send
                             member: MemberItem = request.member
-                            member.__table_name__ = self.config.members_table + tools.make_safe_filename(
+                            member_file = self.config.members_table + tools.make_safe_filename(
                                 member.group_name) + '.txt'
+                            member.__table_name__ = member_file
                             member.status = 'send'
                             yield member.to_UpdateItem()
+                            
+                            # 自动删除已发送的条目，避免重复发送
+                            # Auto-delete the sent entry to prevent duplicate sending
+                            tools.delete_entry_from_file(member_file, 'member_link', member.member_link)
 
-                            # 更新前端状态和保存处理记录，文件名按照天保存，方便结束的时候更新members文件
-                            # member.table_name = tools.abspath(self.config.members_finished + datetime.now().strftime(
-                            #     "%Y-%m-%d") + '/' + request.ads_id + '.txt')
-                            # member.unique_key.append('group_link')  # 在去重的时候，需要按照unique_key进行md5加密处理，members和greets爬虫用了同一个需要更新
-                            # yield member
-
-                            tools.send_message_to_ui(ms=self.ms, ui=self.ui, message=f'私信发送成功！')
+                            tools.send_message_to_ui(ms=self.ms, ui=self.ui, message=f'私信发送成功！已从列表中删除')
                             tools.delay_time(3)
 
                             # //div[@data-testid="mwchat-tab"]/div[contains(@class,"pfnyh3mw")]/div/span  关闭
@@ -207,10 +228,15 @@ class GreetsSpider(autoads.AirSpider):
                 if hasattr(request, 'member') and request.member:
                     tools.send_message_to_ui(ms=self.ms, ui=self.ui, message=f'此成员不能发消息，放弃发送！')
                     member: MemberItem = request.member
-                    member.__table_name__ = self.config.members_table + tools.make_safe_filename(
+                    member_file = self.config.members_table + tools.make_safe_filename(
                         member.group_name) + '.txt'
+                    member.__table_name__ = member_file
                     member.status = 'send'
                     yield member.to_UpdateItem()
+                    
+                    # 自动删除不能发消息的成员，避免重复处理
+                    # Auto-delete members who can't receive messages
+                    tools.delete_entry_from_file(member_file, 'member_link', member.member_link)
 
                     # member.table_name = self.config.members_finished + datetime.now().strftime(
                     #     "%Y-%m-%d") + '/' + request.ads_id + '.txt'
@@ -257,15 +283,14 @@ class GreetsSpider(autoads.AirSpider):
                 if hasattr(request, 'member') and request.member:
                     tools.send_message_to_ui(ms=self.ms, ui=self.ui, message=f'此成员有可能是服务商，不能发消息，放弃发送！')
                     member: MemberItem = request.member
-                    member.__table_name__ = self.config.members_table + tools.make_safe_filename(
+                    member_file = self.config.members_table + tools.make_safe_filename(
                         member.group_name) + '.txt'
+                    member.__table_name__ = member_file
                     member.status = 'send'
                     yield member.to_UpdateItem()
-
-                    # member.table_name = self.config.members_finished + datetime.now().strftime(
-                    #     "%Y-%m-%d") + '/' + request.ads_id + '.txt'
-                    # member.unique_key.append('group_link')
-                    # yield member
+                    
+                    # 自动删除无效成员
+                    tools.delete_entry_from_file(member_file, 'member_link', member.member_link)
 
                 if request.finished_nums == self.config.members_nums - 1 and int(request.index) == 0:
                     # 回到主页，慢慢滚动

@@ -2757,3 +2757,94 @@ def unique_member(dir, unique_key=None):
         os.rename(new_table, table)  # rename temp to original name
 
     log.info(repeats)
+
+
+def delete_entry_from_file(file_path, unique_key, unique_value):
+    """
+    从文件中删除已处理的条目
+    Delete a processed entry from a file
+    
+    :param file_path: 文件路径
+    :param unique_key: 用于识别条目的键名 (如 'member_link')
+    :param unique_value: 要删除的条目的值
+    :return: True 如果删除成功, False 如果失败
+    """
+    try:
+        file_path = abspath(file_path)
+        if not os.path.exists(file_path):
+            log.warning(f"File not found: {file_path}")
+            return False
+        
+        # 创建临时文件
+        split_index = file_path.rfind('.')
+        temp_file = file_path[:split_index] + '_temp' + file_path[split_index:]
+        
+        deleted = False
+        with codecs.open(file_path, 'r', encoding='utf-8') as fi, \
+                codecs.open(temp_file, 'w', encoding='utf-8') as fo:
+            for line in fi:
+                if not line.strip():
+                    continue
+                try:
+                    dictobj = json.loads(line)
+                    if dictobj.get(unique_key) == unique_value:
+                        deleted = True
+                        log.info(f"Deleted entry: {unique_value} from {file_path}")
+                        continue  # 跳过这行，不写入新文件
+                    fo.write(line)
+                except json.JSONDecodeError:
+                    fo.write(line)  # 保留无法解析的行
+        
+        # 替换原文件
+        os.remove(file_path)
+        os.rename(temp_file, file_path)
+        
+        return deleted
+    except Exception as e:
+        log.error(f"Error deleting entry from file: {e}")
+        return False
+
+
+def delete_entries_batch(file_path, unique_key, unique_values):
+    """
+    批量从文件中删除已处理的条目
+    Batch delete processed entries from a file
+    
+    :param file_path: 文件路径
+    :param unique_key: 用于识别条目的键名
+    :param unique_values: 要删除的条目值列表
+    :return: 删除的条目数量
+    """
+    try:
+        file_path = abspath(file_path)
+        if not os.path.exists(file_path):
+            log.warning(f"File not found: {file_path}")
+            return 0
+        
+        values_set = set(unique_values)
+        split_index = file_path.rfind('.')
+        temp_file = file_path[:split_index] + '_temp' + file_path[split_index:]
+        
+        deleted_count = 0
+        with codecs.open(file_path, 'r', encoding='utf-8') as fi, \
+                codecs.open(temp_file, 'w', encoding='utf-8') as fo:
+            for line in fi:
+                if not line.strip():
+                    continue
+                try:
+                    dictobj = json.loads(line)
+                    if dictobj.get(unique_key) in values_set:
+                        deleted_count += 1
+                        continue
+                    fo.write(line)
+                except json.JSONDecodeError:
+                    fo.write(line)
+        
+        os.remove(file_path)
+        os.rename(temp_file, file_path)
+        
+        log.info(f"Batch deleted {deleted_count} entries from {file_path}")
+        return deleted_count
+    except Exception as e:
+        log.error(f"Error batch deleting entries: {e}")
+        return 0

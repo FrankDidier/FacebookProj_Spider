@@ -942,14 +942,53 @@ class MainWindow(QMainWindow):
     def on_group_spider_stop(self):
         if self.group_stop_event:
             self.group_stop_event.set()
+            # Immediately re-enable UI
+            QTimer.singleShot(500, lambda: self._force_re_enable_buttons(1))
+            self.print_to_tui(self.ui.textBrowserGroupSpider, '正在停止...')
 
     def on_member_spider_stop(self):
         if self.member_stop_event:
             self.member_stop_event.set()
+            # Immediately re-enable UI
+            QTimer.singleShot(500, lambda: self._force_re_enable_buttons(2))
+            self.print_to_tui(self.ui.textBrowserMembersSpider, '正在停止...')
 
     def on_greets_spider_stop(self):
         if self.greets_stop_event:
             self.greets_stop_event.set()
+            # Immediately re-enable UI
+            QTimer.singleShot(500, lambda: self._force_re_enable_buttons(3))
+            self.print_to_tui(self.ui.textBrowserGreetsSpider, '正在停止...')
+    
+    def _force_re_enable_buttons(self, tab_index):
+        """Force re-enable buttons after stop is clicked"""
+        try:
+            # Get the tab/page widget
+            if hasattr(self.ui, 'stackedPages'):
+                tab = self.ui.stackedPages.widget(tab_index)
+            else:
+                tab = self.ui.tabWidget.widget(tab_index)
+            
+            if tab:
+                # Find and re-enable all buttons
+                for btn in tab.findChildren(QPushButton):
+                    btn_name = btn.objectName().lower()
+                    btn_text = btn.text()
+                    if 'start' in btn_name or btn_text == '启动':
+                        btn.setEnabled(True)
+                    elif 'stop' in btn_name or btn_text == '停止':
+                        btn.setEnabled(False)
+            
+            # Re-enable all sidebar items
+            if hasattr(self.ui, 'sidebarList'):
+                for i in range(self.ui.sidebarList.count()):
+                    item = self.ui.sidebarList.item(i)
+                    if item:
+                        item.setFlags(item.flags() | Qt.ItemIsEnabled)
+            
+            log.info(f"Force re-enabled buttons for tab index {tab_index}")
+        except Exception as e:
+            log.error(f"Error re-enabling buttons: {e}")
 
     # New spider handlers
     def on_group_specified_spider_start(self):
