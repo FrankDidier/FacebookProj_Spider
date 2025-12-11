@@ -105,12 +105,23 @@ class WebDriver(RemoteWebDriver):
 
         self._timeout = timeout
         self._window_size = window_size
-        self._service_url = service_url
         self._ads_id = ads_id
         self.retry_times = 0
         self.stop_event = stop_event
         self.ms = ms
         self.ui = ui
+
+        # Auto-detect service URL based on browser type if not provided
+        if service_url:
+            self._service_url = service_url
+        else:
+            browser_type = getattr(config, 'browser_type', 'adspower')
+            if browser_type == 'bitbrowser':
+                port = getattr(config, 'bitbrowser_port', '54345')
+                self._service_url = f"http://127.0.0.1:{port}"
+            else:
+                # Get AdsPower service URL
+                self._service_url = ads_api.start_service()
 
         self.driver = self.chrome_driver()
 
