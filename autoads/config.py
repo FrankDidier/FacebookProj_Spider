@@ -217,6 +217,22 @@ class Config(object):
         except:
             return True  # Default: keep browser open
 
+    @property
+    def max_scroll_count(self):
+        """Maximum scroll count for data collection"""
+        try:
+            return int(self.get_option('main', 'max_scroll_count'))
+        except:
+            return 10  # Default: 10 scrolls
+
+    @property
+    def max_thread_count(self):
+        """Maximum thread count for concurrent operations"""
+        try:
+            return int(self.get_option('main', 'max_thread_count'))
+        except:
+            return 2  # Default: 2 threads
+
     # IP Pool properties
     @property
     def ip_pool_enabled(self):

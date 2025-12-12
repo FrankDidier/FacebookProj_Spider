@@ -1,0 +1,30 @@
+[
+  {
+    "id": "notifications",
+    "name": "notifications",
+    "link": "https://www.facebook.com/notifications",
+    "group_id": "discover",
+    "collected_at": "2025-12-12T19:41:30.816397"
+  },
+  {
+    "id": "login_alerts",
+    "name": "login_alerts",
+    "link": "https://www.facebook.com/login_alerts",
+    "group_id": "discover",
+    "collected_at": "2025-12-12T19:41:30.842098"
+  },
+  {
+    "id": "firedupdiscoverycoach",
+    "name": "firedupdiscoverycoach",
+    "link": "https://www.facebook.com/firedupdiscoverycoach",
+    "group_id": "discover",
+    "collected_at": "2025-12-12T19:41:30.863336"
+  },
+  {
+    "id": "help",
+    "name": "详细了解",
+    "link": "https://www.facebook.com/help",
+    "group_id": "discover",
+    "collected_at": "2025-12-12T19:41:30.876805"
+  }
+]

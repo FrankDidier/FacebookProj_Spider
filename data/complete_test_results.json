@@ -1,0 +1,184 @@
+{
+  "timestamp": "2025-12-12T19:46:09.885217",
+  "summary": {
+    "passed": 38,
+    "warned": 3,
+    "failed": 2,
+    "total": 43,
+    "rate": 95.34883720930233
+  },
+  "results": {
+    "Config: Browser Type": {
+      "status": "✅ PASS",
+      "error": null
+    },
+    "Config: BitBrowser URL": {
+      "status": "✅ PASS",
+      "error": null
+    },
+    "Config: Keep Browser Open": {
+      "status": "✅ PASS",
+      "error": null
+    },
+    "Config: Max Scroll Count": {
+      "status": "❌ FAIL",
+      "error": "'Config' object has no attribute 'max_scroll_count'"
+    },
+    "Config: Max Thread Count": {
+      "status": "❌ FAIL",
+      "error": "'Config' object has no attribute 'max_thread_count'"
+    },
+    "BitBrowser: API Connection": {
+      "status": "✅ PASS",
+      "error": null
+    },
+    "BitBrowser: Get Browser List": {
+      "status": "✅ PASS",
+      "error": null
+    },
+    "BitBrowser: Start Browser": {
+      "status": "✅ PASS",
+      "error": null
+    },
+    "Selenium: Connect to Browser": {
+      "status": "✅ PASS",
+      "error": null
+    },
+    "Selenium: Navigate to Facebook": {
+      "status": "✅ PASS",
+      "error": null
+    },
+    "Facebook: Logged In Check": {
+      "status": "✅ PASS",
+      "error": null
+    },
+    "Spider: GroupSpider Import": {
+      "status": "✅ PASS",
+      "error": null
+    },
+    "Spider: GreetsSpider Import": {
+      "status": "✅ PASS",
+      "error": null
+    },
+    "Spider: AutoLikeSpider Import": {
+      "status": "✅ PASS",
+      "error": null
+    },
+    "Spider: AutoCommentSpider Import": {
+      "status": "✅ PASS",
+      "error": null
+    },
+    "Spider: AutoFollowSpider Import": {
+      "status": "✅ PASS",
+      "error": null
+    },
+    "Spider: AutoAddFriendSpider Import": {
+      "status": "✅ PASS",
+      "error": null
+    },
+    "Spider: AutoGroupSpider Import": {
+      "status": "✅ PASS",
+      "error": null
+    },
+    "Spider: AutoPostSpider Import": {
+      "status": "✅ PASS",
+      "error": null
+    },
+    "CloudDedup: Initialize": {
+      "status": "✅ PASS",
+      "error": null
+    },
+    "CloudDedup: Add Member": {
+      "status": "⚠️ WARN",
+      "error": null
+    },
+    "CloudDedup: Check Duplicate": {
+      "status": "⚠️ WARN",
+      "error": null
+    },
+    "CloudDedup: Get Stats": {
+      "status": "✅ PASS",
+      "error": null
+    },
+    "AccountManager: Initialize": {
+      "status": "✅ PASS",
+      "error": null
+    },
+    "AccountManager: Get All Accounts": {
+      "status": "✅ PASS",
+      "error": null
+    },
+    "AccountManager: Get Stats": {
+      "status": "✅ PASS",
+      "error": null
+    },
+    "IPPool: Initialize": {
+      "status": "✅ PASS",
+      "error": null
+    },
+    "AppLogger: Initialize": {
+      "status": "✅ PASS",
+      "error": null
+    },
+    "AppLogger: Log Action": {
+      "status": "✅ PASS",
+      "error": null
+    },
+    "Facebook: Groups Page Access": {
+      "status": "✅ PASS",
+      "error": null
+    },
+    "Facebook: Find Group Links": {
+      "status": "✅ PASS",
+      "error": null
+    },
+    "Facebook: Messenger Page Access": {
+      "status": "✅ PASS",
+      "error": null
+    },
+    "Facebook: Message Input Field": {
+      "status": "✅ PASS",
+      "error": null
+    },
+    "Facebook: Profile Page Access": {
+      "status": "✅ PASS",
+      "error": null
+    },
+    "AutoLike: Find Like Buttons": {
+      "status": "✅ PASS",
+      "error": null
+    },
+    "AutoComment: Find Comment Buttons": {
+      "status": "⚠️ WARN",
+      "error": null
+    },
+    "DataSave: Groups Directory": {
+      "status": "✅ PASS",
+      "error": null
+    },
+    "DataSave: Members Directory": {
+      "status": "✅ PASS",
+      "error": null
+    },
+    "DataSave: Write JSON File": {
+      "status": "✅ PASS",
+      "error": null
+    },
+    "DataSave: Write TXT File": {
+      "status": "✅ PASS",
+      "error": null
+    },
+    "UI: Main Window Setup": {
+      "status": "✅ PASS",
+      "error": null
+    },
+    "UI: Sidebar List": {
+      "status": "✅ PASS",
+      "error": null
+    },
+    "UI: Stacked Pages": {
+      "status": "✅ PASS",
+      "error": null
+    }
+  }
+}
