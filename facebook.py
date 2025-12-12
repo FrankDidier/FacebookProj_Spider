@@ -534,6 +534,12 @@ class MainWindow(QMainWindow):
         tabs: QTabWidget = self.ui.tabWidget
         
         log.info(f"update_control_enabled called: stop={stop}, index={index}")
+        app_logger.log_action("CONTROL_UPDATE", f"更新控件状态", {"stop": stop, "index": index})
+        
+        # IMPORTANT: If stop=True, always call reset to ensure buttons work
+        if stop:
+            # Use QTimer to delay the reset slightly to ensure spider has finished
+            QTimer.singleShot(500, lambda: self._force_re_enable_buttons(index))
         
         # Get tab widget, use stacked widget if tab widget doesn't have it
         tab = tabs.widget(index)
@@ -1046,39 +1052,114 @@ class MainWindow(QMainWindow):
     
     def _force_re_enable_buttons(self, tab_index):
         """Force re-enable buttons after stop is clicked"""
+        app_logger.log_action("BUTTON_REENABLE", f"开始重新启用按钮", {"tab_index": tab_index})
+        
         try:
-            # Get the tab/page widget
+            # Re-enable ALL start buttons across ALL pages/tabs
+            # This ensures no button gets stuck disabled
+            
+            # Method 1: Re-enable buttons on the specific tab
             if hasattr(self.ui, 'stackedPages'):
                 tab = self.ui.stackedPages.widget(tab_index)
-            else:
-                tab = self.ui.tabWidget.widget(tab_index)
+                if tab:
+                    for btn in tab.findChildren(QPushButton):
+                        btn_name = btn.objectName().lower()
+                        btn_text = btn.text()
+                        if 'start' in btn_name or btn_text == '启动':
+                            btn.setEnabled(True)
+                            app_logger.log_action("BUTTON_ENABLED", f"启用按钮: {btn.objectName()}")
+                        elif 'stop' in btn_name or btn_text == '停止':
+                            btn.setEnabled(False)
             
-            if tab:
-                # Find and re-enable all buttons
-                for btn in tab.findChildren(QPushButton):
-                    btn_name = btn.objectName().lower()
-                    btn_text = btn.text()
-                    if 'start' in btn_name or btn_text == '启动':
-                        btn.setEnabled(True)
-                        log.info(f"Re-enabled button: {btn.objectName()}")
-                    elif 'stop' in btn_name or btn_text == '停止':
-                        btn.setEnabled(False)
+            # Method 2: Also re-enable specific known buttons by name
+            known_start_buttons = [
+                'pushButtonGroupSpiderStart',
+                'pushButtonMembersSpiderStart', 
+                'pushButtonGreetsSpiderStart',
+                'pushButtonGroupSpecifiedStart',
+                'pushButtonMembersRapidStart',
+                'pushButtonPostsSpiderStart',
+                'pushButtonPagesSpiderStart',
+            ]
             
-            # Re-enable all sidebar items
+            for btn_name in known_start_buttons:
+                btn = self.findChild(QPushButton, btn_name)
+                if btn:
+                    btn.setEnabled(True)
+                    app_logger.log_action("BUTTON_ENABLED", f"启用按钮: {btn_name}")
+            
+            # Method 3: Re-enable all sidebar items
             if hasattr(self.ui, 'sidebarList'):
+                self.ui.sidebarList.setEnabled(True)
                 for i in range(self.ui.sidebarList.count()):
                     item = self.ui.sidebarList.item(i)
                     if item:
-                        item.setFlags(item.flags() | Qt.ItemIsEnabled)
+                        item.setFlags(item.flags() | Qt.ItemIsEnabled | Qt.ItemIsSelectable)
+                app_logger.log_action("SIDEBAR_ENABLED", "侧边栏已启用")
             
-            # Also enable tab widget if present
+            # Method 4: Enable tab widget
             if hasattr(self.ui, 'tabWidget'):
+                self.ui.tabWidget.setEnabled(True)
                 for i in range(self.ui.tabWidget.count()):
                     self.ui.tabWidget.setTabEnabled(i, True)
             
+            # Method 5: Enable stacked pages
+            if hasattr(self.ui, 'stackedPages'):
+                self.ui.stackedPages.setEnabled(True)
+            
+            app_logger.log_action("BUTTON_REENABLE", f"按钮重新启用完成", {"tab_index": tab_index, "success": True})
             log.info(f"Force re-enabled buttons for tab index {tab_index}")
+            
         except Exception as e:
+            app_logger.log_error("BUTTON_ERROR", f"重新启用按钮失败", e, {"tab_index": tab_index})
             log.error(f"Error re-enabling buttons: {e}")
+    
+    def reset_all_ui_controls(self):
+        """Reset all UI controls to enabled state - emergency reset"""
+        app_logger.log_action("UI_RESET", "开始重置所有UI控件")
+        
+        try:
+            # Clear all stop events
+            if hasattr(self, 'group_stop_event') and self.group_stop_event:
+                self.group_stop_event.clear()
+                self.group_stop_event = None
+            if hasattr(self, 'member_stop_event') and self.member_stop_event:
+                self.member_stop_event.clear()
+                self.member_stop_event = None
+            if hasattr(self, 'greets_stop_event') and self.greets_stop_event:
+                self.greets_stop_event.clear()
+                self.greets_stop_event = None
+            
+            # Enable all QPushButtons in the window
+            for btn in self.findChildren(QPushButton):
+                btn_name = btn.objectName().lower()
+                if 'stop' in btn_name or btn.text() == '停止':
+                    btn.setEnabled(False)
+                else:
+                    btn.setEnabled(True)
+            
+            # Enable sidebar
+            if hasattr(self.ui, 'sidebarList'):
+                self.ui.sidebarList.setEnabled(True)
+                for i in range(self.ui.sidebarList.count()):
+                    item = self.ui.sidebarList.item(i)
+                    if item:
+                        item.setFlags(item.flags() | Qt.ItemIsEnabled | Qt.ItemIsSelectable)
+            
+            # Enable tabs
+            if hasattr(self.ui, 'tabWidget'):
+                self.ui.tabWidget.setEnabled(True)
+                for i in range(self.ui.tabWidget.count()):
+                    self.ui.tabWidget.setTabEnabled(i, True)
+            
+            # Enable stacked pages
+            if hasattr(self.ui, 'stackedPages'):
+                self.ui.stackedPages.setEnabled(True)
+            
+            app_logger.log_action("UI_RESET", "UI控件重置完成", {"success": True})
+            
+        except Exception as e:
+            app_logger.log_error("UI_RESET_ERROR", "UI重置失败", e)
 
     # New spider handlers
     def on_group_specified_spider_start(self):
@@ -1973,133 +2054,72 @@ class MainWindow(QMainWindow):
         #     Thread(target=check_data, daemon=True).start()
 
     def closeEvent(self, event):
-        """Handle application close - save logs with user choice"""
-        from PySide2.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QFileDialog
-        from PySide2.QtCore import Qt
-        
+        """Handle application close - auto-save logs and notify user"""
         app_logger.log_action("APP_CLOSE", "用户请求关闭应用")
         
-        # Get session summary
-        summary = app_logger.get_session_summary()
-        
-        # Create custom dialog
-        dialog = QDialog(self)
-        dialog.setWindowTitle("💾 保存日志 - Save Logs")
-        dialog.setMinimumWidth(500)
-        dialog.setStyleSheet("""
-            QDialog {
-                background-color: #f5f5f5;
-            }
-            QLabel {
-                color: #333;
-            }
-            QPushButton {
-                padding: 10px 20px;
-                border-radius: 5px;
-                font-weight: bold;
-            }
-        """)
-        
-        layout = QVBoxLayout(dialog)
-        
-        # Header
-        header = QLabel("📊 会话日志已生成 - Session Logs Generated")
-        header.setStyleSheet("font-size: 16px; font-weight: bold; color: #1976d2; margin-bottom: 10px;")
-        layout.addWidget(header)
-        
-        # Session info
-        info_text = f"""
-        <b>会话ID:</b> {summary['session_id']}<br>
-        <b>运行时长:</b> {summary['duration_formatted']}<br>
-        <b>总操作数:</b> {summary['total_actions']}<br>
-        <b>错误数量:</b> {summary['total_errors']}<br>
-        <b>终端输出:</b> {summary['total_terminal_output']} 行
-        """
-        info_label = QLabel(info_text)
-        info_label.setStyleSheet("background-color: white; padding: 15px; border-radius: 5px; margin: 10px 0;")
-        layout.addWidget(info_label)
-        
-        # Explanation
-        explain_label = QLabel("日志文件可以帮助我们诊断问题。请选择保存位置:")
-        explain_label.setStyleSheet("color: #666; margin: 10px 0;")
-        layout.addWidget(explain_label)
-        
-        # Default location info
-        default_label = QLabel(f"默认位置: {app_logger.default_log_dir}")
-        default_label.setStyleSheet("color: #888; font-size: 11px;")
-        layout.addWidget(default_label)
-        
-        # Buttons
-        btn_layout = QHBoxLayout()
-        
-        # Save to default location
-        btn_default = QPushButton("💾 保存到默认位置")
-        btn_default.setStyleSheet("background-color: #4caf50; color: white;")
-        btn_default.clicked.connect(lambda: self._save_logs_and_close(dialog, None, event))
-        btn_layout.addWidget(btn_default)
-        
-        # Choose location
-        btn_choose = QPushButton("📁 选择保存位置...")
-        btn_choose.setStyleSheet("background-color: #2196f3; color: white;")
-        btn_choose.clicked.connect(lambda: self._choose_save_location(dialog, event))
-        btn_layout.addWidget(btn_choose)
-        
-        # Don't save
-        btn_skip = QPushButton("❌ 不保存")
-        btn_skip.setStyleSheet("background-color: #f44336; color: white;")
-        btn_skip.clicked.connect(lambda: self._skip_save_and_close(dialog, event))
-        btn_layout.addWidget(btn_skip)
-        
-        layout.addLayout(btn_layout)
-        
-        dialog.exec_()
-    
-    def _save_logs_and_close(self, dialog, save_path, event):
-        """Save logs and close the application"""
+        # AUTO-SAVE logs first (so they're never lost)
         try:
-            log_file, json_file = app_logger.save_logs(save_path)
+            log_file, json_file = app_logger.save_logs()
             
-            # Show success message
-            QMessageBox.information(
-                self,
-                "日志已保存",
-                f"日志文件已保存:\n\n📄 {log_file}\n📄 {json_file}\n\n请将这些文件发送给技术支持以帮助诊断问题。"
-            )
+            # Get session summary
+            summary = app_logger.get_session_summary()
             
-            app_logger.log_action("LOGS_SAVED", f"日志保存成功", {"path": save_path or app_logger.default_log_dir})
+            # Get absolute paths for display
+            abs_log_dir = os.path.abspath(app_logger.default_log_dir)
+            
+            # Show info message with log location
+            msg = QMessageBox(self)
+            msg.setWindowTitle("📊 日志已保存 - Logs Saved")
+            msg.setIcon(QMessageBox.Information)
+            msg.setText(f"""
+<h3>✅ 会话日志已自动保存</h3>
+
+<p><b>会话信息:</b></p>
+<ul>
+<li>会话ID: {summary['session_id']}</li>
+<li>运行时长: {summary['duration_formatted']}</li>
+<li>总操作数: {summary['total_actions']}</li>
+<li>错误数量: {summary['total_errors']}</li>
+</ul>
+
+<p><b>日志文件位置:</b></p>
+<p style="background-color: #f0f0f0; padding: 10px; font-family: monospace;">
+{abs_log_dir}
+</p>
+
+<p><b>如何发送日志给技术支持:</b></p>
+<ol>
+<li>打开文件夹: {abs_log_dir}</li>
+<li>找到文件: session_{summary['session_id']}.log</li>
+<li>将此文件发送给我们</li>
+</ol>
+""")
+            msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Open)
+            msg.button(QMessageBox.Open).setText("📂 打开日志文件夹")
+            msg.button(QMessageBox.Ok).setText("✓ 关闭应用")
+            
+            result = msg.exec_()
+            
+            # If user clicks "Open folder"
+            if result == QMessageBox.Open:
+                import subprocess
+                import platform
+                if platform.system() == 'Windows':
+                    subprocess.Popen(['explorer', abs_log_dir])
+                elif platform.system() == 'Darwin':
+                    subprocess.Popen(['open', abs_log_dir])
+                else:
+                    subprocess.Popen(['xdg-open', abs_log_dir])
+            
         except Exception as e:
-            QMessageBox.warning(self, "保存失败", f"保存日志时出错:\n{str(e)}")
-            app_logger.log_error("SAVE_ERROR", "保存日志失败", e)
+            # If saving fails, still allow close but show error
+            QMessageBox.warning(
+                self,
+                "日志保存失败",
+                f"无法保存日志文件:\n{str(e)}\n\n应用将继续关闭。"
+            )
         
-        dialog.close()
         event.accept()
-    
-    def _choose_save_location(self, dialog, event):
-        """Let user choose save location"""
-        save_path = QFileDialog.getExistingDirectory(
-            self,
-            "选择日志保存位置",
-            os.path.expanduser("~"),
-            QFileDialog.ShowDirsOnly
-        )
-        
-        if save_path:
-            self._save_logs_and_close(dialog, save_path, event)
-        # If user cancels, dialog stays open
-    
-    def _skip_save_and_close(self, dialog, event):
-        """Close without saving logs"""
-        reply = QMessageBox.question(
-            self,
-            "确认不保存",
-            "确定不保存日志吗?\n\n如果遇到问题，日志文件可以帮助我们诊断。",
-            QMessageBox.Yes | QMessageBox.No
-        )
-        
-        if reply == QMessageBox.Yes:
-            app_logger.log_action("LOGS_SKIPPED", "用户选择不保存日志")
-            dialog.close()
-            event.accept()
 
 
 # 程序入口
