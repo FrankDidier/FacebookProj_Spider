@@ -389,6 +389,16 @@ class Ui_MainWindow(object):
             # If config wizard fails to load, skip it
             print(f"Warning: Could not load config wizard: {e}")
         
+        # Enhanced Dashboard (Main Control Panel)
+        try:
+            from enhanced_dashboard import EnhancedDashboard
+            self.enhancedDashboard = EnhancedDashboard()
+            self.enhancedDashboard.setObjectName(u"enhancedDashboard")
+            self.stackedPages.addWidget(self.enhancedDashboard)
+            self.sidebarList.addItem("📊 主控制台")
+        except Exception as e:
+            print(f"Warning: Could not load enhanced dashboard: {e}")
+        
         self.stackedPages.addWidget(self.tabGroupSpider)
         self.sidebarList.addItem("采集群组")
         self.tabMembersSpider = QWidget()
