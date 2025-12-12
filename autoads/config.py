@@ -209,6 +209,14 @@ class Config(object):
             port = self.bitbrowser_port
             return f'http://127.0.0.1:{port}'
 
+    @property
+    def keep_browser_open(self):
+        """Keep browser open after collection stops"""
+        try:
+            return self.get_option('ads', 'keep_browser_open').lower() == 'true'
+        except:
+            return True  # Default: keep browser open
+
     # IP Pool properties
     @property
     def ip_pool_enabled(self):

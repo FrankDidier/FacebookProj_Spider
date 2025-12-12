@@ -463,7 +463,15 @@ class WebDriverPool:
 
             log.info(self.queue_drop_res)
 
-    def remove(self, ads_id, pre_remove=None):
+    def remove(self, ads_id, pre_remove=None, force_close=False):
+        """
+        Remove browser from pool
+        
+        Args:
+            ads_id: Browser ID
+            pre_remove: Callback before removal
+            force_close: If True, always close browser. If False, check config.
+        """
         with self.lock:  # 防止线程多次并发
             if callable(pre_remove):
                 pre_remove(ads_id)
@@ -471,38 +479,58 @@ class WebDriverPool:
             if ads_id in self.queue.keys():
                 driver = self.queue.pop(ads_id)
 
-                if driver.get_driver():
-                    driver.quit()
-
-                # Close browser via appropriate API
-                browser_type = getattr(config, 'browser_type', 'adspower') if hasattr(config, 'browser_type') else 'adspower'
+                # Check if we should keep browser open
+                keep_browser_open = getattr(config, 'keep_browser_open', True)
                 
-                close_times = 0
-                while close_times < 2:
-                    try:
-                        if browser_type == 'bitbrowser':
-                            # BitBrowser uses POST with JSON body
-                            result = bitbrowser_api.stop_browser(ads_id)
-                            if result:
-                                break
+                if force_close or not keep_browser_open:
+                    # Close the browser
+                    if driver.get_driver():
+                        try:
+                            driver.quit()
+                        except Exception as e:
+                            log.debug(f"Error quitting driver: {e}")
+
+                    # Close browser via appropriate API
+                    browser_type = getattr(config, 'browser_type', 'adspower') if hasattr(config, 'browser_type') else 'adspower'
+                    
+                    close_times = 0
+                    while close_times < 2:
+                        try:
+                            if browser_type == 'bitbrowser':
+                                # BitBrowser uses POST with JSON body
+                                result = bitbrowser_api.stop_browser(ads_id)
+                                if result:
+                                    break
+                                else:
+                                    close_times += 1
+                                    tools.delay_time(2)
+                                    log.info(f'close BitBrowser browser_id: {ads_id}')
                             else:
-                                close_times += 1
-                                tools.delay_time(2)
-                                log.info(f'close BitBrowser browser_id: {ads_id}')
-                        else:
-                            # AdsPower uses GET
-                            close_url = f"{self.service_url}/api/v1/browser/stop?user_id={ads_id}"
-                            res = requests.get(close_url).json()
-                            if 'code' in res and res['code'] == 0:
-                                break
-                            else:
-                                close_times += 1
-                                tools.delay_time(2)
-                                log.info('close ads_id:' + ads_id + '|' + json.dumps(res))
-                    except Exception as e:
-                        close_times += 1
-                        log.error(e)
-                        tools.delay_time(2)
+                                # AdsPower uses GET
+                                close_url = f"{self.service_url}/api/v1/browser/stop?user_id={ads_id}"
+                                res = requests.get(close_url).json()
+                                if 'code' in res and res['code'] == 0:
+                                    break
+                                else:
+                                    close_times += 1
+                                    tools.delay_time(2)
+                                    log.info('close ads_id:' + ads_id + '|' + json.dumps(res))
+                        except Exception as e:
+                            close_times += 1
+                            log.error(e)
+                            tools.delay_time(2)
+                    
+                    log.info(f'Browser {ads_id} closed')
+                else:
+                    # Just disconnect WebDriver but keep browser open
+                    if driver.get_driver():
+                        try:
+                            # Detach from browser without closing
+                            driver.get_driver().quit()
+                        except Exception as e:
+                            log.debug(f"Error detaching driver: {e}")
+                    
+                    log.info(f'Browser {ads_id} kept open (disconnected from WebDriver)')
 
                 self.driver_count -= 1
 
