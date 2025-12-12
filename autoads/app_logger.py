@@ -93,15 +93,20 @@ class AppLogger:
         # Remove default handler
         logger.remove()
         
-        # Add console handler (colored)
-        logger.add(
-            sys.stderr,
-            format="<green>{time:YYYY-MM-DD HH:mm:ss}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>",
-            level="DEBUG",
-            colorize=True
-        )
+        # Add console handler (colored) - only if stderr is available
+        # In PyInstaller windowed mode, sys.stderr may be None
+        if sys.stderr is not None:
+            try:
+                logger.add(
+                    sys.stderr,
+                    format="<green>{time:YYYY-MM-DD HH:mm:ss}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>",
+                    level="DEBUG",
+                    colorize=True
+                )
+            except Exception:
+                pass  # Skip console logging if it fails
         
-        # Add file handler (detailed)
+        # Add file handler (detailed) - this always works
         logger.add(
             self.log_file,
             format="{time:YYYY-MM-DD HH:mm:ss.SSS} | {level: <8} | {name}:{function}:{line} | {message}",
@@ -115,9 +120,16 @@ class AppLogger:
     
     def _capture_terminal_output(self):
         """Capture all stdout/stderr output"""
-        sys.stdout = TeeOutput(sys.__stdout__, self.terminal_output)
-        sys.stderr = TeeOutput(sys.__stderr__, self.terminal_output)
-        logger.info("📺 终端输出捕获已启动")
+        # Only capture if streams are available (not in PyInstaller windowed mode)
+        try:
+            if sys.__stdout__ is not None and sys.stdout is not None:
+                sys.stdout = TeeOutput(sys.__stdout__, self.terminal_output)
+            if sys.__stderr__ is not None and sys.stderr is not None:
+                sys.stderr = TeeOutput(sys.__stderr__, self.terminal_output)
+            logger.info("📺 终端输出捕获已启动")
+        except Exception as e:
+            # In windowed mode, just skip terminal capture
+            logger.debug(f"Terminal capture skipped: {e}")
     
     def _log_session_start(self):
         """Log session start information with system details"""
