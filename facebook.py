@@ -822,18 +822,24 @@ class MainWindow(QMainWindow):
         # 确定需要开启多少个线程来处理请求
         thread_count = len(ads_ids) if len(ads_ids) < len(config.groups_words) else len(config.groups_words)
 
-        # Subtract 1 because ConfigWizardPage is at index 0
-        grid_index = self.ui.stackedPages.currentIndex() - 1
-        grid_layout = self.findChildren(QGridLayout, f'gridLayout_{str(grid_index)}')
+        # Calculate grid index: subtract 2 for ConfigWizardPage and EnhancedDashboard
+        # Page 0 = ConfigWizard, Page 1 = Dashboard, Page 2 = Groups (gridLayout_0)
+        current_page = self.ui.stackedPages.currentIndex()
+        grid_index = current_page - 2  # Groups page is index 2, maps to gridLayout_0
         
-        # Safety check
-        if not grid_layout:
-            log.warning(f"Grid layout not found for index {grid_index}, trying gridLayout_0")
-            grid_layout = self.findChildren(QGridLayout, 'gridLayout_0')
+        # Direct mapping for group spider
+        grid_layout = self.findChildren(QGridLayout, 'gridLayout_0')
         
         if not grid_layout:
+            log.warning(f"Grid layout gridLayout_0 not found")
             QMessageBox.warning(self, "错误", "无法找到布局组件，请重启应用")
             return
+
+        # Clear existing widgets from grid layout
+        while grid_layout[0].count():
+            item = grid_layout[0].takeAt(0)
+            if item.widget():
+                item.widget().deleteLater()
 
         # 给每个处理请求的线程配置对应的流程展示控件，实时监控到请求被处理到哪一步了
         for i in range(thread_count):
@@ -871,18 +877,20 @@ class MainWindow(QMainWindow):
 
         # 确定需要开启多少个线程来处理请求
         thread_count = tools.get_greet_threading_count(config_from_newest=config)
-        # Subtract 1 because ConfigWizardPage is at index 0
-        grid_index = self.ui.stackedPages.currentIndex() - 1
-        grid_layout = self.findChildren(QGridLayout, f'gridLayout_{str(grid_index)}')
         
-        # Safety check
-        if not grid_layout:
-            log.warning(f"Grid layout not found for index {grid_index}, trying gridLayout_1")
-            grid_layout = self.findChildren(QGridLayout, 'gridLayout_1')
+        # Direct mapping for member spider - use gridLayout_1
+        grid_layout = self.findChildren(QGridLayout, 'gridLayout_1')
         
         if not grid_layout:
+            log.warning(f"Grid layout gridLayout_1 not found")
             QMessageBox.warning(self, "错误", "无法找到布局组件，请重启应用")
             return
+        
+        # Clear existing widgets from grid layout
+        while grid_layout[0].count():
+            item = grid_layout[0].takeAt(0)
+            if item.widget():
+                item.widget().deleteLater()
 
         # 给每个处理请求的线程配置对应的流程展示控件，实时监控到请求被处理到哪一步了
         for i in range(thread_count):
@@ -943,18 +951,19 @@ class MainWindow(QMainWindow):
         # 确定需要开启多少个线程来处理请求
         thread_count = tools.get_greet_threading_count(config_from_newest=config)
 
-        # Subtract 1 because ConfigWizardPage is at index 0
-        grid_index = self.ui.stackedPages.currentIndex() - 1
-        grid_layout = self.findChildren(QGridLayout, f'gridLayout_{str(grid_index)}')
-        
-        # Safety check
-        if not grid_layout:
-            log.warning(f"Grid layout not found for index {grid_index}, trying gridLayout_2")
-            grid_layout = self.findChildren(QGridLayout, 'gridLayout_2')
+        # Direct mapping for greets spider - use gridLayout_2
+        grid_layout = self.findChildren(QGridLayout, 'gridLayout_2')
         
         if not grid_layout:
+            log.warning(f"Grid layout gridLayout_2 not found")
             QMessageBox.warning(self, "错误", "无法找到布局组件，请重启应用")
             return
+
+        # Clear existing widgets from grid layout
+        while grid_layout[0].count():
+            item = grid_layout[0].takeAt(0)
+            if item.widget():
+                item.widget().deleteLater()
 
         # 给每个处理请求的线程配置对应的流程展示控件，实时监控到请求被处理到哪一步了
         for i in range(thread_count):
