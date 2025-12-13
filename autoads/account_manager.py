@@ -308,6 +308,9 @@ class AccountManager:
             'message': f'已清空 {count} 个账号'
         }
     
+    # Alias for compatibility
+    clear_all = clear_accounts
+    
     def add_account(self, account_data):
         """
         添加单个账号
