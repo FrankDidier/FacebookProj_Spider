@@ -38,6 +38,12 @@ class NoConsoleService(Service):
     # Compatibility fix for newer Selenium versions
     start_error_message = "Please check that the chromedriver is installed and in PATH."
     
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Ensure log_file attribute exists for compatibility
+        if not hasattr(self, 'log_file') or self.log_file is None:
+            self.log_file = PIPE
+    
     def start(self):
         try:
             cmd = [self.path]
