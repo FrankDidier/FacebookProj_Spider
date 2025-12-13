@@ -482,6 +482,19 @@ class MembersSpider(autoads.AirSpider):
             for line in fi:
                 dictobj = json.loads(line)
                 fo.write(dictobj[unique_key] + '\n')
+        
+        # 自动生成合并的成员文件 - Auto-create consolidated member file
+        try:
+            member_dir = tools.abspath(self.config.members_table)
+            if os.path.isdir(member_dir):
+                output_file = os.path.join(member_dir, 'all_members.txt')
+                count = tools.create_consolidated_member_file(member_dir, output_file)
+                if count > 0:
+                    log.info(f'已自动生成合并成员文件: {output_file} (共 {count} 个成员)')
+                    tools.send_message_to_ui(ms=self.ms, ui=self.ui, 
+                        message=f'已生成合并成员文件: all_members.txt (共 {count} 个成员)')
+        except Exception as e:
+            log.error(f'生成合并成员文件失败: {e}')
 
 
 if __name__ == "__main__":
