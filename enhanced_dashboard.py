@@ -260,17 +260,48 @@ class AccountManagementPanel(QGroupBox):
                 QMessageBox.critical(self, "导出失败", f"导出失败: {str(e)}")
         
     def add_account(self, account_data):
+        """Add account to table - handles both dict and Account objects"""
         row = self.table.rowCount()
         self.table.insertRow(row)
         
+        # Handle both Account objects and dicts
+        if hasattr(account_data, 'to_dict'):
+            # It's an Account object
+            data = account_data.to_dict()
+            username = data.get('username', '')
+            password = '***'  # Don't show password
+            two_fa = data.get('two_fa', '')
+            cookie = data.get('cookie', '')[:20] + '...' if data.get('cookie') else ''
+            proxy = data.get('proxy', '')
+            stats = str(data.get('stats', {}))
+            status = data.get('status', '待机')
+        elif hasattr(account_data, 'username'):
+            # It's an Account object without to_dict
+            username = getattr(account_data, 'username', '')
+            password = '***'
+            two_fa = getattr(account_data, 'two_fa', '')
+            cookie = getattr(account_data, 'cookie', '')[:20] + '...' if getattr(account_data, 'cookie', '') else ''
+            proxy = getattr(account_data, 'proxy', '')
+            stats = str(getattr(account_data, 'stats', {}))
+            status = getattr(account_data, 'status', '待机')
+        else:
+            # It's a dict
+            username = account_data.get('username', '')
+            password = '***'
+            two_fa = account_data.get('2fa', '') or account_data.get('two_fa', '')
+            cookie = account_data.get('cookie', '')[:20] + '...' if account_data.get('cookie') else ''
+            proxy = account_data.get('proxy', '')
+            stats = str(account_data.get('stats', 0))
+            status = account_data.get('status', '待机')
+        
         self.table.setItem(row, 0, QTableWidgetItem(str(row + 1)))
-        self.table.setItem(row, 1, QTableWidgetItem(account_data.get('username', '')))
-        self.table.setItem(row, 2, QTableWidgetItem(account_data.get('password', '***')))
-        self.table.setItem(row, 3, QTableWidgetItem(account_data.get('2fa', '')))
-        self.table.setItem(row, 4, QTableWidgetItem(account_data.get('cookie', '')[:20] + '...'))
-        self.table.setItem(row, 5, QTableWidgetItem(account_data.get('proxy', '')))
-        self.table.setItem(row, 6, QTableWidgetItem(str(account_data.get('stats', 0))))
-        self.table.setItem(row, 7, QTableWidgetItem(account_data.get('status', '待机')))
+        self.table.setItem(row, 1, QTableWidgetItem(username))
+        self.table.setItem(row, 2, QTableWidgetItem(password))
+        self.table.setItem(row, 3, QTableWidgetItem(two_fa))
+        self.table.setItem(row, 4, QTableWidgetItem(cookie))
+        self.table.setItem(row, 5, QTableWidgetItem(proxy))
+        self.table.setItem(row, 6, QTableWidgetItem(stats))
+        self.table.setItem(row, 7, QTableWidgetItem(status))
 
 
 class UserManagementPanel(QGroupBox):
