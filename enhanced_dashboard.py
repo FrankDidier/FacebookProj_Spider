@@ -18,6 +18,16 @@ import os
 import json
 from datetime import datetime
 
+# Import actual functionality modules
+try:
+    from autoads.account_manager import AccountManager
+    from autoads.cloud_dedup import CloudDeduplication
+    from autoads.config import config
+    HAS_BACKEND = True
+except ImportError:
+    HAS_BACKEND = False
+    print("Warning: Backend modules not available")
+
 
 class StatsWidget(QFrame):
     """Statistics display widget"""
@@ -89,9 +99,17 @@ class StatsWidget(QFrame):
 class AccountManagementPanel(QGroupBox):
     """Account Management Panel (账号管理)"""
     
+    # Signals for parent to connect to
+    account_imported = Signal(int)
+    account_cleared = Signal()
+    account_exported = Signal(str)
+    
     def __init__(self, parent=None):
         super().__init__("账号管理", parent)
+        self.account_manager = AccountManager() if HAS_BACKEND else None
         self.setup_ui()
+        self.connect_signals()
+        self.load_accounts()
         
     def setup_ui(self):
         self.setStyleSheet("""
@@ -155,6 +173,92 @@ class AccountManagementPanel(QGroupBox):
         
         layout.addWidget(self.table)
         
+    def connect_signals(self):
+        """Connect button signals to actual functionality"""
+        self.btn_import.clicked.connect(self.on_import_accounts)
+        self.btn_clear.clicked.connect(self.on_clear_accounts)
+        self.btn_export.clicked.connect(self.on_export_accounts)
+        
+    def load_accounts(self):
+        """Load accounts from account manager"""
+        if not self.account_manager:
+            return
+        try:
+            accounts = self.account_manager.get_all_accounts()
+            self.table.setRowCount(0)
+            for acc in accounts:
+                self.add_account(acc)
+        except Exception as e:
+            print(f"Error loading accounts: {e}")
+            
+    def on_import_accounts(self):
+        """Import accounts from file"""
+        file_path, _ = QFileDialog.getOpenFileName(
+            self, "选择账号文件", "", "Text Files (*.txt);;CSV Files (*.csv);;All Files (*)"
+        )
+        if file_path:
+            try:
+                if self.account_manager:
+                    count = self.account_manager.import_from_file(file_path)
+                    self.load_accounts()
+                    QMessageBox.information(self, "导入成功", f"成功导入 {count} 个账号")
+                    self.account_imported.emit(count)
+                else:
+                    # Fallback: just read the file and display
+                    with open(file_path, 'r', encoding='utf-8') as f:
+                        lines = f.readlines()
+                    for i, line in enumerate(lines):
+                        parts = line.strip().split('\t') if '\t' in line else line.strip().split(',')
+                        if parts:
+                            self.add_account({
+                                'username': parts[0] if len(parts) > 0 else '',
+                                'password': parts[1] if len(parts) > 1 else '',
+                                '2fa': parts[2] if len(parts) > 2 else '',
+                                'cookie': parts[3] if len(parts) > 3 else '',
+                                'proxy': parts[4] if len(parts) > 4 else '',
+                                'stats': 0,
+                                'status': '待机'
+                            })
+                    QMessageBox.information(self, "导入成功", f"成功导入 {len(lines)} 个账号")
+            except Exception as e:
+                QMessageBox.critical(self, "导入失败", f"导入失败: {str(e)}")
+                
+    def on_clear_accounts(self):
+        """Clear all accounts"""
+        reply = QMessageBox.question(
+            self, "确认清空", "确定要清空所有账号吗？",
+            QMessageBox.Yes | QMessageBox.No
+        )
+        if reply == QMessageBox.Yes:
+            if self.account_manager:
+                self.account_manager.clear_all()
+            self.table.setRowCount(0)
+            self.account_cleared.emit()
+            QMessageBox.information(self, "清空成功", "已清空所有账号")
+            
+    def on_export_accounts(self):
+        """Export unused accounts"""
+        file_path, _ = QFileDialog.getSaveFileName(
+            self, "导出账号", "unused_accounts.txt", "Text Files (*.txt);;All Files (*)"
+        )
+        if file_path:
+            try:
+                if self.account_manager:
+                    self.account_manager.export_unused(file_path)
+                else:
+                    # Fallback: export from table
+                    with open(file_path, 'w', encoding='utf-8') as f:
+                        for row in range(self.table.rowCount()):
+                            status = self.table.item(row, 7).text() if self.table.item(row, 7) else ''
+                            if '使用' not in status:
+                                username = self.table.item(row, 1).text() if self.table.item(row, 1) else ''
+                                password = self.table.item(row, 2).text() if self.table.item(row, 2) else ''
+                                f.write(f"{username}\t{password}\n")
+                QMessageBox.information(self, "导出成功", f"已导出到 {file_path}")
+                self.account_exported.emit(file_path)
+            except Exception as e:
+                QMessageBox.critical(self, "导出失败", f"导出失败: {str(e)}")
+        
     def add_account(self, account_data):
         row = self.table.rowCount()
         self.table.insertRow(row)
@@ -172,9 +276,16 @@ class AccountManagementPanel(QGroupBox):
 class UserManagementPanel(QGroupBox):
     """User Management Panel (用户管理)"""
     
+    # Signals
+    data_imported = Signal(int)
+    data_cleared = Signal()
+    data_exported = Signal(str)
+    
     def __init__(self, parent=None):
         super().__init__("用户管理", parent)
         self.setup_ui()
+        self.connect_signals()
+        self.load_collected_users()
         
     def setup_ui(self):
         self.setStyleSheet("""
@@ -230,6 +341,94 @@ class UserManagementPanel(QGroupBox):
         ])
         self.table.horizontalHeader().setStretchLastSection(True)
         self.table.setAlternatingRowColors(True)
+        
+    def connect_signals(self):
+        """Connect button signals"""
+        self.btn_import.clicked.connect(self.on_import_data)
+        self.btn_clear.clicked.connect(self.on_clear_data)
+        self.btn_export.clicked.connect(self.on_export_data)
+        
+    def load_collected_users(self):
+        """Load collected users from data directory"""
+        try:
+            data_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'members')
+            if os.path.exists(data_dir):
+                for filename in os.listdir(data_dir)[:50]:  # Limit to 50 files
+                    if filename.endswith('.json'):
+                        filepath = os.path.join(data_dir, filename)
+                        try:
+                            with open(filepath, 'r', encoding='utf-8') as f:
+                                users = json.load(f)
+                                if isinstance(users, list):
+                                    for user in users[:20]:  # Limit per file
+                                        self.add_user(user)
+                        except:
+                            pass
+        except Exception as e:
+            print(f"Error loading users: {e}")
+            
+    def on_import_data(self):
+        """Import user data from file"""
+        file_path, _ = QFileDialog.getOpenFileName(
+            self, "选择用户数据文件", "", "JSON Files (*.json);;Text Files (*.txt);;All Files (*)"
+        )
+        if file_path:
+            try:
+                with open(file_path, 'r', encoding='utf-8') as f:
+                    if file_path.endswith('.json'):
+                        users = json.load(f)
+                    else:
+                        users = [{'name': line.strip(), 'uid': '', 'time': '', 'status': ''} 
+                                for line in f.readlines() if line.strip()]
+                
+                count = 0
+                for user in users:
+                    self.add_user(user)
+                    count += 1
+                    
+                QMessageBox.information(self, "导入成功", f"成功导入 {count} 个用户")
+                self.data_imported.emit(count)
+            except Exception as e:
+                QMessageBox.critical(self, "导入失败", f"导入失败: {str(e)}")
+                
+    def on_clear_data(self):
+        """Clear all user data"""
+        reply = QMessageBox.question(
+            self, "确认清空", "确定要清空所有用户数据吗？",
+            QMessageBox.Yes | QMessageBox.No
+        )
+        if reply == QMessageBox.Yes:
+            self.table.setRowCount(0)
+            self.data_cleared.emit()
+            QMessageBox.information(self, "清空成功", "已清空所有用户数据")
+            
+    def on_export_data(self):
+        """Export user data"""
+        file_path, _ = QFileDialog.getSaveFileName(
+            self, "导出用户数据", "users.txt", "Text Files (*.txt);;JSON Files (*.json);;All Files (*)"
+        )
+        if file_path:
+            try:
+                users = []
+                for row in range(self.table.rowCount()):
+                    users.append({
+                        'name': self.table.item(row, 1).text() if self.table.item(row, 1) else '',
+                        'uid': self.table.item(row, 2).text() if self.table.item(row, 2) else '',
+                        'time': self.table.item(row, 3).text() if self.table.item(row, 3) else '',
+                        'status': self.table.item(row, 4).text() if self.table.item(row, 4) else ''
+                    })
+                
+                with open(file_path, 'w', encoding='utf-8') as f:
+                    if file_path.endswith('.json'):
+                        json.dump(users, f, ensure_ascii=False, indent=2)
+                    else:
+                        for user in users:
+                            f.write(f"{user['name']}\t{user['uid']}\n")
+                            
+                QMessageBox.information(self, "导出成功", f"已导出到 {file_path}")
+                self.data_exported.emit(file_path)
+            except Exception as e:
+                QMessageBox.critical(self, "导出失败", f"导出失败: {str(e)}")
         self.table.setSelectionBehavior(QTableWidget.SelectRows)
         
         layout.addWidget(self.table)
@@ -338,9 +537,63 @@ class CollectionControlPanel(QGroupBox):
 class FilterSettingsPanel(QGroupBox):
     """Filter Settings Panel (功能设置)"""
     
+    # Signals
+    settings_changed = Signal(dict)
+    
     def __init__(self, parent=None):
         super().__init__("功能设置", parent)
+        self.cloud_dedup = CloudDeduplication() if HAS_BACKEND else None
         self.setup_ui()
+        self.connect_signals()
+        
+    def connect_signals(self):
+        """Connect all filter controls"""
+        self.btn_test_connection.clicked.connect(self.on_test_connection)
+        
+    def on_test_connection(self):
+        """Test cloud deduplication connection"""
+        try:
+            if self.cloud_dedup:
+                stats = self.cloud_dedup.get_stats()
+                QMessageBox.information(
+                    self, "连通测试成功", 
+                    f"云端去重复连接正常!\n\n"
+                    f"数据库: {self.txt_db_name.text()}\n"
+                    f"总记录数: {stats.get('total_entries', 0)}\n"
+                    f"成员数: {stats.get('members', 0)}\n"
+                    f"群组数: {stats.get('groups', 0)}"
+                )
+            else:
+                QMessageBox.warning(self, "连通测试", "云端去重复模块未加载")
+        except Exception as e:
+            QMessageBox.critical(self, "连通测试失败", f"连接失败: {str(e)}")
+            
+    def get_settings(self):
+        """Get all filter settings as a dict"""
+        return {
+            'pm_after_add': self.chk_pm_after_add.isChecked(),
+            'delete_request': self.chk_delete_request.isChecked(),
+            'delete_unfit': self.chk_delete_unfit.isChecked(),
+            'country': self.combo_country.currentText(),
+            'gender': self.combo_gender.currentText(),
+            'text_detect': self.chk_text_detect.isChecked(),
+            'language': self.combo_language.currentText(),
+            'ai_only': self.chk_ai_only.isChecked(),
+            'ai_face': self.chk_ai_face.isChecked(),
+            'friend_min': self.spin_friend_min.value(),
+            'friend_max': self.spin_friend_max.value(),
+            'age_min': self.spin_age_min.value(),
+            'age_max': self.spin_age_max.value(),
+            'delay_min': self.spin_delay_min.value(),
+            'delay_max': self.spin_delay_max.value(),
+            'quantity': self.spin_quantity.value(),
+            'cloud_dedup': self.chk_cloud_dedup.isChecked(),
+            'db_name': self.txt_db_name.text(),
+            'no_age': self.chk_no_age.isChecked(),
+            'no_gender': self.chk_no_gender.isChecked(),
+            'no_location': self.chk_no_location.isChecked(),
+            'name_only': self.chk_name_only.isChecked()
+        }
         
     def setup_ui(self):
         self.setStyleSheet("""
@@ -598,9 +851,67 @@ class RunLogPanel(QGroupBox):
 class ThreadControlPanel(QWidget):
     """Thread Control Panel"""
     
+    # Signals
+    stop_requested = Signal()
+    pause_requested = Signal()
+    thread_count_changed = Signal(int)
+    
     def __init__(self, parent=None):
         super().__init__(parent)
+        self.is_paused = False
         self.setup_ui()
+        self.connect_signals()
+        
+    def connect_signals(self):
+        """Connect button signals"""
+        self.btn_stop.clicked.connect(self.on_stop_clicked)
+        self.btn_pause.clicked.connect(self.on_pause_clicked)
+        self.spin_threads.valueChanged.connect(self.on_thread_count_changed)
+        
+    def on_stop_clicked(self):
+        """Handle stop button click"""
+        reply = QMessageBox.question(
+            self, "确认停止", "确定要停止所有运行中的任务吗？",
+            QMessageBox.Yes | QMessageBox.No
+        )
+        if reply == QMessageBox.Yes:
+            self.stop_requested.emit()
+            QMessageBox.information(self, "已停止", "已发送停止信号到所有任务")
+            
+    def on_pause_clicked(self):
+        """Handle pause button click"""
+        self.is_paused = not self.is_paused
+        if self.is_paused:
+            self.btn_pause.setText("继续")
+            self.btn_pause.setStyleSheet("""
+                QPushButton {
+                    background: #27ae60;
+                    color: white;
+                    border: none;
+                    padding: 8px 20px;
+                    border-radius: 5px;
+                    font-weight: bold;
+                    font-size: 13px;
+                }
+            """)
+        else:
+            self.btn_pause.setText("暂停")
+            self.btn_pause.setStyleSheet("""
+                QPushButton {
+                    background: #f39c12;
+                    color: white;
+                    border: none;
+                    padding: 8px 20px;
+                    border-radius: 5px;
+                    font-weight: bold;
+                    font-size: 13px;
+                }
+            """)
+        self.pause_requested.emit()
+        
+    def on_thread_count_changed(self, value):
+        """Handle thread count change"""
+        self.thread_count_changed.emit(value)
         
     def setup_ui(self):
         layout = QHBoxLayout(self)
