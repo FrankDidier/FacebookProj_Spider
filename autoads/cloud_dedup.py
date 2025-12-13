@@ -69,7 +69,8 @@ class CloudDeduplication:
                 self.remote_url = ''
             
             try:
-                self.local_db_path = config.get_option('cloud_dedup', 'local_db_path')
+                val = config.get_option('cloud_dedup', 'local_db_path')
+                self.local_db_path = val if val else './dedup_cache/'
             except:
                 self.local_db_path = './dedup_cache/'
                 
