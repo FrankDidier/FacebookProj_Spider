@@ -2963,3 +2963,108 @@ def save_clean_link(file_path, link):
             f.write(link + '\n')
     except Exception as e:
         log.error(f"Error saving clean link: {e}")
+
+
+def extract_user_name_from_url(url):
+    """
+    从Facebook用户链接中提取用户名/ID
+    Extract username/ID from Facebook user URL
+    
+    Examples:
+    - https://www.facebook.com/groups/484481109977576/user/100079287581930/ -> user_100079287581930
+    - https://www.facebook.com/john.doe -> john.doe
+    - https://m.facebook.com/profile.php?id=100012345678 -> user_100012345678
+    
+    :param url: Facebook用户URL
+    :return: 提取的用户名或None
+    """
+    if not url:
+        return None
+    
+    try:
+        parsed = urlparse(url)
+        path = parsed.path.rstrip('/')
+        
+        # Pattern 1: /groups/{group_id}/user/{user_id}/
+        user_match = re.search(r'/user/(\d+)', path)
+        if user_match:
+            return f"user_{user_match.group(1)}"
+        
+        # Pattern 2: /profile.php?id={user_id}
+        if 'profile.php' in path:
+            query = urllib.parse.parse_qs(parsed.query)
+            if 'id' in query:
+                return f"user_{query['id'][0]}"
+        
+        # Pattern 3: /{username}
+        path_parts = path.split('/')
+        if len(path_parts) >= 2:
+            username = path_parts[-1] or path_parts[-2]
+            if username and username not in ['groups', 'pages', 'events']:
+                return username
+        
+        return None
+    except Exception as e:
+        log.error(f"Error extracting username from URL {url}: {e}")
+        return None
+
+
+def create_consolidated_member_file(member_dir='./fb/member/', output_file='./fb/member/all_members.txt'):
+    """
+    将所有成员文件合并为一个统一的文件
+    Consolidate all member files into a single file
+    
+    :param member_dir: 成员文件目录
+    :param output_file: 输出文件路径
+    :return: 合并的成员总数
+    """
+    try:
+        member_dir = abspath(member_dir)
+        output_file = abspath(output_file)
+        
+        if not os.path.exists(member_dir):
+            log.warning(f"Member directory not found: {member_dir}")
+            return 0
+        
+        all_members = []
+        seen_links = set()  # Deduplication
+        files = glob.glob(member_dir + '/*.txt') + glob.glob(member_dir + '\\*.txt')
+        
+        for file_path in files:
+            # Skip already consolidated files and link files
+            if 'all_members' in file_path or '_links' in file_path:
+                continue
+            
+            with codecs.open(file_path, 'r', encoding='utf-8') as fi:
+                for line in fi:
+                    if not line.strip():
+                        continue
+                    try:
+                        dictobj = json.loads(line)
+                        link = dictobj.get('member_link')
+                        
+                        # Deduplication based on member_link
+                        if link and link not in seen_links:
+                            seen_links.add(link)
+                            all_members.append(line)
+                    except json.JSONDecodeError:
+                        continue
+        
+        # Write all members to output file
+        with codecs.open(output_file, 'w', encoding='utf-8') as fo:
+            for member in all_members:
+                if not member.endswith('\n'):
+                    member += '\n'
+                fo.write(member)
+        
+        # Also create a _links.txt version for convenience
+        links_file = output_file.replace('.txt', '_links.txt')
+        with codecs.open(links_file, 'w', encoding='utf-8') as fo:
+            for link in seen_links:
+                fo.write(link + '\n')
+        
+        log.info(f"Consolidated {len(all_members)} unique members to {output_file}")
+        return len(all_members)
+    except Exception as e:
+        log.error(f"Error creating consolidated member file: {e}")
+        return 0

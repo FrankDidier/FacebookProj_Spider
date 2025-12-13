@@ -33,6 +33,18 @@ class GreetsSpider(autoads.AirSpider):
     pipeline = None
     selected_member_file = None  # Path to selected member file from UI
 
+    def _load_links_file(self, filepath):
+        """Load plain URLs from a _links.txt file and yield them as an iterator"""
+        try:
+            with codecs.open(filepath, 'r', encoding='utf-8') as f:
+                lines = [line.strip() for line in f if line.strip()]
+                log.info(f'Loaded {len(lines)} URLs from {filepath}')
+                for line in lines:
+                    yield line
+        except Exception as e:
+            log.error(f'Error loading links file {filepath}: {e}')
+            return
+
     def start_requests(self):
 
         self.pipeline = self._item_buffer._pipelines[0]
@@ -42,7 +54,14 @@ class GreetsSpider(autoads.AirSpider):
         if hasattr(self.config, 'members_selected_file') and self.config.members_selected_file:
             self.selected_member_file = self.config.members_selected_file
             log.info(f'Using selected member file: {self.selected_member_file}')
-            members = self.pipeline.load_items_from_file(member_template, self.selected_member_file)
+            
+            # Check if it's a _links.txt file (plain URLs) or regular JSON file
+            if self.selected_member_file.endswith('_links.txt'):
+                # Read plain URLs and convert to member objects
+                members = self._load_links_file(self.selected_member_file)
+                log.info(f'Loaded {len(members)} members from links file')
+            else:
+                members = self.pipeline.load_items_from_file(member_template, self.selected_member_file)
         else:
             members = self.pipeline.load_items(member_template)
 
@@ -55,12 +74,6 @@ class GreetsSpider(autoads.AirSpider):
         request_dict = {}
         for ads_id in ads_ids:
             try:
-                # 获取目录中，今天已经处理过的ads_id进行剔除
-                # ads_id_path = self.config.members_finished + datetime.now().strftime(
-                #     "%Y-%m-%d") + '/' + ads_id + '.txt'
-                # if os.path.exists(ads_id_path):
-                #     continue
-
                 # 初始化当前ads_id容器
                 if ads_id not in request_dict:
                     request_dict[ads_id] = []
@@ -68,13 +81,40 @@ class GreetsSpider(autoads.AirSpider):
                 # 加载每天每个浏览器可以发送多少个私信请求,就循环多少次，并添加成员请求
                 for i in range(int(self.config.members_nums)):
                     item = next(members)
-                    dictobj = json.loads(item)
-                    member: MemberItem = self.pipeline.dictToObj(dictobj, member_template)
-
-                    while member.status!='init':
-                        item = next(members)
-                        dictobj = json.loads(item)
+                    
+                    # Handle both plain URL strings and JSON objects
+                    if isinstance(item, str):
+                        item = item.strip()
+                        if not item:
+                            continue
+                        
+                        # Check if it's JSON or plain URL
+                        if item.startswith('{'):
+                            try:
+                                dictobj = json.loads(item)
+                                member: MemberItem = self.pipeline.dictToObj(dictobj, member_template)
+                            except json.JSONDecodeError:
+                                log.error(f'Failed to parse JSON: {item[:100]}...')
+                                continue
+                        else:
+                            # It's a plain URL - create a minimal MemberItem
+                            member = MemberItem()
+                            member.member_link = item
+                            member.member_name = tools.extract_user_name_from_url(item) or "Unknown"
+                            member.group_name = "Unknown Group"
+                            member.group_link = ""
+                            member.role_type = "member"
+                            member.status = "init"
+                            log.info(f'Created member from URL: {member.member_link}')
+                    elif isinstance(item, MemberItem):
+                        member = item
+                    else:
+                        dictobj = item if isinstance(item, dict) else json.loads(str(item))
                         member: MemberItem = self.pipeline.dictToObj(dictobj, member_template)
+
+                    # Skip non-init members (only for JSON-based members)
+                    if hasattr(member, 'status') and member.status and member.status != 'init':
+                        continue
                     
                     # 云端去重复检查 - Cloud deduplication check
                     if cloud_dedup.enabled and cloud_dedup.is_processed(member.member_link, 'message'):
@@ -85,10 +125,18 @@ class GreetsSpider(autoads.AirSpider):
 
                     member.priority = (i + 1) * 5
                     request_dict[ads_id].append(member)
+                    log.info(f'Added member to queue: {member.member_name} -> {member.member_link}')
             except StopIteration:
+                log.info(f'Finished loading members for ads_id: {ads_id}')
                 break
+            except Exception as e:
+                log.error(f'Error loading member: {e}')
+                continue
 
         count = 0
+        total_members = sum(len(m) for m in request_dict.values())
+        log.info(f'Total members to process: {total_members}')
+        tools.send_message_to_ui(ms=self.ms, ui=self.ui, message=f'已加载 {total_members} 个成员待发送私信')
 
         log.info(request_dict)
 

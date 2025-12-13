@@ -60,53 +60,107 @@ class Action(object):
         self.browser = browser
         self.wait = WebDriverWait(browser, 8)
 
-    def scroll_until_loaded(self):
+    def scroll_until_loaded(self, max_retries=3):
+        """
+        Scroll down the page until no new content loads
+        
+        :param max_retries: Number of retries if scroll fails
+        :return: True if finished scrolling, False if more content may load
+        """
         if self.browser:
-            try:
-                check_height = self.browser.execute_script("return document.body.scrollHeight;")
-                self.browser.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+            for attempt in range(max_retries):
+                try:
+                    check_height = self.browser.execute_script("return document.body.scrollHeight;")
+                    
+                    # Use JavaScript scrolling instead of Selenium actions to avoid element interaction issues
+                    self.browser.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+                    
+                    # Wait a bit for content to load
+                    tools.delay_time(1.5)
+                    
+                    # Check if more content loaded
+                    new_height = self.browser.execute_script("return document.body.scrollHeight;")
+                    
+                    if new_height > check_height:
+                        return False  # More content loaded, not finished
+                    
+                    # Try to trigger lazy loading by scrolling up slightly and then down
+                    self.browser.execute_script("window.scrollBy(0, -300);")
+                    tools.delay_time(0.5)
+                    self.browser.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+                    tools.delay_time(1)
+                    
+                    final_height = self.browser.execute_script("return document.body.scrollHeight;")
+                    
+                    if final_height > check_height:
+                        return False  # More content loaded
+                    
+                    return True  # No more content, finished
 
-                flag = self.wait.until(
-                    lambda driver: driver.execute_script("return document.body.scrollHeight;") > check_height)
-                return not flag
-
-            except Exception as e:
-                log.error(e)
-                return True
+                except Exception as e:
+                    log.error(f"Scroll attempt {attempt + 1}/{max_retries} failed: {e}")
+                    tools.delay_time(1)
+                    if attempt == max_retries - 1:
+                        return True  # Give up and consider it finished
+            return True
         else:
             return True
 
-    def scroll(self):
-        # 页面一直滚动，直到‘已经到底啦~’出现
-        # 慢慢的下拉
-
+    def scroll(self, max_retries=3):
+        """
+        Scroll down the page slowly in increments
+        
+        :param max_retries: Number of retries if scroll fails
+        :return: True if finished scrolling (reached bottom), False otherwise
+        """
         if self.browser:
-            try:
-                check_height = self.browser.execute_script("return document.body.scrollHeight;")
-                is_finished = False
-                # 整个滚动条高度，10等分来滚动
-                # slides = self.slide_list(check_height)
-                slides = [check_height // 10] * 10
-                # print('browser id:' + str(id(self.browser)))
-                for split_distance in slides:
-                    before_scroll = self.browser.execute_script('return window.document.documentElement.scrollTop;')
-                    # log.info(before_scroll)
-                    self.browser.execute_script(f'window.scrollBy(0,{split_distance})')
-                    log.info(f'scroll down by {split_distance}')
-                    tools.delay_time(random.randint(100, 200) / 100)
-                    after_scroll = self.browser.execute_script('return window.document.documentElement.scrollTop;')
-                    # log.info(after_scroll)
-                    # 每次移动一下都检查是不是已经到底啦！
-                    is_finished = before_scroll == after_scroll
-                    # log.info(f'已经到底啦-->{is_finished}')
-
-                    if is_finished:
-                        return is_finished
-                # log.info('已经执行完成了这一轮')
-                return is_finished
-            except Exception as e:
-                log.error(e)
-                return True
+            for attempt in range(max_retries):
+                try:
+                    check_height = self.browser.execute_script("return document.body.scrollHeight;")
+                    is_finished = False
+                    
+                    # Calculate scroll increments (10 steps)
+                    scroll_increment = max(check_height // 10, 300)  # Minimum 300px per scroll
+                    slides = [scroll_increment] * 10
+                    
+                    for split_distance in slides:
+                        try:
+                            before_scroll = self.browser.execute_script('return window.document.documentElement.scrollTop;')
+                            
+                            # Use pure JavaScript scroll to avoid element interaction issues
+                            self.browser.execute_script(f'window.scrollBy(0, {split_distance});')
+                            log.info(f'scroll down by {split_distance}')
+                            
+                            # Random delay to simulate human behavior
+                            tools.delay_time(random.randint(100, 200) / 100)
+                            
+                            after_scroll = self.browser.execute_script('return window.document.documentElement.scrollTop;')
+                            
+                            # Check if we've reached the bottom
+                            is_finished = abs(before_scroll - after_scroll) < 5  # Allow small margin
+                            
+                            if is_finished:
+                                # Double-check by trying to scroll a bit more
+                                self.browser.execute_script('window.scrollBy(0, 500);')
+                                tools.delay_time(0.5)
+                                final_scroll = self.browser.execute_script('return window.document.documentElement.scrollTop;')
+                                is_finished = abs(after_scroll - final_scroll) < 5
+                                
+                                if is_finished:
+                                    return True
+                                    
+                        except Exception as inner_e:
+                            log.warning(f'Scroll step failed: {inner_e}')
+                            continue
+                    
+                    return is_finished
+                    
+                except Exception as e:
+                    log.error(f'Scroll attempt {attempt + 1}/{max_retries} failed: {e}')
+                    tools.delay_time(1)
+                    if attempt == max_retries - 1:
+                        return True  # Give up and consider it finished
+            return True
         else:
             return True
 
