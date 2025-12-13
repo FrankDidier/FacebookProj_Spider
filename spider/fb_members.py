@@ -299,7 +299,11 @@ class MembersSpider(autoads.AirSpider):
                 # 先检查是不是有上一次或者之前没有正常关闭的消息对话框，如果有就先关闭掉
                 closespan_pre = tools.get_page_data_mutilxpath(browser, self.config.greets_xpath_close_btn_row)
                 if len(closespan_pre) > 0:
-                    closespan_pre[-1].click()
+                    try:
+                        # Use JavaScript click to avoid "element not interactable" error
+                        browser.execute_script("arguments[0].click();", closespan_pre[-1])
+                    except Exception as click_err:
+                        log.warning(f'Failed to close dialog: {click_err}')
                     tools.delay_time(2)
 
                 if not is_finished:

@@ -57,9 +57,10 @@ class GreetsSpider(autoads.AirSpider):
             
             # Check if it's a _links.txt file (plain URLs) or regular JSON file
             if self.selected_member_file.endswith('_links.txt'):
-                # Read plain URLs and convert to member objects
-                members = self._load_links_file(self.selected_member_file)
-                log.info(f'Loaded {len(members)} members from links file')
+                # Read plain URLs and convert to member objects - load as list, not generator
+                members_list = list(self._load_links_file(self.selected_member_file))
+                log.info(f'Loaded {len(members_list)} members from links file')
+                members = iter(members_list)  # Convert back to iterator for consumption
             else:
                 members = self.pipeline.load_items_from_file(member_template, self.selected_member_file)
         else:
