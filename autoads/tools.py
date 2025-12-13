@@ -2759,14 +2759,18 @@ def unique_member(dir, unique_key=None):
     log.info(repeats)
 
 
-def delete_entry_from_file(file_path, unique_key, unique_value):
+def delete_entry_from_file(file_path, unique_key_or_url, unique_value=None):
     """
     从文件中删除已处理的条目
     Delete a processed entry from a file
     
+    Supports two modes:
+    1. JSON mode: delete_entry_from_file(file_path, 'member_link', 'https://...')
+    2. Plain URL mode: delete_entry_from_file(file_path, 'https://...')
+    
     :param file_path: 文件路径
-    :param unique_key: 用于识别条目的键名 (如 'member_link')
-    :param unique_value: 要删除的条目的值
+    :param unique_key_or_url: 用于识别条目的键名 (JSON模式) 或直接是要删除的URL (纯URL模式)
+    :param unique_value: 要删除的条目的值 (JSON模式), None表示纯URL模式
     :return: True 如果删除成功, False 如果失败
     """
     try:
@@ -2774,6 +2778,14 @@ def delete_entry_from_file(file_path, unique_key, unique_value):
         if not os.path.exists(file_path):
             log.warning(f"File not found: {file_path}")
             return False
+        
+        # Determine mode: JSON or plain URL
+        is_plain_url_mode = unique_value is None
+        if is_plain_url_mode:
+            target_url = unique_key_or_url.strip()
+        else:
+            unique_key = unique_key_or_url
+            target_value = unique_value
         
         # 创建临时文件
         split_index = file_path.rfind('.')
@@ -2783,17 +2795,26 @@ def delete_entry_from_file(file_path, unique_key, unique_value):
         with codecs.open(file_path, 'r', encoding='utf-8') as fi, \
                 codecs.open(temp_file, 'w', encoding='utf-8') as fo:
             for line in fi:
-                if not line.strip():
+                line_stripped = line.strip()
+                if not line_stripped:
                     continue
+                
+                # Try JSON parsing first
                 try:
-                    dictobj = json.loads(line)
-                    if dictobj.get(unique_key) == unique_value:
+                    dictobj = json.loads(line_stripped)
+                    # JSON mode
+                    if not is_plain_url_mode and dictobj.get(unique_key) == target_value:
                         deleted = True
-                        log.info(f"Deleted entry: {unique_value} from {file_path}")
+                        log.info(f"Deleted entry: {target_value} from {file_path}")
                         continue  # 跳过这行，不写入新文件
                     fo.write(line)
                 except json.JSONDecodeError:
-                    fo.write(line)  # 保留无法解析的行
+                    # Plain URL mode - line is not JSON
+                    if is_plain_url_mode and line_stripped == target_url:
+                        deleted = True
+                        log.info(f"Deleted entry: {target_url} from {file_path}")
+                        continue  # 跳过这行，不写入新文件
+                    fo.write(line)
         
         # 替换原文件
         os.remove(file_path)
