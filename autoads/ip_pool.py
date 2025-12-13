@@ -53,20 +53,55 @@ class IPPoolManager:
     def parse_proxy(self, proxy_str):
         """
         Parse proxy string to config dict
-        Formats: host:port or host:port:user:password
+        Formats: 
+        - host:port
+        - host:port:user:password
+        - http://host:port
+        - http://user:pass@host:port
+        - socks5://host:port
+        - socks5://user:pass@host:port
         """
+        proxy_str = proxy_str.strip()
+        
+        # Determine proxy type from URL scheme
+        proxy_type = 'http'
+        if proxy_str.startswith('socks5://'):
+            proxy_type = 'socks5'
+            proxy_str = proxy_str[9:]  # Remove 'socks5://'
+        elif proxy_str.startswith('socks4://'):
+            proxy_type = 'socks4'
+            proxy_str = proxy_str[9:]
+        elif proxy_str.startswith('http://'):
+            proxy_type = 'http'
+            proxy_str = proxy_str[7:]  # Remove 'http://'
+        elif proxy_str.startswith('https://'):
+            proxy_type = 'https'
+            proxy_str = proxy_str[8:]
+        
+        result = {"proxy_type": proxy_type}
+        
+        # Check for user:pass@host:port format
+        if '@' in proxy_str:
+            auth_part, host_part = proxy_str.rsplit('@', 1)
+            if ':' in auth_part:
+                result["proxy_user"], result["proxy_password"] = auth_part.split(':', 1)
+            else:
+                result["proxy_user"] = auth_part
+            proxy_str = host_part
+        
+        # Parse host:port
         parts = proxy_str.split(':')
-        if len(parts) < 2:
+        if len(parts) >= 2:
+            result["proxy_host"] = parts[0]
+            result["proxy_port"] = parts[1]
+        elif len(parts) == 1:
+            result["proxy_host"] = parts[0]
+            result["proxy_port"] = "8080"  # Default port
+        else:
             return None
         
-        proxy_type = config.ip_pool_proxy_type
-        result = {
-            "proxy_type": proxy_type,
-            "proxy_host": parts[0],
-            "proxy_port": parts[1],
-        }
-        
-        if len(parts) >= 4:
+        # Legacy format: host:port:user:password
+        if len(parts) >= 4 and "proxy_user" not in result:
             result["proxy_user"] = parts[2]
             result["proxy_password"] = parts[3]
         

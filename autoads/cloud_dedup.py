@@ -47,13 +47,35 @@ class CloudDeduplication:
     def _load_config(self):
         """Load configuration from config.ini"""
         try:
-            self.enabled = config.get_option('cloud_dedup', 'enabled', 'False').lower() == 'true'
-            self.db_name = config.get_option('cloud_dedup', 'db_name', 'default')
-            self.mode = config.get_option('cloud_dedup', 'mode', 'local')
-            self.remote_url = config.get_option('cloud_dedup', 'remote_url', '')
-            self.local_db_path = config.get_option('cloud_dedup', 'local_db_path', './dedup_cache/')
+            # get_option doesn't support default values, use try/except
+            try:
+                self.enabled = config.get_option('cloud_dedup', 'enabled').lower() == 'true'
+            except:
+                self.enabled = False
+            
+            try:
+                self.db_name = config.get_option('cloud_dedup', 'db_name')
+            except:
+                self.db_name = 'default'
+            
+            try:
+                self.mode = config.get_option('cloud_dedup', 'mode')
+            except:
+                self.mode = 'local'
+            
+            try:
+                self.remote_url = config.get_option('cloud_dedup', 'remote_url')
+            except:
+                self.remote_url = ''
+            
+            try:
+                self.local_db_path = config.get_option('cloud_dedup', 'local_db_path')
+            except:
+                self.local_db_path = './dedup_cache/'
+                
+            log.debug(f"Cloud dedup config loaded: enabled={self.enabled}, mode={self.mode}, db={self.db_name}")
         except Exception as e:
-            log.debug(f"Cloud dedup config not found, using defaults: {e}")
+            log.debug(f"Cloud dedup config error: {e}")
     
     def _get_local_db(self):
         """Get local SQLite connection"""
