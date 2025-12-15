@@ -60,42 +60,57 @@ class FilePipeline(BasePipeline):
                  若False，不会将本批数据入到去重库，以便再次入库
 
         """
+        try:
+            split_index = table.rfind('.')
+            new_table = tools.abspath(table[:split_index] + '_temp' + table[split_index:])
+            table = tools.abspath(table)
 
-        # print(items)
-        # print(update_keys)
+            if not os.path.exists(table):
+                log.warning(f"Table file not found: {table}")
+                return True  # Return True to not block pipeline
 
-        split_index = table.rfind('.')
-        new_table = tools.abspath(table[:split_index] + '_temp' + table[split_index:])
-        table = tools.abspath(table)
+            unique_key = unique_keys[0] if unique_keys else 'member_link'
+            keys = [item.get(unique_key, '') for item in items]
+            
+            # Also collect member_link URLs for plain URL file handling
+            member_links = [item.get('member_link', '') for item in items]
 
-        # print(new_table)
+            is_links_file = '_links.txt' in table or table.endswith('_links.txt')
 
-        unique_key = unique_keys[0]
+            with codecs.open(table, 'r', encoding='utf-8') as fi, \
+                    codecs.open(new_table, 'w', encoding='utf-8') as fo:
 
-        # print(unique_key)
+                for line in fi:
+                    line_stripped = line.strip()
+                    if not line_stripped:
+                        continue
+                    
+                    # Try JSON parsing first
+                    try:
+                        dictobj = json.loads(line_stripped)
+                        if dictobj.get(unique_key) in keys:
+                            item = items[keys.index(dictobj[unique_key])]
+                            for uk in update_keys:
+                                dictobj[uk] = item.get(uk, dictobj.get(uk))
+                            fo.write(json.dumps(dictobj, ensure_ascii=False) + '\n')
+                        else:
+                            fo.write(line)
+                    except json.JSONDecodeError:
+                        # Plain URL file - check if this URL should be deleted
+                        if is_links_file:
+                            # For _links.txt files, delete processed entries
+                            if line_stripped in member_links:
+                                log.debug(f"Removing processed URL from links file: {line_stripped}")
+                                continue  # Skip writing this line (delete it)
+                        fo.write(line)
 
-        keys = [item[unique_key] for item in items]
+            os.remove(table)  # remove original
+            os.rename(new_table, table)  # rename temp to original name
 
-        with codecs.open(table, 'r', encoding='utf-8') as fi, \
-                codecs.open(new_table, 'w', encoding='utf-8') as fo:
-
-            for line in fi:
-                dictobj = json.loads(line)
-                if dictobj[unique_key] in keys:
-                    item = items[keys.index(dictobj[unique_key])]
-                    # print(item)
-                    for uk in update_keys:
-                        dictobj[uk] = item[uk]
-
-                    # print(dictobj)
-                    fo.write(json.dumps(dictobj, ensure_ascii=False) + '\n')
-                else:
-                    fo.write(line)
-
-        os.remove(table)  # remove original
-        os.rename(new_table, table)  # rename temp to original name
-
-        return True
+            return True
+        except Exception as e:
+            log.error(f"Error in update_items for {table}: {e}")
+            return True  # Return True to not block pipeline
 
     def dictToObj(self, dictObj, item: Item):
         if not isinstance(dictObj, dict):

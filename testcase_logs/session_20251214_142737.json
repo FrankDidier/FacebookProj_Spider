@@ -1,0 +1,1955 @@
+{
+  "session_id": "20251214_142737",
+  "start_time": "2025-12-14T14:27:37.543411",
+  "end_time": "2025-12-14T14:47:33.490432",
+  "duration_seconds": 1195.947021,
+  "duration_formatted": "19m 55s",
+  "total_actions": 177,
+  "total_errors": 0,
+  "total_terminal_output": 0,
+  "event_counts": {
+    "SESSION_START": 1,
+    "CONTROL_UPDATE": 12,
+    "BUTTON_REENABLE": 22,
+    "BUTTON_ENABLED": 64,
+    "SIDEBAR_ENABLED": 11,
+    "UI_EVENT": 11,
+    "BUTTON_CLICK": 11,
+    "VALIDATION": 18,
+    "SPIDER_STOP": 5,
+    "CLEANUP": 13,
+    "CONFIG_CHANGE": 8,
+    "APP_CLOSE": 1
+  },
+  "log_file": "./logs/session_20251214_142737.log",
+  "json_log_file": "./logs/session_20251214_142737.json",
+  "actions": [
+    {
+      "event": "SESSION_START",
+      "timestamp": "2025-12-14T14:27:37.543411",
+      "session_id": "20251214_142737",
+      "system": {
+        "platform": "Windows",
+        "platform_version": "10.0.19045",
+        "platform_release": "10",
+        "machine": "AMD64",
+        "processor": "Intel64 Family 6 Model 158 Stepping 9, GenuineIntel",
+        "python_version": "3.9.13 (tags/v3.9.13:6de2ca5, May 17 2022, 16:36:42) [MSC v.1929 64 bit (AMD64)]",
+        "python_executable": "D:\\FB脚本\\FacebookMarketingTool.exe"
+      },
+      "working_directory": "D:\\FB脚本",
+      "user": "hao"
+    },
+    {
+      "event": "CONTROL_UPDATE",
+      "action": "更新控件状态",
+      "timestamp": "2025-12-14T14:27:39.635724",
+      "success": true,
+      "details": {
+        "stop": true,
+        "index": 0
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "开始重新启用按钮",
+      "timestamp": "2025-12-14T14:27:40.135893",
+      "success": true,
+      "details": {
+        "tab_index": 0
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpiderStart",
+      "timestamp": "2025-12-14T14:27:40.135893",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersSpiderStart",
+      "timestamp": "2025-12-14T14:27:40.135893",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGreetsSpiderStart",
+      "timestamp": "2025-12-14T14:27:40.135893",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpecifiedStart",
+      "timestamp": "2025-12-14T14:27:40.136916",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersRapidStart",
+      "timestamp": "2025-12-14T14:27:40.136916",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "SIDEBAR_ENABLED",
+      "action": "侧边栏已启用",
+      "timestamp": "2025-12-14T14:27:40.137893",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "按钮重新启用完成",
+      "timestamp": "2025-12-14T14:27:40.137893",
+      "success": true,
+      "details": {
+        "tab_index": 0,
+        "success": true
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: 📊 主控制台",
+      "timestamp": "2025-12-14T14:27:51.039646",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "📊 主控制台",
+        "timestamp": "2025-12-14T14:27:51.039646",
+        "index": 1
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: 采集群组",
+      "timestamp": "2025-12-14T14:28:08.085079",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "采集群组",
+        "timestamp": "2025-12-14T14:28:08.085079",
+        "index": 2
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_CLICK",
+      "action": "采集群组-启动",
+      "timestamp": "2025-12-14T14:28:22.800049",
+      "success": true,
+      "details": {
+        "button": "采集群组-启动",
+        "page": "GroupSpider页面",
+        "enabled": true,
+        "click_time": "14:28:22.800"
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "VALIDATION",
+      "action": "开始验证配置 - 采集群组",
+      "timestamp": "2025-12-14T14:28:22.800049",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "VALIDATION",
+      "action": "浏览器类型: BitBrowser",
+      "timestamp": "2025-12-14T14:28:22.800049",
+      "success": true,
+      "details": {
+        "browser_type": "bitbrowser"
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "VALIDATION",
+      "action": "采集群组-配置检查",
+      "timestamp": "2025-12-14T14:28:23.762109",
+      "success": true,
+      "details": {
+        "check": "采集群组-配置检查",
+        "passed": true,
+        "message": ""
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "CONTROL_UPDATE",
+      "action": "更新控件状态",
+      "timestamp": "2025-12-14T14:28:24.331592",
+      "success": true,
+      "details": {
+        "stop": false,
+        "index": 2
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "CONTROL_UPDATE",
+      "action": "更新控件状态",
+      "timestamp": "2025-12-14T14:28:57.702439",
+      "success": true,
+      "details": {
+        "stop": true,
+        "index": 2
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "开始重新启用按钮",
+      "timestamp": "2025-12-14T14:28:58.199624",
+      "success": true,
+      "details": {
+        "tab_index": 2
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpiderStart",
+      "timestamp": "2025-12-14T14:28:58.200584",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpiderStart",
+      "timestamp": "2025-12-14T14:28:58.201624",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersSpiderStart",
+      "timestamp": "2025-12-14T14:28:58.202621",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGreetsSpiderStart",
+      "timestamp": "2025-12-14T14:28:58.202621",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpecifiedStart",
+      "timestamp": "2025-12-14T14:28:58.203596",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersRapidStart",
+      "timestamp": "2025-12-14T14:28:58.203596",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "SIDEBAR_ENABLED",
+      "action": "侧边栏已启用",
+      "timestamp": "2025-12-14T14:28:58.206611",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "按钮重新启用完成",
+      "timestamp": "2025-12-14T14:28:58.207607",
+      "success": true,
+      "details": {
+        "tab_index": 2,
+        "success": true
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_CLICK",
+      "action": "采集群组-启动",
+      "timestamp": "2025-12-14T14:29:48.538767",
+      "success": true,
+      "details": {
+        "button": "采集群组-启动",
+        "page": "GroupSpider页面",
+        "enabled": true,
+        "click_time": "14:29:48.538"
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "VALIDATION",
+      "action": "开始验证配置 - 采集群组",
+      "timestamp": "2025-12-14T14:29:48.538767",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "VALIDATION",
+      "action": "浏览器类型: BitBrowser",
+      "timestamp": "2025-12-14T14:29:48.538767",
+      "success": true,
+      "details": {
+        "browser_type": "bitbrowser"
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "VALIDATION",
+      "action": "采集群组-配置检查",
+      "timestamp": "2025-12-14T14:29:49.494548",
+      "success": true,
+      "details": {
+        "check": "采集群组-配置检查",
+        "passed": true,
+        "message": ""
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "CONTROL_UPDATE",
+      "action": "更新控件状态",
+      "timestamp": "2025-12-14T14:29:50.077114",
+      "success": true,
+      "details": {
+        "stop": false,
+        "index": 2
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_CLICK",
+      "action": "采集群组-停止",
+      "timestamp": "2025-12-14T14:31:17.380621",
+      "success": true,
+      "details": {
+        "button": "采集群组-停止",
+        "page": "GroupSpider页面",
+        "enabled": true,
+        "click_time": "14:31:17.380"
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "SPIDER_STOP",
+      "action": "Stopping GroupSpider",
+      "timestamp": "2025-12-14T14:31:17.380621",
+      "success": true,
+      "details": {
+        "spider": "GroupSpider",
+        "reason": "用户点击停止",
+        "stop_time": "2025-12-14T14:31:17.380621"
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "CLEANUP",
+      "action": "开始清理 group spider",
+      "timestamp": "2025-12-14T14:31:18.388317",
+      "success": true,
+      "details": {
+        "tab_index": 1
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "CLEANUP",
+      "action": "已清理 group_stop_event",
+      "timestamp": "2025-12-14T14:31:18.389275",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "开始重新启用按钮",
+      "timestamp": "2025-12-14T14:31:18.391323",
+      "success": true,
+      "details": {
+        "tab_index": 1
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpiderStart",
+      "timestamp": "2025-12-14T14:31:18.393319",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersSpiderStart",
+      "timestamp": "2025-12-14T14:31:18.394316",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGreetsSpiderStart",
+      "timestamp": "2025-12-14T14:31:18.394316",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpecifiedStart",
+      "timestamp": "2025-12-14T14:31:18.395313",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersRapidStart",
+      "timestamp": "2025-12-14T14:31:18.395313",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "SIDEBAR_ENABLED",
+      "action": "侧边栏已启用",
+      "timestamp": "2025-12-14T14:31:18.398304",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "按钮重新启用完成",
+      "timestamp": "2025-12-14T14:31:18.398304",
+      "success": true,
+      "details": {
+        "tab_index": 1,
+        "success": true
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "CLEANUP",
+      "action": "清理完成 group spider",
+      "timestamp": "2025-12-14T14:31:18.400302",
+      "success": true,
+      "details": {
+        "success": true
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "CONTROL_UPDATE",
+      "action": "更新控件状态",
+      "timestamp": "2025-12-14T14:31:23.943045",
+      "success": true,
+      "details": {
+        "stop": true,
+        "index": 2
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "开始重新启用按钮",
+      "timestamp": "2025-12-14T14:31:24.442065",
+      "success": true,
+      "details": {
+        "tab_index": 2
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpiderStart",
+      "timestamp": "2025-12-14T14:31:24.443058",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpiderStart",
+      "timestamp": "2025-12-14T14:31:24.444056",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersSpiderStart",
+      "timestamp": "2025-12-14T14:31:24.445053",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGreetsSpiderStart",
+      "timestamp": "2025-12-14T14:31:24.445053",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpecifiedStart",
+      "timestamp": "2025-12-14T14:31:24.446050",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersRapidStart",
+      "timestamp": "2025-12-14T14:31:24.446050",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "SIDEBAR_ENABLED",
+      "action": "侧边栏已启用",
+      "timestamp": "2025-12-14T14:31:24.449041",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "按钮重新启用完成",
+      "timestamp": "2025-12-14T14:31:24.450039",
+      "success": true,
+      "details": {
+        "tab_index": 2,
+        "success": true
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: 采集成员",
+      "timestamp": "2025-12-14T14:31:27.037419",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "采集成员",
+        "timestamp": "2025-12-14T14:31:27.037419",
+        "index": 3
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_CLICK",
+      "action": "采集成员-启动",
+      "timestamp": "2025-12-14T14:31:51.521935",
+      "success": true,
+      "details": {
+        "button": "采集成员-启动",
+        "page": "MembersSpider页面",
+        "enabled": true,
+        "click_time": "14:31:51.521"
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "VALIDATION",
+      "action": "开始验证配置 - 采集成员",
+      "timestamp": "2025-12-14T14:31:51.522961",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "VALIDATION",
+      "action": "浏览器类型: BitBrowser",
+      "timestamp": "2025-12-14T14:31:51.522961",
+      "success": true,
+      "details": {
+        "browser_type": "bitbrowser"
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "VALIDATION",
+      "action": "采集成员-配置检查",
+      "timestamp": "2025-12-14T14:31:52.556142",
+      "success": true,
+      "details": {
+        "check": "采集成员-配置检查",
+        "passed": true,
+        "message": ""
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "CONFIG_CHANGE",
+      "action": "main.account_nums",
+      "timestamp": "2025-12-14T14:31:52.561131",
+      "success": true,
+      "details": {
+        "section": "main",
+        "key": "account_nums",
+        "old_value": "",
+        "new_value": "1",
+        "changed_at": "2025-12-14T14:31:52.561131"
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "CONFIG_CHANGE",
+      "action": "main.group_nums",
+      "timestamp": "2025-12-14T14:31:52.562125",
+      "success": true,
+      "details": {
+        "section": "main",
+        "key": "group_nums",
+        "old_value": "",
+        "new_value": "10",
+        "changed_at": "2025-12-14T14:31:52.562125"
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "CONTROL_UPDATE",
+      "action": "更新控件状态",
+      "timestamp": "2025-12-14T14:31:53.105588",
+      "success": true,
+      "details": {
+        "stop": false,
+        "index": 3
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_CLICK",
+      "action": "采集成员-停止",
+      "timestamp": "2025-12-14T14:36:38.823341",
+      "success": true,
+      "details": {
+        "button": "采集成员-停止",
+        "page": "MembersSpider页面",
+        "enabled": true,
+        "click_time": "14:36:38.823"
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "SPIDER_STOP",
+      "action": "Stopping MembersSpider",
+      "timestamp": "2025-12-14T14:36:38.823341",
+      "success": true,
+      "details": {
+        "spider": "MembersSpider",
+        "reason": "用户点击停止",
+        "stop_time": "2025-12-14T14:36:38.823341"
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "CLEANUP",
+      "action": "开始清理 member spider",
+      "timestamp": "2025-12-14T14:36:39.828975",
+      "success": true,
+      "details": {
+        "tab_index": 2
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "CLEANUP",
+      "action": "已清理 member_stop_event",
+      "timestamp": "2025-12-14T14:36:39.828975",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "开始重新启用按钮",
+      "timestamp": "2025-12-14T14:36:39.829973",
+      "success": true,
+      "details": {
+        "tab_index": 2
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpiderStart",
+      "timestamp": "2025-12-14T14:36:39.829973",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpiderStart",
+      "timestamp": "2025-12-14T14:36:39.830970",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersSpiderStart",
+      "timestamp": "2025-12-14T14:36:39.830970",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGreetsSpiderStart",
+      "timestamp": "2025-12-14T14:36:39.830970",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpecifiedStart",
+      "timestamp": "2025-12-14T14:36:39.830970",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersRapidStart",
+      "timestamp": "2025-12-14T14:36:39.831967",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "SIDEBAR_ENABLED",
+      "action": "侧边栏已启用",
+      "timestamp": "2025-12-14T14:36:39.831967",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "按钮重新启用完成",
+      "timestamp": "2025-12-14T14:36:39.832965",
+      "success": true,
+      "details": {
+        "tab_index": 2,
+        "success": true
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "CLEANUP",
+      "action": "清理完成 member spider",
+      "timestamp": "2025-12-14T14:36:39.832965",
+      "success": true,
+      "details": {
+        "success": true
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_CLICK",
+      "action": "采集成员-启动",
+      "timestamp": "2025-12-14T14:37:09.972140",
+      "success": true,
+      "details": {
+        "button": "采集成员-启动",
+        "page": "MembersSpider页面",
+        "enabled": true,
+        "click_time": "14:37:09.972"
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "VALIDATION",
+      "action": "开始验证配置 - 采集成员",
+      "timestamp": "2025-12-14T14:37:09.973151",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "VALIDATION",
+      "action": "浏览器类型: BitBrowser",
+      "timestamp": "2025-12-14T14:37:09.973151",
+      "success": true,
+      "details": {
+        "browser_type": "bitbrowser"
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "VALIDATION",
+      "action": "采集成员-配置检查",
+      "timestamp": "2025-12-14T14:37:10.921229",
+      "success": true,
+      "details": {
+        "check": "采集成员-配置检查",
+        "passed": true,
+        "message": ""
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "CONFIG_CHANGE",
+      "action": "main.account_nums",
+      "timestamp": "2025-12-14T14:37:10.924223",
+      "success": true,
+      "details": {
+        "section": "main",
+        "key": "account_nums",
+        "old_value": "",
+        "new_value": "1",
+        "changed_at": "2025-12-14T14:37:10.924223"
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "CONFIG_CHANGE",
+      "action": "main.group_nums",
+      "timestamp": "2025-12-14T14:37:10.925219",
+      "success": true,
+      "details": {
+        "section": "main",
+        "key": "group_nums",
+        "old_value": "",
+        "new_value": "10",
+        "changed_at": "2025-12-14T14:37:10.925219"
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "CONTROL_UPDATE",
+      "action": "更新控件状态",
+      "timestamp": "2025-12-14T14:37:11.474664",
+      "success": true,
+      "details": {
+        "stop": false,
+        "index": 3
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "CONTROL_UPDATE",
+      "action": "更新控件状态",
+      "timestamp": "2025-12-14T14:37:22.301301",
+      "success": true,
+      "details": {
+        "stop": true,
+        "index": 3
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "开始重新启用按钮",
+      "timestamp": "2025-12-14T14:37:22.794828",
+      "success": true,
+      "details": {
+        "tab_index": 3
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersSpiderStart",
+      "timestamp": "2025-12-14T14:37:22.796803",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpiderStart",
+      "timestamp": "2025-12-14T14:37:22.797807",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersSpiderStart",
+      "timestamp": "2025-12-14T14:37:22.798854",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGreetsSpiderStart",
+      "timestamp": "2025-12-14T14:37:22.798854",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpecifiedStart",
+      "timestamp": "2025-12-14T14:37:22.799849",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersRapidStart",
+      "timestamp": "2025-12-14T14:37:22.799849",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "SIDEBAR_ENABLED",
+      "action": "侧边栏已启用",
+      "timestamp": "2025-12-14T14:37:22.802841",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "按钮重新启用完成",
+      "timestamp": "2025-12-14T14:37:22.803790",
+      "success": true,
+      "details": {
+        "tab_index": 3,
+        "success": true
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_CLICK",
+      "action": "采集成员-启动",
+      "timestamp": "2025-12-14T14:43:29.125924",
+      "success": true,
+      "details": {
+        "button": "采集成员-启动",
+        "page": "MembersSpider页面",
+        "enabled": true,
+        "click_time": "14:43:29.125"
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "VALIDATION",
+      "action": "开始验证配置 - 采集成员",
+      "timestamp": "2025-12-14T14:43:29.125924",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "VALIDATION",
+      "action": "浏览器类型: BitBrowser",
+      "timestamp": "2025-12-14T14:43:29.125924",
+      "success": true,
+      "details": {
+        "browser_type": "bitbrowser"
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "VALIDATION",
+      "action": "采集成员-配置检查",
+      "timestamp": "2025-12-14T14:43:30.067578",
+      "success": true,
+      "details": {
+        "check": "采集成员-配置检查",
+        "passed": true,
+        "message": ""
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "CONFIG_CHANGE",
+      "action": "main.account_nums",
+      "timestamp": "2025-12-14T14:43:30.072593",
+      "success": true,
+      "details": {
+        "section": "main",
+        "key": "account_nums",
+        "old_value": "",
+        "new_value": "1",
+        "changed_at": "2025-12-14T14:43:30.072593"
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "CONFIG_CHANGE",
+      "action": "main.group_nums",
+      "timestamp": "2025-12-14T14:43:30.073568",
+      "success": true,
+      "details": {
+        "section": "main",
+        "key": "group_nums",
+        "old_value": "",
+        "new_value": "10",
+        "changed_at": "2025-12-14T14:43:30.073568"
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "CONTROL_UPDATE",
+      "action": "更新控件状态",
+      "timestamp": "2025-12-14T14:43:30.660835",
+      "success": true,
+      "details": {
+        "stop": false,
+        "index": 3
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "CONTROL_UPDATE",
+      "action": "更新控件状态",
+      "timestamp": "2025-12-14T14:43:41.390160",
+      "success": true,
+      "details": {
+        "stop": true,
+        "index": 3
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "开始重新启用按钮",
+      "timestamp": "2025-12-14T14:43:41.891791",
+      "success": true,
+      "details": {
+        "tab_index": 3
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersSpiderStart",
+      "timestamp": "2025-12-14T14:43:41.892802",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpiderStart",
+      "timestamp": "2025-12-14T14:43:41.893801",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersSpiderStart",
+      "timestamp": "2025-12-14T14:43:41.894798",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGreetsSpiderStart",
+      "timestamp": "2025-12-14T14:43:41.895796",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpecifiedStart",
+      "timestamp": "2025-12-14T14:43:41.895796",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersRapidStart",
+      "timestamp": "2025-12-14T14:43:41.896792",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "SIDEBAR_ENABLED",
+      "action": "侧边栏已启用",
+      "timestamp": "2025-12-14T14:43:41.899785",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "按钮重新启用完成",
+      "timestamp": "2025-12-14T14:43:41.899785",
+      "success": true,
+      "details": {
+        "tab_index": 3,
+        "success": true
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: 采集群组",
+      "timestamp": "2025-12-14T14:45:42.607997",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "采集群组",
+        "timestamp": "2025-12-14T14:45:42.607997",
+        "index": 2
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: 采集成员",
+      "timestamp": "2025-12-14T14:45:44.063217",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "采集成员",
+        "timestamp": "2025-12-14T14:45:44.063217",
+        "index": 3
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: 采集群组",
+      "timestamp": "2025-12-14T14:45:44.894584",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "采集群组",
+        "timestamp": "2025-12-14T14:45:44.894584",
+        "index": 2
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: 采集成员",
+      "timestamp": "2025-12-14T14:45:46.118222",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "采集成员",
+        "timestamp": "2025-12-14T14:45:46.118222",
+        "index": 3
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: 私信成员",
+      "timestamp": "2025-12-14T14:45:46.658694",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "私信成员",
+        "timestamp": "2025-12-14T14:45:46.658694",
+        "index": 4
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: 采集成员",
+      "timestamp": "2025-12-14T14:45:47.814681",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "采集成员",
+        "timestamp": "2025-12-14T14:45:47.814681",
+        "index": 3
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: 采集群组",
+      "timestamp": "2025-12-14T14:45:50.794492",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "采集群组",
+        "timestamp": "2025-12-14T14:45:50.794492",
+        "index": 2
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: 采集成员",
+      "timestamp": "2025-12-14T14:45:52.702764",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "采集成员",
+        "timestamp": "2025-12-14T14:45:52.702764",
+        "index": 3
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_CLICK",
+      "action": "采集成员-启动",
+      "timestamp": "2025-12-14T14:45:57.678798",
+      "success": true,
+      "details": {
+        "button": "采集成员-启动",
+        "page": "MembersSpider页面",
+        "enabled": true,
+        "click_time": "14:45:57.678"
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "VALIDATION",
+      "action": "开始验证配置 - 采集成员",
+      "timestamp": "2025-12-14T14:45:57.678798",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "VALIDATION",
+      "action": "浏览器类型: BitBrowser",
+      "timestamp": "2025-12-14T14:45:57.678798",
+      "success": true,
+      "details": {
+        "browser_type": "bitbrowser"
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "VALIDATION",
+      "action": "采集成员-配置检查",
+      "timestamp": "2025-12-14T14:45:58.624724",
+      "success": true,
+      "details": {
+        "check": "采集成员-配置检查",
+        "passed": true,
+        "message": ""
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "CONFIG_CHANGE",
+      "action": "main.account_nums",
+      "timestamp": "2025-12-14T14:45:58.629662",
+      "success": true,
+      "details": {
+        "section": "main",
+        "key": "account_nums",
+        "old_value": "",
+        "new_value": "1",
+        "changed_at": "2025-12-14T14:45:58.629662"
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "CONFIG_CHANGE",
+      "action": "main.group_nums",
+      "timestamp": "2025-12-14T14:45:58.630661",
+      "success": true,
+      "details": {
+        "section": "main",
+        "key": "group_nums",
+        "old_value": "",
+        "new_value": "10",
+        "changed_at": "2025-12-14T14:45:58.630661"
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "CONTROL_UPDATE",
+      "action": "更新控件状态",
+      "timestamp": "2025-12-14T14:45:59.201605",
+      "success": true,
+      "details": {
+        "stop": false,
+        "index": 3
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_CLICK",
+      "action": "采集成员-停止",
+      "timestamp": "2025-12-14T14:45:59.902657",
+      "success": true,
+      "details": {
+        "button": "采集成员-停止",
+        "page": "MembersSpider页面",
+        "enabled": true,
+        "click_time": "14:45:59.902"
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "SPIDER_STOP",
+      "action": "Stopping MembersSpider",
+      "timestamp": "2025-12-14T14:45:59.902657",
+      "success": true,
+      "details": {
+        "spider": "MembersSpider",
+        "reason": "用户点击停止",
+        "stop_time": "2025-12-14T14:45:59.902657"
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_CLICK",
+      "action": "采集成员-停止",
+      "timestamp": "2025-12-14T14:46:00.087762",
+      "success": true,
+      "details": {
+        "button": "采集成员-停止",
+        "page": "MembersSpider页面",
+        "enabled": true,
+        "click_time": "14:46:00.087"
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "SPIDER_STOP",
+      "action": "Stopping MembersSpider",
+      "timestamp": "2025-12-14T14:46:00.087762",
+      "success": true,
+      "details": {
+        "spider": "MembersSpider",
+        "reason": "用户点击停止",
+        "stop_time": "2025-12-14T14:46:00.087762"
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_CLICK",
+      "action": "采集成员-停止",
+      "timestamp": "2025-12-14T14:46:00.270636",
+      "success": true,
+      "details": {
+        "button": "采集成员-停止",
+        "page": "MembersSpider页面",
+        "enabled": true,
+        "click_time": "14:46:00.270"
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "SPIDER_STOP",
+      "action": "Stopping MembersSpider",
+      "timestamp": "2025-12-14T14:46:00.271634",
+      "success": true,
+      "details": {
+        "spider": "MembersSpider",
+        "reason": "用户点击停止",
+        "stop_time": "2025-12-14T14:46:00.271634"
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "CLEANUP",
+      "action": "开始清理 member spider",
+      "timestamp": "2025-12-14T14:46:00.905109",
+      "success": true,
+      "details": {
+        "tab_index": 2
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "CLEANUP",
+      "action": "已清理 member_stop_event",
+      "timestamp": "2025-12-14T14:46:00.906082",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "开始重新启用按钮",
+      "timestamp": "2025-12-14T14:46:00.908117",
+      "success": true,
+      "details": {
+        "tab_index": 2
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpiderStart",
+      "timestamp": "2025-12-14T14:46:00.908117",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpiderStart",
+      "timestamp": "2025-12-14T14:46:00.909114",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersSpiderStart",
+      "timestamp": "2025-12-14T14:46:00.910058",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGreetsSpiderStart",
+      "timestamp": "2025-12-14T14:46:00.911107",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpecifiedStart",
+      "timestamp": "2025-12-14T14:46:00.911107",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersRapidStart",
+      "timestamp": "2025-12-14T14:46:00.912105",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "SIDEBAR_ENABLED",
+      "action": "侧边栏已启用",
+      "timestamp": "2025-12-14T14:46:00.915096",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "按钮重新启用完成",
+      "timestamp": "2025-12-14T14:46:00.916093",
+      "success": true,
+      "details": {
+        "tab_index": 2,
+        "success": true
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "CLEANUP",
+      "action": "清理完成 member spider",
+      "timestamp": "2025-12-14T14:46:00.919037",
+      "success": true,
+      "details": {
+        "success": true
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "CLEANUP",
+      "action": "开始清理 member spider",
+      "timestamp": "2025-12-14T14:46:01.092557",
+      "success": true,
+      "details": {
+        "tab_index": 2
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "开始重新启用按钮",
+      "timestamp": "2025-12-14T14:46:01.092557",
+      "success": true,
+      "details": {
+        "tab_index": 2
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpiderStart",
+      "timestamp": "2025-12-14T14:46:01.093554",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpiderStart",
+      "timestamp": "2025-12-14T14:46:01.093554",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersSpiderStart",
+      "timestamp": "2025-12-14T14:46:01.093554",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGreetsSpiderStart",
+      "timestamp": "2025-12-14T14:46:01.093554",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpecifiedStart",
+      "timestamp": "2025-12-14T14:46:01.093554",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersRapidStart",
+      "timestamp": "2025-12-14T14:46:01.094552",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "SIDEBAR_ENABLED",
+      "action": "侧边栏已启用",
+      "timestamp": "2025-12-14T14:46:01.095549",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "按钮重新启用完成",
+      "timestamp": "2025-12-14T14:46:01.095549",
+      "success": true,
+      "details": {
+        "tab_index": 2,
+        "success": true
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "CLEANUP",
+      "action": "清理完成 member spider",
+      "timestamp": "2025-12-14T14:46:01.095549",
+      "success": true,
+      "details": {
+        "success": true
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "CLEANUP",
+      "action": "开始清理 member spider",
+      "timestamp": "2025-12-14T14:46:01.263589",
+      "success": true,
+      "details": {
+        "tab_index": 2
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "开始重新启用按钮",
+      "timestamp": "2025-12-14T14:46:01.264591",
+      "success": true,
+      "details": {
+        "tab_index": 2
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpiderStart",
+      "timestamp": "2025-12-14T14:46:01.264591",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpiderStart",
+      "timestamp": "2025-12-14T14:46:01.265588",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersSpiderStart",
+      "timestamp": "2025-12-14T14:46:01.265588",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGreetsSpiderStart",
+      "timestamp": "2025-12-14T14:46:01.266586",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpecifiedStart",
+      "timestamp": "2025-12-14T14:46:01.266586",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersRapidStart",
+      "timestamp": "2025-12-14T14:46:01.266586",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "SIDEBAR_ENABLED",
+      "action": "侧边栏已启用",
+      "timestamp": "2025-12-14T14:46:01.268579",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "按钮重新启用完成",
+      "timestamp": "2025-12-14T14:46:01.268579",
+      "success": true,
+      "details": {
+        "tab_index": 2,
+        "success": true
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "CLEANUP",
+      "action": "清理完成 member spider",
+      "timestamp": "2025-12-14T14:46:01.269577",
+      "success": true,
+      "details": {
+        "success": true
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "CONTROL_UPDATE",
+      "action": "更新控件状态",
+      "timestamp": "2025-12-14T14:46:09.931761",
+      "success": true,
+      "details": {
+        "stop": true,
+        "index": 3
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "开始重新启用按钮",
+      "timestamp": "2025-12-14T14:46:10.443395",
+      "success": true,
+      "details": {
+        "tab_index": 3
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersSpiderStart",
+      "timestamp": "2025-12-14T14:46:10.444358",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpiderStart",
+      "timestamp": "2025-12-14T14:46:10.445406",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersSpiderStart",
+      "timestamp": "2025-12-14T14:46:10.446403",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGreetsSpiderStart",
+      "timestamp": "2025-12-14T14:46:10.447400",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpecifiedStart",
+      "timestamp": "2025-12-14T14:46:10.447400",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersRapidStart",
+      "timestamp": "2025-12-14T14:46:10.448396",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "SIDEBAR_ENABLED",
+      "action": "侧边栏已启用",
+      "timestamp": "2025-12-14T14:46:10.451388",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "按钮重新启用完成",
+      "timestamp": "2025-12-14T14:46:10.451388",
+      "success": true,
+      "details": {
+        "tab_index": 3,
+        "success": true
+      },
+      "thread": "MainThread",
+      "thread_id": 13040
+    },
+    {
+      "event": "APP_CLOSE",
+      "action": "用户请求关闭应用",
+      "timestamp": "2025-12-14T14:47:33.489435",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 13040
+    }
+  ],
+  "errors": [],
+  "terminal_output": []
+}

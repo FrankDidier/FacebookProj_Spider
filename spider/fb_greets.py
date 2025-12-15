@@ -173,7 +173,11 @@ class GreetsSpider(autoads.AirSpider):
                     if len(closespan_pre) > 0:
                         log.info(f'线程{threading.current_thread().name}中浏览器{request.ads_id}检查到有消息没有正常结束，准备关闭')
                         tools.send_message_to_ui(ms=self.ms, ui=self.ui, message=f'检查到有消息没有正常结束，准备关闭...')
-                        closespan_pre[-1].click()
+                        # Use JavaScript click to avoid "element not interactable" error
+                        try:
+                            browser.execute_script("arguments[0].click();", closespan_pre[-1])
+                        except:
+                            closespan_pre[-1].click()
                         tools.delay_time(2)
                 except Exception as e:
                     tools.send_message_to_ui(ms=self.ms, ui=self.ui, message=f'检查到有消息没有正常结束，准备关闭 | 关闭异常')
@@ -246,7 +250,11 @@ class GreetsSpider(autoads.AirSpider):
                         if len(textbox) > 0:
                             if text:
                                 # 随机选择一条文案，进行输入
-                                textbox[0].click()
+                                # Use JavaScript click to avoid "element not interactable" error
+                                try:
+                                    browser.execute_script("arguments[0].click();", textbox[0])
+                                except:
+                                    textbox[0].click()
                                 tools.delay_time(0.5)
                                 log.info(f'线程{threading.current_thread().name}中浏览器{request.ads_id}输入文本：{text}')
                                 tools.send_message_to_ui(ms=self.ms, ui=self.ui,
@@ -288,7 +296,10 @@ class GreetsSpider(autoads.AirSpider):
                             # //div[@data-testid="mwchat-tab"]/div[contains(@class,"pfnyh3mw")]/div/span  关闭
                             closespan = tools.get_page_data_mutilxpath(browser, self.config.greets_xpath_close_btn_row)
                             if len(closespan) > 0:
-                                closespan[-1].click()
+                                try:
+                                    browser.execute_script("arguments[0].click();", closespan[-1])
+                                except:
+                                    closespan[-1].click()
                                 tools.delay_time(2)
 
                             if request.finished_nums == self.config.members_nums - 1 and int(index) == 0:
