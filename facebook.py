@@ -373,10 +373,15 @@ class MainWindow(QMainWindow):
             # Member page - select group files
             if hasattr(self.ui, 'comboBoxMemberGroupFile'):
                 self._refresh_member_group_files()
+                log.info("comboBoxMemberGroupFile found and refreshed")
                 if hasattr(self.ui, 'pushButtonMemberRefreshFiles'):
                     self.ui.pushButtonMemberRefreshFiles.clicked.connect(self._refresh_member_group_files)
+                    log.info("pushButtonMemberRefreshFiles connected")
                 if hasattr(self.ui, 'pushButtonMemberBrowseFile'):
                     self.ui.pushButtonMemberBrowseFile.clicked.connect(self._browse_member_group_file)
+                    log.info("pushButtonMemberBrowseFile connected to _browse_member_group_file")
+                else:
+                    log.warning("pushButtonMemberBrowseFile NOT found in UI!")
             
             # Greets page - select member files  
             if hasattr(self.ui, 'comboBoxGreetsMemberFile'):
@@ -410,14 +415,22 @@ class MainWindow(QMainWindow):
 
     def _browse_member_group_file(self):
         """Browse for a group links file"""
-        file_name, _ = QFileDialog.getOpenFileName(
-            self, '选择群组链接文件', '.', 
-            '文本文件 (*.txt);;CSV文件 (*.csv);;JSON文件 (*.json);;所有文件 (*.*)'
-        )
-        if file_name:
-            combo = self.ui.comboBoxMemberGroupFile
-            combo.addItem(file_name)
-            combo.setCurrentText(file_name)
+        app_logger.log_action("BROWSE", "点击浏览群组文件按钮")
+        try:
+            file_name, _ = QFileDialog.getOpenFileName(
+                self, '选择群组链接文件', '.', 
+                '文本文件 (*.txt);;CSV文件 (*.csv);;JSON文件 (*.json);;所有文件 (*.*)'
+            )
+            if file_name:
+                app_logger.log_action("BROWSE", f"选择文件: {file_name}")
+                combo = self.ui.comboBoxMemberGroupFile
+                combo.addItem(file_name)
+                combo.setCurrentText(file_name)
+            else:
+                app_logger.log_action("BROWSE", "用户取消选择")
+        except Exception as e:
+            app_logger.log_error("BROWSE_ERROR", "浏览群组文件失败", e)
+            QMessageBox.critical(self, "错误", f"浏览文件失败: {str(e)}")
 
     def _refresh_greets_member_files(self):
         """Refresh the member files list for private messaging"""
@@ -441,14 +454,22 @@ class MainWindow(QMainWindow):
 
     def _browse_greets_member_file(self):
         """Browse for a member data file"""
-        file_name, _ = QFileDialog.getOpenFileName(
-            self, '选择成员数据文件', '.', 
-            '文本文件 (*.txt);;CSV文件 (*.csv);;JSON文件 (*.json);;所有文件 (*.*)'
-        )
-        if file_name:
-            combo = self.ui.comboBoxGreetsMemberFile
-            combo.addItem(file_name)
-            combo.setCurrentText(file_name)
+        app_logger.log_action("BROWSE", "点击浏览成员文件按钮")
+        try:
+            file_name, _ = QFileDialog.getOpenFileName(
+                self, '选择成员数据文件', '.', 
+                '文本文件 (*.txt);;CSV文件 (*.csv);;JSON文件 (*.json);;所有文件 (*.*)'
+            )
+            if file_name:
+                app_logger.log_action("BROWSE", f"选择成员文件: {file_name}")
+                combo = self.ui.comboBoxGreetsMemberFile
+                combo.addItem(file_name)
+                combo.setCurrentText(file_name)
+            else:
+                app_logger.log_action("BROWSE", "用户取消选择成员文件")
+        except Exception as e:
+            app_logger.log_error("BROWSE_ERROR", "浏览成员文件失败", e)
+            QMessageBox.critical(self, "错误", f"浏览文件失败: {str(e)}")
 
     def get_selected_group_file(self):
         """Get the selected group file path, or None for default"""
@@ -782,6 +803,12 @@ class MainWindow(QMainWindow):
         """
         app_logger.log_button_click("采集群组-启动", "GroupSpider页面")
         
+        # Check if old spider is still stopping
+        if self.group_stop_event and self.group_stop_event.is_set():
+            app_logger.log_warning("SPIDER_BUSY", "上一个采集任务正在停止中，请稍候再试")
+            QMessageBox.warning(self, "提示", "上一个采集任务正在停止中，请稍候几秒再试")
+            return
+        
         # Validate setup first
         if not self.validate_setup("采集群组"):
             app_logger.log_validation("采集群组-配置检查", False, "配置验证失败")
@@ -860,6 +887,12 @@ class MainWindow(QMainWindow):
     def on_member_spider_start(self):
         app_logger.log_button_click("采集成员-启动", "MembersSpider页面")
         
+        # Check if old spider is still stopping
+        if self.member_stop_event and self.member_stop_event.is_set():
+            app_logger.log_warning("SPIDER_BUSY", "上一个采集任务正在停止中，请稍候再试")
+            QMessageBox.warning(self, "提示", "上一个采集任务正在停止中，请稍候几秒再试")
+            return
+        
         # Validate setup first
         if not self.validate_setup("采集成员"):
             app_logger.log_validation("采集成员-配置检查", False, "配置验证失败")
@@ -909,6 +942,12 @@ class MainWindow(QMainWindow):
 
     def on_greets_spider_start(self):
         app_logger.log_button_click("私信成员-启动", "GreetsSpider页面")
+        
+        # Check if old spider is still stopping
+        if self.greets_stop_event and self.greets_stop_event.is_set():
+            app_logger.log_warning("SPIDER_BUSY", "上一个采集任务正在停止中，请稍候再试")
+            QMessageBox.warning(self, "提示", "上一个采集任务正在停止中，请稍候几秒再试")
+            return
         
         # Validate setup first
         if not self.validate_setup("私信成员"):
@@ -986,8 +1025,10 @@ class MainWindow(QMainWindow):
             self.group_stop_event.set()
             app_logger.log_spider_stop("GroupSpider", "用户点击停止")
             self.print_to_tui(self.ui.textBrowserGroupSpider, '正在停止...')
-            # Delay re-enable to allow spider to finish, then clear stop_event
+            # Quick cleanup (re-enable buttons) but keep stop_event set
             QTimer.singleShot(1000, lambda: self._cleanup_after_stop(1, 'group'))
+            # Final cleanup after 8 seconds to allow restart
+            QTimer.singleShot(8000, lambda: self._final_cleanup_stop_event('group'))
         else:
             app_logger.log_error("BUTTON_ERROR", "group_stop_event 为 None，无法停止")
 
@@ -997,8 +1038,10 @@ class MainWindow(QMainWindow):
             self.member_stop_event.set()
             app_logger.log_spider_stop("MembersSpider", "用户点击停止")
             self.print_to_tui(self.ui.textBrowserMembersSpider, '正在停止...')
-            # Delay re-enable to allow spider to finish, then clear stop_event
+            # Quick cleanup (re-enable buttons) but keep stop_event set
             QTimer.singleShot(1000, lambda: self._cleanup_after_stop(2, 'member'))
+            # Final cleanup after 8 seconds to allow restart
+            QTimer.singleShot(8000, lambda: self._final_cleanup_stop_event('member'))
         else:
             app_logger.log_error("BUTTON_ERROR", "member_stop_event 为 None，无法停止")
 
@@ -1008,28 +1051,52 @@ class MainWindow(QMainWindow):
             self.greets_stop_event.set()
             app_logger.log_spider_stop("GreetsSpider", "用户点击停止")
             self.print_to_tui(self.ui.textBrowserGreetsSpider, '正在停止...')
-            # Delay re-enable to allow spider to finish, then clear stop_event
+            # Quick cleanup (re-enable buttons) but keep stop_event set
             QTimer.singleShot(1000, lambda: self._cleanup_after_stop(3, 'greets'))
+            # Final cleanup after 8 seconds to allow restart
+            QTimer.singleShot(8000, lambda: self._final_cleanup_stop_event('greets'))
         else:
             app_logger.log_error("BUTTON_ERROR", "greets_stop_event 为 None，无法停止")
     
-    def _cleanup_after_stop(self, tab_index, spider_type):
-        """Cleanup after spider stop - re-enable buttons and clear stop_event"""
-        app_logger.log_action("CLEANUP", f"开始清理 {spider_type} spider", {"tab_index": tab_index})
+    def _final_cleanup_stop_event(self, spider_type):
+        """Final cleanup - clear stop_event after spider has had time to stop"""
         try:
-            # Clear the stop_event so spider can start again
             if spider_type == 'group' and self.group_stop_event:
                 self.group_stop_event.clear()
                 self.group_stop_event = None
-                app_logger.log_action("CLEANUP", "已清理 group_stop_event")
+                app_logger.log_action("FINAL_CLEANUP", "已清理 group_stop_event，可以重新启动")
             elif spider_type == 'member' and self.member_stop_event:
                 self.member_stop_event.clear()
                 self.member_stop_event = None
-                app_logger.log_action("CLEANUP", "已清理 member_stop_event")
+                app_logger.log_action("FINAL_CLEANUP", "已清理 member_stop_event，可以重新启动")
             elif spider_type == 'greets' and self.greets_stop_event:
                 self.greets_stop_event.clear()
                 self.greets_stop_event = None
-                app_logger.log_action("CLEANUP", "已清理 greets_stop_event")
+                app_logger.log_action("FINAL_CLEANUP", "已清理 greets_stop_event，可以重新启动")
+        except Exception as e:
+            app_logger.log_error("FINAL_CLEANUP_ERROR", f"清理 {spider_type} stop_event 失败", e)
+    
+    def _cleanup_after_stop(self, tab_index, spider_type):
+        """Cleanup after spider stop - re-enable buttons
+        
+        IMPORTANT: Do NOT clear the stop_event here! The stop_event must remain set
+        until the spider threads actually see it and stop. Clearing it immediately
+        causes threads to miss the stop signal and keep running.
+        
+        The stop_event will be set to None only when user starts a new spider,
+        which creates a fresh stop_event.
+        """
+        app_logger.log_action("CLEANUP", f"开始清理 {spider_type} spider (保持stop_event设置)", {"tab_index": tab_index})
+        try:
+            # DO NOT clear stop_event here - threads need it to stop!
+            # stop_event remains set until user starts a new spider
+            # Log the current state for debugging
+            if spider_type == 'group' and self.group_stop_event:
+                app_logger.log_action("CLEANUP", f"group_stop_event 保持设置状态: {self.group_stop_event.is_set()}")
+            elif spider_type == 'member' and self.member_stop_event:
+                app_logger.log_action("CLEANUP", f"member_stop_event 保持设置状态: {self.member_stop_event.is_set()}")
+            elif spider_type == 'greets' and self.greets_stop_event:
+                app_logger.log_action("CLEANUP", f"greets_stop_event 保持设置状态: {self.greets_stop_event.is_set()}")
             
             # Clear grid layout widgets
             self._clear_grid_layout(tab_index)
@@ -1044,8 +1111,12 @@ class MainWindow(QMainWindow):
     def _clear_grid_layout(self, tab_index):
         """Clear all widgets from grid layout"""
         try:
-            # Calculate grid index (subtract 1 for ConfigWizardPage at index 0)
-            grid_index = tab_index - 1 if tab_index > 0 else 0
+            # Calculate grid index correctly:
+            # Tab 2 (Groups) -> gridLayout_0
+            # Tab 3 (Members) -> gridLayout_1  
+            # Tab 4 (Greets) -> gridLayout_2
+            # Page 0 = ConfigWizard, Page 1 = Dashboard, Page 2+ = Spider pages
+            grid_index = tab_index - 2 if tab_index >= 2 else 0
             grid_layouts = self.findChildren(QGridLayout, f'gridLayout_{grid_index}')
             
             if grid_layouts:
