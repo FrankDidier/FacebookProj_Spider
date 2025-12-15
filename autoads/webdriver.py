@@ -552,16 +552,30 @@ class WebDriverPool:
             close_times = 0
             while close_times < 2:
                 try:
-                    res = requests.get(close_url).json()
-                    if 'code' in res and res['code'] == 0:
-                        break
+                    response = requests.get(close_url, timeout=10)
+                    # Handle empty or non-JSON responses
+                    if response.text.strip():
+                        try:
+                            res = response.json()
+                            if 'code' in res and res['code'] == 0:
+                                log.info(f'close ads_id: {_key} | success')
+                                break
+                            else:
+                                close_times += 1
+                                log.info('close ads_id:' + _key + '|' + json.dumps(res))
+                        except json.JSONDecodeError:
+                            log.debug(f'close ads_id: {_key} | response not JSON: {response.text[:100]}')
+                            close_times += 1
                     else:
+                        log.debug(f'close ads_id: {_key} | empty response')
                         close_times += 1
-                        tools.delay_time(2)
-
-                    log.info('close ads_id:' + _key + '|' + json.dumps(res))
+                    tools.delay_time(2)
+                except requests.exceptions.RequestException as e:
+                    log.debug(f'close ads_id: {_key} | request error: {e}')
+                    close_times += 1
+                    tools.delay_time(2)
                 except Exception as e:
-                    log.error(e)
+                    log.error(f'close ads_id: {_key} | unexpected error: {e}')
                     close_times += 1
                     tools.delay_time(2)
 

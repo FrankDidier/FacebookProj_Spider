@@ -298,8 +298,12 @@ class GreetsSpider(autoads.AirSpider):
                             if len(closespan) > 0:
                                 try:
                                     browser.execute_script("arguments[0].click();", closespan[-1])
-                                except:
-                                    closespan[-1].click()
+                                except Exception as js_err:
+                                    # Try regular click as fallback, but don't fail if it doesn't work
+                                    try:
+                                        closespan[-1].click()
+                                    except Exception as click_err:
+                                        log.debug(f'Could not close dialog: JS={js_err}, Click={click_err}')
                                 tools.delay_time(2)
 
                             if request.finished_nums == self.config.members_nums - 1 and int(index) == 0:
