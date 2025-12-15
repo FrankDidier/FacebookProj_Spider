@@ -17,6 +17,7 @@ import codecs
 import os
 import glob
 from autoads import tools
+from autoads.log import log
 
 
 class FilePipeline(BasePipeline):
