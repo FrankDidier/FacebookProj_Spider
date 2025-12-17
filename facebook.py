@@ -904,6 +904,16 @@ class MainWindow(QMainWindow):
         config.set_option('main', 'group_nums', self.ui.lineEditGroupCount.text())
         app_logger.log_config_change('main', 'account_nums', '', self.ui.lineEditMemberMaxThreadCount.text())
         app_logger.log_config_change('main', 'group_nums', '', self.ui.lineEditGroupCount.text())
+        
+        # Get selected group file from UI - THIS WAS MISSING!
+        selected_group_file = self.get_selected_group_file()
+        if selected_group_file:
+            config.set_option('groups', 'selected_file', selected_group_file)
+            self.print_to_tui(self.ui.textBrowserMembersSpider, f'使用选择的群组文件: {selected_group_file}')
+            app_logger.log_action("MEMBER_SPIDER", f"使用选择的群组文件: {selected_group_file}")
+        else:
+            config.set_option('groups', 'selected_file', '')
+            app_logger.log_action("MEMBER_SPIDER", "使用默认群组目录")
 
         # 获取可用的外部浏览器个数
         # ads_ids = tools.get_ads_id(config.account_nums)

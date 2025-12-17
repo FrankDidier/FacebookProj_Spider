@@ -35,7 +35,15 @@ class MembersSpider(autoads.AirSpider):
 
         # 使用了yield加载组数据
         group_template = GroupItem()
-        groups = self.pipeline.load_items(group_template)
+        
+        # Check if a specific group file was selected in UI
+        if hasattr(self.config, 'groups_selected_file') and self.config.groups_selected_file:
+            selected_file = self.config.groups_selected_file
+            log.info(f'Using selected group file: {selected_file}')
+            groups = self.pipeline.load_items_from_file(group_template, selected_file)
+        else:
+            log.info('Using default group directory')
+            groups = self.pipeline.load_items(group_template)
 
         # self.ads_ids = tools.get_ads_id(config.account_nums)  # 总共有多少个账户同时搜集
 
