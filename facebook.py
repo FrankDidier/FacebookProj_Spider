@@ -1040,7 +1040,9 @@ class MainWindow(QMainWindow):
             # Final cleanup after 8 seconds to allow restart
             QTimer.singleShot(8000, lambda: self._final_cleanup_stop_event('group'))
         else:
-            app_logger.log_error("BUTTON_ERROR", "group_stop_event 为 None，无法停止")
+            # No spider running - this is normal, not an error
+            app_logger.log_action("STOP_IGNORED", "没有运行中的群组采集任务")
+            self.print_to_tui(self.ui.textBrowserGroupSpider, '💡 没有正在运行的任务，请先点击"启动"开始采集')
 
     def on_member_spider_stop(self):
         app_logger.log_button_click("采集成员-停止", "MembersSpider页面")
@@ -1053,7 +1055,9 @@ class MainWindow(QMainWindow):
             # Final cleanup after 8 seconds to allow restart
             QTimer.singleShot(8000, lambda: self._final_cleanup_stop_event('member'))
         else:
-            app_logger.log_error("BUTTON_ERROR", "member_stop_event 为 None，无法停止")
+            # No spider running - this is normal, not an error
+            app_logger.log_action("STOP_IGNORED", "没有运行中的成员采集任务")
+            self.print_to_tui(self.ui.textBrowserMembersSpider, '💡 没有正在运行的任务，请先点击"启动"开始采集')
 
     def on_greets_spider_stop(self):
         app_logger.log_button_click("私信成员-停止", "GreetsSpider页面")
@@ -1066,7 +1070,9 @@ class MainWindow(QMainWindow):
             # Final cleanup after 8 seconds to allow restart
             QTimer.singleShot(8000, lambda: self._final_cleanup_stop_event('greets'))
         else:
-            app_logger.log_error("BUTTON_ERROR", "greets_stop_event 为 None，无法停止")
+            # No spider running - this is normal, not an error
+            app_logger.log_action("STOP_IGNORED", "没有运行中的私信任务")
+            self.print_to_tui(self.ui.textBrowserGreetsSpider, '💡 没有正在运行的任务，请先点击"启动"开始私信')
     
     def _final_cleanup_stop_event(self, spider_type):
         """Final cleanup - set stop_event to None after spider has had time to stop
