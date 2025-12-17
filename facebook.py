@@ -1059,18 +1059,26 @@ class MainWindow(QMainWindow):
             app_logger.log_error("BUTTON_ERROR", "greets_stop_event 为 None，无法停止")
     
     def _final_cleanup_stop_event(self, spider_type):
-        """Final cleanup - clear stop_event after spider has had time to stop"""
+        """Final cleanup - set stop_event to None after spider has had time to stop
+        
+        IMPORTANT: Do NOT call clear()! Worker threads need to see is_set()=True
+        to know they should stop. If we clear() the event, threads in the middle
+        of processing will miss the stop signal and keep running.
+        
+        The threads have their own reference to the Event object, so setting
+        our reference to None doesn't affect them - they'll still see is_set()=True.
+        """
         try:
             if spider_type == 'group' and self.group_stop_event:
-                self.group_stop_event.clear()
+                # DON'T call clear() - threads need to see the stop signal!
                 self.group_stop_event = None
                 app_logger.log_action("FINAL_CLEANUP", "已清理 group_stop_event，可以重新启动")
             elif spider_type == 'member' and self.member_stop_event:
-                self.member_stop_event.clear()
+                # DON'T call clear() - threads need to see the stop signal!
                 self.member_stop_event = None
                 app_logger.log_action("FINAL_CLEANUP", "已清理 member_stop_event，可以重新启动")
             elif spider_type == 'greets' and self.greets_stop_event:
-                self.greets_stop_event.clear()
+                # DON'T call clear() - threads need to see the stop signal!
                 self.greets_stop_event = None
                 app_logger.log_action("FINAL_CLEANUP", "已清理 greets_stop_event，可以重新启动")
         except Exception as e:
@@ -1199,15 +1207,16 @@ class MainWindow(QMainWindow):
         app_logger.log_action("UI_RESET", "开始重置所有UI控件")
         
         try:
-            # Clear all stop events
+            # Set stop events to None - DON'T call clear()!
+            # Threads need to see is_set()=True to stop properly
             if hasattr(self, 'group_stop_event') and self.group_stop_event:
-                self.group_stop_event.clear()
+                self.group_stop_event.set()  # Signal threads to stop first
                 self.group_stop_event = None
             if hasattr(self, 'member_stop_event') and self.member_stop_event:
-                self.member_stop_event.clear()
+                self.member_stop_event.set()  # Signal threads to stop first
                 self.member_stop_event = None
             if hasattr(self, 'greets_stop_event') and self.greets_stop_event:
-                self.greets_stop_event.clear()
+                self.greets_stop_event.set()  # Signal threads to stop first
                 self.greets_stop_event = None
             
             # Enable all QPushButtons in the window

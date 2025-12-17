@@ -199,10 +199,13 @@ class AccountManagementPanel(QGroupBox):
         if file_path:
             try:
                 if self.account_manager:
-                    count = self.account_manager.import_from_file(file_path)
+                    result = self.account_manager.import_accounts(file_path)
                     self.load_accounts()
-                    QMessageBox.information(self, "导入成功", f"成功导入 {count} 个账号")
-                    self.account_imported.emit(count)
+                    if result.get('success'):
+                        QMessageBox.information(self, "导入成功", result.get('message', f"成功导入 {result.get('count', 0)} 个账号"))
+                        self.account_imported.emit(result.get('count', 0))
+                    else:
+                        QMessageBox.warning(self, "导入警告", result.get('message', '导入失败'))
                 else:
                     # Fallback: just read the file and display
                     with open(file_path, 'r', encoding='utf-8') as f:

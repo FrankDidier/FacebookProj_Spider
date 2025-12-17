@@ -308,8 +308,9 @@ class AccountManager:
             'message': f'已清空 {count} 个账号'
         }
     
-    # Alias for compatibility
+    # Aliases for compatibility
     clear_all = clear_accounts
+    import_from_file = import_accounts  # Used by enhanced_dashboard.py
     
     def add_account(self, account_data):
         """

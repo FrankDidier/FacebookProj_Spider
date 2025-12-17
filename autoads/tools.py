@@ -2809,10 +2809,16 @@ def delete_entry_from_file(file_path, unique_key_or_url, unique_value=None):
                         continue  # 跳过这行，不写入新文件
                     fo.write(line)
                 except json.JSONDecodeError:
-                    # Plain URL mode - line is not JSON
+                    # Line is not JSON - could be plain URL
+                    # Check if it matches our target (either in plain URL mode or JSON mode with URL value)
                     if is_plain_url_mode and line_stripped == target_url:
                         deleted = True
-                        log.info(f"Deleted entry: {target_url} from {file_path}")
+                        log.info(f"Deleted entry (plain URL mode): {target_url} from {file_path}")
+                        continue  # 跳过这行，不写入新文件
+                    elif not is_plain_url_mode and line_stripped == target_value:
+                        # JSON mode but file contains plain URLs - still delete if URL matches
+                        deleted = True
+                        log.info(f"Deleted entry (URL in JSON mode): {target_value} from {file_path}")
                         continue  # 跳过这行，不写入新文件
                     fo.write(line)
         
