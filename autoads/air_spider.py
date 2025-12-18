@@ -103,6 +103,14 @@ class AirSpider(Thread):
 
         tools.send_message_to_ui(self.ms, self.ui, '采集器启动中...')
 
+        # Reset window position cache for new run to ensure proper auto-arrangement
+        try:
+            from autoads.webdriver import WebDriverPool
+            pool = WebDriverPool()
+            pool.reset_window_positions()
+        except Exception as e:
+            log.debug(f"Could not reset window positions: {e}")
+
         if hasattr(self, 'is_use_interval_timeout'):
             is_use_interval_timeout = self.is_use_interval_timeout
         else:

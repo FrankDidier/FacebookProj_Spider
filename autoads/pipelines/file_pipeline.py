@@ -36,6 +36,16 @@ class FilePipeline(BasePipeline):
                  若False，不会将本批数据入到去重库，以便再次入库
 
         """
+        from autoads.config import config
+        
+        # Check if we should only save links (not JSON) for member files
+        is_member_file = 'member' in table.lower()
+        save_links_only = getattr(config, 'members_save_links_only', False)
+        
+        if is_member_file and save_links_only:
+            # Skip saving JSON format - links are saved separately by spider
+            log.debug(f"Skipping JSON save for {table} (save_links_only=true)")
+            return True
 
         file_dir = os.path.split(table)[0]
 

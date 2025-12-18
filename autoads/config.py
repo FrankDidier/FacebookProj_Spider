@@ -814,11 +814,36 @@ class Config(object):
             return ''
 
     @property
+    def members_save_links_only(self):
+        """只保存links文件 - Only save links file (no JSON format)"""
+        try:
+            val = self.get_option('members', 'save_links_only')
+            return val.lower() == 'true' if val else False
+        except:
+            return True  # Default to true per client request
+
+    @property
     def groups_selected_file(self):
         try:
             return self.get_option('groups', 'selected_file')
         except:
             return ''
+
+    @property
+    def screen_width(self):
+        """屏幕宽度 - Screen width for browser auto-arrangement"""
+        try:
+            return int(self.get_option('main', 'screen_width'))
+        except:
+            return 1920
+
+    @property
+    def screen_height(self):
+        """屏幕高度 - Screen height for browser auto-arrangement"""
+        try:
+            return int(self.get_option('main', 'screen_height'))
+        except:
+            return 1080
 
 
 config = Config()

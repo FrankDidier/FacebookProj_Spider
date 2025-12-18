@@ -1,0 +1,3308 @@
+{
+  "session_id": "20251218_163736",
+  "start_time": "2025-12-18T16:37:36.996076",
+  "end_time": "2025-12-18T17:11:36.336269",
+  "duration_seconds": 2039.340193,
+  "duration_formatted": "33m 59s",
+  "total_actions": 263,
+  "total_errors": 0,
+  "total_terminal_output": 0,
+  "event_counts": {
+    "SESSION_START": 1,
+    "CONTROL_UPDATE": 9,
+    "BUTTON_REENABLE": 18,
+    "BUTTON_ENABLED": 53,
+    "SIDEBAR_ENABLED": 9,
+    "UI_EVENT": 43,
+    "BUTTON_CLICK": 8,
+    "VALIDATION": 12,
+    "CONFIG_CHANGE": 6,
+    "MEMBER_SPIDER": 3,
+    "SPIDER_STOP": 4,
+    "CLEANUP": 12,
+    "FINAL_CLEANUP": 4,
+    "BROWSE": 4,
+    "MESSAGE_SEND": 38,
+    "FILE_OP": 38,
+    "APP_CLOSE": 1
+  },
+  "log_file": "./logs/session_20251218_163736.log",
+  "json_log_file": "./logs/session_20251218_163736.json",
+  "actions": [
+    {
+      "event": "SESSION_START",
+      "timestamp": "2025-12-18T16:37:36.996076",
+      "session_id": "20251218_163736",
+      "system": {
+        "platform": "Windows",
+        "platform_version": "10.0.19045",
+        "platform_release": "10",
+        "machine": "AMD64",
+        "processor": "Intel64 Family 6 Model 158 Stepping 9, GenuineIntel",
+        "python_version": "3.9.13 (tags/v3.9.13:6de2ca5, May 17 2022, 16:36:42) [MSC v.1929 64 bit (AMD64)]",
+        "python_executable": "D:\\FB脚本\\FacebookMarketingTool.exe"
+      },
+      "working_directory": "D:\\FB脚本",
+      "user": "hao"
+    },
+    {
+      "event": "CONTROL_UPDATE",
+      "action": "更新控件状态",
+      "timestamp": "2025-12-18T16:37:39.032560",
+      "success": true,
+      "details": {
+        "stop": true,
+        "index": 0
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "开始重新启用按钮",
+      "timestamp": "2025-12-18T16:37:39.528853",
+      "success": true,
+      "details": {
+        "tab_index": 0
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpiderStart",
+      "timestamp": "2025-12-18T16:37:39.529850",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersSpiderStart",
+      "timestamp": "2025-12-18T16:37:39.529850",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGreetsSpiderStart",
+      "timestamp": "2025-12-18T16:37:39.529850",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpecifiedStart",
+      "timestamp": "2025-12-18T16:37:39.548040",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersRapidStart",
+      "timestamp": "2025-12-18T16:37:39.548040",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "SIDEBAR_ENABLED",
+      "action": "侧边栏已启用",
+      "timestamp": "2025-12-18T16:37:39.549068",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "按钮重新启用完成",
+      "timestamp": "2025-12-18T16:37:39.549068",
+      "success": true,
+      "details": {
+        "tab_index": 0,
+        "success": true
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: 📊 主控制台",
+      "timestamp": "2025-12-18T16:37:42.982297",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "📊 主控制台",
+        "timestamp": "2025-12-18T16:37:42.982297",
+        "index": 1
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: 采集群组",
+      "timestamp": "2025-12-18T16:39:28.358626",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "采集群组",
+        "timestamp": "2025-12-18T16:39:28.358626",
+        "index": 2
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: 采集成员",
+      "timestamp": "2025-12-18T16:39:28.995494",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "采集成员",
+        "timestamp": "2025-12-18T16:39:28.995494",
+        "index": 3
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: 私信成员",
+      "timestamp": "2025-12-18T16:39:29.542775",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "私信成员",
+        "timestamp": "2025-12-18T16:39:29.542775",
+        "index": 4
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: 💬 自动评论",
+      "timestamp": "2025-12-18T16:39:32.412810",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "💬 自动评论",
+        "timestamp": "2025-12-18T16:39:32.412810",
+        "index": 14
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: 🤍 自动点赞",
+      "timestamp": "2025-12-18T16:39:32.813948",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "🤍 自动点赞",
+        "timestamp": "2025-12-18T16:39:32.813948",
+        "index": 13
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: 👥 自动关注",
+      "timestamp": "2025-12-18T16:39:33.370948",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "👥 自动关注",
+        "timestamp": "2025-12-18T16:39:33.370948",
+        "index": 15
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: ➕ 自动添加好友",
+      "timestamp": "2025-12-18T16:39:33.917245",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "➕ 自动添加好友",
+        "timestamp": "2025-12-18T16:39:33.917245",
+        "index": 16
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: 👥 群组自动化",
+      "timestamp": "2025-12-18T16:39:34.636860",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "👥 群组自动化",
+        "timestamp": "2025-12-18T16:39:34.636860",
+        "index": 17
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: 📝 自动发帖",
+      "timestamp": "2025-12-18T16:39:35.245927",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "📝 自动发帖",
+        "timestamp": "2025-12-18T16:39:35.245927",
+        "index": 18
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: 💌 高级私信",
+      "timestamp": "2025-12-18T16:39:35.676374",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "💌 高级私信",
+        "timestamp": "2025-12-18T16:39:35.676374",
+        "index": 19
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: 📝 自动注册",
+      "timestamp": "2025-12-18T16:39:36.179599",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "📝 自动注册",
+        "timestamp": "2025-12-18T16:39:36.179599",
+        "index": 20
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: 采集群组",
+      "timestamp": "2025-12-18T16:39:39.195361",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "采集群组",
+        "timestamp": "2025-12-18T16:39:39.195361",
+        "index": 2
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: 采集成员",
+      "timestamp": "2025-12-18T16:39:39.671616",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "采集成员",
+        "timestamp": "2025-12-18T16:39:39.671616",
+        "index": 3
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: 私信成员",
+      "timestamp": "2025-12-18T16:39:40.186540",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "私信成员",
+        "timestamp": "2025-12-18T16:39:40.186540",
+        "index": 4
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: FB小组指定采集",
+      "timestamp": "2025-12-18T16:39:41.564101",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "FB小组指定采集",
+        "timestamp": "2025-12-18T16:39:41.564101",
+        "index": 5
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: FB小组成员极速采集",
+      "timestamp": "2025-12-18T16:39:42.195984",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "FB小组成员极速采集",
+        "timestamp": "2025-12-18T16:39:42.195984",
+        "index": 6
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: FB小组帖子采集",
+      "timestamp": "2025-12-18T16:39:43.219876",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "FB小组帖子采集",
+        "timestamp": "2025-12-18T16:39:43.219876",
+        "index": 7
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: FB公共主页采集",
+      "timestamp": "2025-12-18T16:39:43.676429",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "FB公共主页采集",
+        "timestamp": "2025-12-18T16:39:43.676429",
+        "index": 8
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: 采集群组",
+      "timestamp": "2025-12-18T16:39:44.569781",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "采集群组",
+        "timestamp": "2025-12-18T16:39:44.569781",
+        "index": 2
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: 📊 主控制台",
+      "timestamp": "2025-12-18T16:39:46.068247",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "📊 主控制台",
+        "timestamp": "2025-12-18T16:39:46.068247",
+        "index": 1
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: 采集群组",
+      "timestamp": "2025-12-18T16:40:08.314599",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "采集群组",
+        "timestamp": "2025-12-18T16:40:08.314599",
+        "index": 2
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: 采集成员",
+      "timestamp": "2025-12-18T16:40:09.091697",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "采集成员",
+        "timestamp": "2025-12-18T16:40:09.090700",
+        "index": 3
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_CLICK",
+      "action": "采集成员-启动",
+      "timestamp": "2025-12-18T16:40:12.538360",
+      "success": true,
+      "details": {
+        "button": "采集成员-启动",
+        "page": "MembersSpider页面",
+        "enabled": true,
+        "click_time": "16:40:12.538"
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "VALIDATION",
+      "action": "开始验证配置 - 采集成员",
+      "timestamp": "2025-12-18T16:40:12.538360",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "VALIDATION",
+      "action": "浏览器类型: BitBrowser",
+      "timestamp": "2025-12-18T16:40:12.538360",
+      "success": true,
+      "details": {
+        "browser_type": "bitbrowser"
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "VALIDATION",
+      "action": "采集成员-配置检查",
+      "timestamp": "2025-12-18T16:40:13.484098",
+      "success": true,
+      "details": {
+        "check": "采集成员-配置检查",
+        "passed": true,
+        "message": ""
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "CONFIG_CHANGE",
+      "action": "main.account_nums",
+      "timestamp": "2025-12-18T16:40:13.490082",
+      "success": true,
+      "details": {
+        "section": "main",
+        "key": "account_nums",
+        "old_value": "",
+        "new_value": "2",
+        "changed_at": "2025-12-18T16:40:13.490082"
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "CONFIG_CHANGE",
+      "action": "main.group_nums",
+      "timestamp": "2025-12-18T16:40:13.490082",
+      "success": true,
+      "details": {
+        "section": "main",
+        "key": "group_nums",
+        "old_value": "",
+        "new_value": "1",
+        "changed_at": "2025-12-18T16:40:13.490082"
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "MEMBER_SPIDER",
+      "action": "使用默认群组目录",
+      "timestamp": "2025-12-18T16:40:13.493076",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "CONTROL_UPDATE",
+      "action": "更新控件状态",
+      "timestamp": "2025-12-18T16:40:14.079641",
+      "success": true,
+      "details": {
+        "stop": false,
+        "index": 3
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_CLICK",
+      "action": "采集成员-停止",
+      "timestamp": "2025-12-18T16:40:59.115615",
+      "success": true,
+      "details": {
+        "button": "采集成员-停止",
+        "page": "MembersSpider页面",
+        "enabled": true,
+        "click_time": "16:40:59.115"
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "SPIDER_STOP",
+      "action": "Stopping MembersSpider",
+      "timestamp": "2025-12-18T16:40:59.115615",
+      "success": true,
+      "details": {
+        "spider": "MembersSpider",
+        "reason": "用户点击停止",
+        "stop_time": "2025-12-18T16:40:59.115615"
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "CLEANUP",
+      "action": "开始清理 member spider (保持stop_event设置)",
+      "timestamp": "2025-12-18T16:41:00.124146",
+      "success": true,
+      "details": {
+        "tab_index": 2
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "CLEANUP",
+      "action": "member_stop_event 保持设置状态: True",
+      "timestamp": "2025-12-18T16:41:00.125159",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "开始重新启用按钮",
+      "timestamp": "2025-12-18T16:41:00.126160",
+      "success": true,
+      "details": {
+        "tab_index": 2
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpiderStart",
+      "timestamp": "2025-12-18T16:41:00.128150",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpiderStart",
+      "timestamp": "2025-12-18T16:41:00.129148",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersSpiderStart",
+      "timestamp": "2025-12-18T16:41:00.129148",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGreetsSpiderStart",
+      "timestamp": "2025-12-18T16:41:00.130145",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpecifiedStart",
+      "timestamp": "2025-12-18T16:41:00.131146",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersRapidStart",
+      "timestamp": "2025-12-18T16:41:00.131146",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "SIDEBAR_ENABLED",
+      "action": "侧边栏已启用",
+      "timestamp": "2025-12-18T16:41:00.134135",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "按钮重新启用完成",
+      "timestamp": "2025-12-18T16:41:00.135133",
+      "success": true,
+      "details": {
+        "tab_index": 2,
+        "success": true
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "CLEANUP",
+      "action": "清理完成 member spider",
+      "timestamp": "2025-12-18T16:41:00.136129",
+      "success": true,
+      "details": {
+        "success": true
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "FINAL_CLEANUP",
+      "action": "已清理 member_stop_event，可以重新启动",
+      "timestamp": "2025-12-18T16:41:07.110893",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "CONTROL_UPDATE",
+      "action": "更新控件状态",
+      "timestamp": "2025-12-18T16:41:08.147643",
+      "success": true,
+      "details": {
+        "stop": true,
+        "index": 3
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "开始重新启用按钮",
+      "timestamp": "2025-12-18T16:41:08.651808",
+      "success": true,
+      "details": {
+        "tab_index": 3
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersSpiderStart",
+      "timestamp": "2025-12-18T16:41:08.652766",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpiderStart",
+      "timestamp": "2025-12-18T16:41:08.653769",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersSpiderStart",
+      "timestamp": "2025-12-18T16:41:08.654808",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGreetsSpiderStart",
+      "timestamp": "2025-12-18T16:41:08.654808",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpecifiedStart",
+      "timestamp": "2025-12-18T16:41:08.655758",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersRapidStart",
+      "timestamp": "2025-12-18T16:41:08.656755",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "SIDEBAR_ENABLED",
+      "action": "侧边栏已启用",
+      "timestamp": "2025-12-18T16:41:08.659747",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "按钮重新启用完成",
+      "timestamp": "2025-12-18T16:41:08.659747",
+      "success": true,
+      "details": {
+        "tab_index": 3,
+        "success": true
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_CLICK",
+      "action": "采集成员-启动",
+      "timestamp": "2025-12-18T16:41:12.611898",
+      "success": true,
+      "details": {
+        "button": "采集成员-启动",
+        "page": "MembersSpider页面",
+        "enabled": true,
+        "click_time": "16:41:12.611"
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "VALIDATION",
+      "action": "开始验证配置 - 采集成员",
+      "timestamp": "2025-12-18T16:41:12.611898",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "VALIDATION",
+      "action": "浏览器类型: BitBrowser",
+      "timestamp": "2025-12-18T16:41:12.611898",
+      "success": true,
+      "details": {
+        "browser_type": "bitbrowser"
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "VALIDATION",
+      "action": "采集成员-配置检查",
+      "timestamp": "2025-12-18T16:41:13.587854",
+      "success": true,
+      "details": {
+        "check": "采集成员-配置检查",
+        "passed": true,
+        "message": ""
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "CONFIG_CHANGE",
+      "action": "main.account_nums",
+      "timestamp": "2025-12-18T16:41:13.593892",
+      "success": true,
+      "details": {
+        "section": "main",
+        "key": "account_nums",
+        "old_value": "",
+        "new_value": "4",
+        "changed_at": "2025-12-18T16:41:13.593892"
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "CONFIG_CHANGE",
+      "action": "main.group_nums",
+      "timestamp": "2025-12-18T16:41:13.593892",
+      "success": true,
+      "details": {
+        "section": "main",
+        "key": "group_nums",
+        "old_value": "",
+        "new_value": "1",
+        "changed_at": "2025-12-18T16:41:13.593892"
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "MEMBER_SPIDER",
+      "action": "使用默认群组目录",
+      "timestamp": "2025-12-18T16:41:13.596831",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "CONTROL_UPDATE",
+      "action": "更新控件状态",
+      "timestamp": "2025-12-18T16:41:14.157953",
+      "success": true,
+      "details": {
+        "stop": false,
+        "index": 3
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_CLICK",
+      "action": "采集成员-停止",
+      "timestamp": "2025-12-18T16:42:30.220028",
+      "success": true,
+      "details": {
+        "button": "采集成员-停止",
+        "page": "MembersSpider页面",
+        "enabled": true,
+        "click_time": "16:42:30.219"
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "SPIDER_STOP",
+      "action": "Stopping MembersSpider",
+      "timestamp": "2025-12-18T16:42:30.220028",
+      "success": true,
+      "details": {
+        "spider": "MembersSpider",
+        "reason": "用户点击停止",
+        "stop_time": "2025-12-18T16:42:30.220028"
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "CLEANUP",
+      "action": "开始清理 member spider (保持stop_event设置)",
+      "timestamp": "2025-12-18T16:42:31.232122",
+      "success": true,
+      "details": {
+        "tab_index": 2
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "CLEANUP",
+      "action": "member_stop_event 保持设置状态: True",
+      "timestamp": "2025-12-18T16:42:31.232122",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "开始重新启用按钮",
+      "timestamp": "2025-12-18T16:42:31.234101",
+      "success": true,
+      "details": {
+        "tab_index": 2
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpiderStart",
+      "timestamp": "2025-12-18T16:42:31.234101",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpiderStart",
+      "timestamp": "2025-12-18T16:42:31.235098",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersSpiderStart",
+      "timestamp": "2025-12-18T16:42:31.235098",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGreetsSpiderStart",
+      "timestamp": "2025-12-18T16:42:31.236097",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpecifiedStart",
+      "timestamp": "2025-12-18T16:42:31.236097",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersRapidStart",
+      "timestamp": "2025-12-18T16:42:31.237061",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "SIDEBAR_ENABLED",
+      "action": "侧边栏已启用",
+      "timestamp": "2025-12-18T16:42:31.239087",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "按钮重新启用完成",
+      "timestamp": "2025-12-18T16:42:31.239087",
+      "success": true,
+      "details": {
+        "tab_index": 2,
+        "success": true
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "CLEANUP",
+      "action": "清理完成 member spider",
+      "timestamp": "2025-12-18T16:42:31.239087",
+      "success": true,
+      "details": {
+        "success": true
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "FINAL_CLEANUP",
+      "action": "已清理 member_stop_event，可以重新启动",
+      "timestamp": "2025-12-18T16:42:38.223072",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "CONTROL_UPDATE",
+      "action": "更新控件状态",
+      "timestamp": "2025-12-18T16:42:39.501060",
+      "success": true,
+      "details": {
+        "stop": true,
+        "index": 3
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "开始重新启用按钮",
+      "timestamp": "2025-12-18T16:42:40.004717",
+      "success": true,
+      "details": {
+        "tab_index": 3
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersSpiderStart",
+      "timestamp": "2025-12-18T16:42:40.005714",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpiderStart",
+      "timestamp": "2025-12-18T16:42:40.006710",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersSpiderStart",
+      "timestamp": "2025-12-18T16:42:40.006710",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGreetsSpiderStart",
+      "timestamp": "2025-12-18T16:42:40.007708",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpecifiedStart",
+      "timestamp": "2025-12-18T16:42:40.007708",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersRapidStart",
+      "timestamp": "2025-12-18T16:42:40.007708",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "SIDEBAR_ENABLED",
+      "action": "侧边栏已启用",
+      "timestamp": "2025-12-18T16:42:40.008706",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "按钮重新启用完成",
+      "timestamp": "2025-12-18T16:42:40.008706",
+      "success": true,
+      "details": {
+        "tab_index": 3,
+        "success": true
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_CLICK",
+      "action": "采集成员-启动",
+      "timestamp": "2025-12-18T16:43:38.020918",
+      "success": true,
+      "details": {
+        "button": "采集成员-启动",
+        "page": "MembersSpider页面",
+        "enabled": true,
+        "click_time": "16:43:38.020"
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "VALIDATION",
+      "action": "开始验证配置 - 采集成员",
+      "timestamp": "2025-12-18T16:43:38.020918",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "VALIDATION",
+      "action": "浏览器类型: BitBrowser",
+      "timestamp": "2025-12-18T16:43:38.020918",
+      "success": true,
+      "details": {
+        "browser_type": "bitbrowser"
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "VALIDATION",
+      "action": "采集成员-配置检查",
+      "timestamp": "2025-12-18T16:43:38.967098",
+      "success": true,
+      "details": {
+        "check": "采集成员-配置检查",
+        "passed": true,
+        "message": ""
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "CONFIG_CHANGE",
+      "action": "main.account_nums",
+      "timestamp": "2025-12-18T16:43:38.974080",
+      "success": true,
+      "details": {
+        "section": "main",
+        "key": "account_nums",
+        "old_value": "",
+        "new_value": "4",
+        "changed_at": "2025-12-18T16:43:38.974080"
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "CONFIG_CHANGE",
+      "action": "main.group_nums",
+      "timestamp": "2025-12-18T16:43:38.974080",
+      "success": true,
+      "details": {
+        "section": "main",
+        "key": "group_nums",
+        "old_value": "",
+        "new_value": "4",
+        "changed_at": "2025-12-18T16:43:38.974080"
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "MEMBER_SPIDER",
+      "action": "使用默认群组目录",
+      "timestamp": "2025-12-18T16:43:38.977071",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "CONTROL_UPDATE",
+      "action": "更新控件状态",
+      "timestamp": "2025-12-18T16:43:39.566500",
+      "success": true,
+      "details": {
+        "stop": false,
+        "index": 3
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_CLICK",
+      "action": "采集成员-停止",
+      "timestamp": "2025-12-18T16:54:45.985119",
+      "success": true,
+      "details": {
+        "button": "采集成员-停止",
+        "page": "MembersSpider页面",
+        "enabled": true,
+        "click_time": "16:54:45.985"
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "SPIDER_STOP",
+      "action": "Stopping MembersSpider",
+      "timestamp": "2025-12-18T16:54:45.985119",
+      "success": true,
+      "details": {
+        "spider": "MembersSpider",
+        "reason": "用户点击停止",
+        "stop_time": "2025-12-18T16:54:45.985119"
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "CLEANUP",
+      "action": "开始清理 member spider (保持stop_event设置)",
+      "timestamp": "2025-12-18T16:54:46.977284",
+      "success": true,
+      "details": {
+        "tab_index": 2
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "CLEANUP",
+      "action": "member_stop_event 保持设置状态: True",
+      "timestamp": "2025-12-18T16:54:46.977284",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "开始重新启用按钮",
+      "timestamp": "2025-12-18T16:54:46.979280",
+      "success": true,
+      "details": {
+        "tab_index": 2
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpiderStart",
+      "timestamp": "2025-12-18T16:54:46.979280",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpiderStart",
+      "timestamp": "2025-12-18T16:54:46.980278",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersSpiderStart",
+      "timestamp": "2025-12-18T16:54:46.980278",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGreetsSpiderStart",
+      "timestamp": "2025-12-18T16:54:46.980278",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpecifiedStart",
+      "timestamp": "2025-12-18T16:54:46.980278",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersRapidStart",
+      "timestamp": "2025-12-18T16:54:46.981284",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "SIDEBAR_ENABLED",
+      "action": "侧边栏已启用",
+      "timestamp": "2025-12-18T16:54:46.981284",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "按钮重新启用完成",
+      "timestamp": "2025-12-18T16:54:46.981284",
+      "success": true,
+      "details": {
+        "tab_index": 2,
+        "success": true
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "CLEANUP",
+      "action": "清理完成 member spider",
+      "timestamp": "2025-12-18T16:54:46.982272",
+      "success": true,
+      "details": {
+        "success": true
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "FINAL_CLEANUP",
+      "action": "已清理 member_stop_event，可以重新启动",
+      "timestamp": "2025-12-18T16:54:53.979745",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "CONTROL_UPDATE",
+      "action": "更新控件状态",
+      "timestamp": "2025-12-18T16:54:58.526185",
+      "success": true,
+      "details": {
+        "stop": true,
+        "index": 3
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "开始重新启用按钮",
+      "timestamp": "2025-12-18T16:54:59.038716",
+      "success": true,
+      "details": {
+        "tab_index": 3
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersSpiderStart",
+      "timestamp": "2025-12-18T16:54:59.039767",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpiderStart",
+      "timestamp": "2025-12-18T16:54:59.040763",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersSpiderStart",
+      "timestamp": "2025-12-18T16:54:59.041759",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGreetsSpiderStart",
+      "timestamp": "2025-12-18T16:54:59.041759",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpecifiedStart",
+      "timestamp": "2025-12-18T16:54:59.042747",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersRapidStart",
+      "timestamp": "2025-12-18T16:54:59.043745",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "SIDEBAR_ENABLED",
+      "action": "侧边栏已启用",
+      "timestamp": "2025-12-18T16:54:59.046746",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "按钮重新启用完成",
+      "timestamp": "2025-12-18T16:54:59.046746",
+      "success": true,
+      "details": {
+        "tab_index": 3,
+        "success": true
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: 私信成员",
+      "timestamp": "2025-12-18T16:55:05.462632",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "私信成员",
+        "timestamp": "2025-12-18T16:55:05.462632",
+        "index": 4
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BROWSE",
+      "action": "点击浏览成员文件按钮",
+      "timestamp": "2025-12-18T16:55:14.729814",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BROWSE",
+      "action": "选择成员文件: D:/FB脚本/fb/member/صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+      "timestamp": "2025-12-18T16:55:39.613608",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_CLICK",
+      "action": "私信成员-启动",
+      "timestamp": "2025-12-18T16:56:17.370534",
+      "success": true,
+      "details": {
+        "button": "私信成员-启动",
+        "page": "GreetsSpider页面",
+        "enabled": true,
+        "click_time": "16:56:17.370"
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "VALIDATION",
+      "action": "开始验证配置 - 私信成员",
+      "timestamp": "2025-12-18T16:56:17.370534",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "VALIDATION",
+      "action": "浏览器类型: BitBrowser",
+      "timestamp": "2025-12-18T16:56:17.370534",
+      "success": true,
+      "details": {
+        "browser_type": "bitbrowser"
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "VALIDATION",
+      "action": "私信成员-配置检查",
+      "timestamp": "2025-12-18T16:56:18.366494",
+      "success": true,
+      "details": {
+        "check": "私信成员-配置检查",
+        "passed": true,
+        "message": ""
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "CONTROL_UPDATE",
+      "action": "更新控件状态",
+      "timestamp": "2025-12-18T16:56:18.961703",
+      "success": true,
+      "details": {
+        "stop": false,
+        "index": 4
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_100072653287961",
+      "timestamp": "2025-12-18T16:57:36.752219",
+      "success": false,
+      "details": {
+        "member_name": "user_100072653287961",
+        "member_link": "https://www.facebook.com/groups/304814211409397/user/100072653287961/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-18T16:57:36.752219"
+      },
+      "thread": "Thread-26",
+      "thread_id": 9708
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+      "timestamp": "2025-12-18T16:57:36.761167",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_name": "صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 54245,
+        "member": "user_100072653287961",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-26",
+      "thread_id": 9708
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+      "timestamp": "2025-12-18T16:57:38.224258",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_name": "صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 54176,
+        "member": "user_61573872985897"
+      },
+      "thread": "Thread-27",
+      "thread_id": 8088
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61573872985897",
+      "timestamp": "2025-12-18T16:57:38.333278",
+      "success": true,
+      "details": {
+        "member_name": "user_61573872985897",
+        "member_link": "https://www.facebook.com/groups/304814211409397/user/61573872985897/",
+        "reason": "发送成功",
+        "timestamp": "2025-12-18T16:57:38.333278"
+      },
+      "thread": "Thread-27",
+      "thread_id": 8088
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61584817023246",
+      "timestamp": "2025-12-18T16:57:39.659082",
+      "success": false,
+      "details": {
+        "member_name": "user_61584817023246",
+        "member_link": "https://www.facebook.com/groups/304814211409397/user/61584817023246/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-18T16:57:39.659082"
+      },
+      "thread": "Thread-28",
+      "thread_id": 3776
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+      "timestamp": "2025-12-18T16:57:39.667083",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_name": "صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 54107,
+        "member": "user_61584817023246",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-28",
+      "thread_id": 3776
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_100070102846289",
+      "timestamp": "2025-12-18T16:58:07.298987",
+      "success": false,
+      "details": {
+        "member_name": "user_100070102846289",
+        "member_link": "https://www.facebook.com/groups/304814211409397/user/100070102846289/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-18T16:58:07.298987"
+      },
+      "thread": "Thread-26",
+      "thread_id": 9708
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+      "timestamp": "2025-12-18T16:58:07.315505",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_name": "صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 54037,
+        "member": "user_100070102846289",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-26",
+      "thread_id": 9708
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_100003207258579",
+      "timestamp": "2025-12-18T16:58:09.284849",
+      "success": false,
+      "details": {
+        "member_name": "user_100003207258579",
+        "member_link": "https://www.facebook.com/groups/304814211409397/user/100003207258579/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-18T16:58:09.284849"
+      },
+      "thread": "Thread-28",
+      "thread_id": 3776
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+      "timestamp": "2025-12-18T16:58:09.296856",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_name": "صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 53967,
+        "member": "user_100003207258579",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-28",
+      "thread_id": 3776
+    },
+    {
+      "event": "BROWSE",
+      "action": "点击浏览成员文件按钮",
+      "timestamp": "2025-12-18T16:58:13.234730",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BROWSE",
+      "action": "用户取消选择成员文件",
+      "timestamp": "2025-12-18T16:58:15.466066",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+      "timestamp": "2025-12-18T16:58:16.541959",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_name": "صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 53898,
+        "member": "user_61584024082644"
+      },
+      "thread": "Thread-27",
+      "thread_id": 8088
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61584024082644",
+      "timestamp": "2025-12-18T16:58:16.657199",
+      "success": true,
+      "details": {
+        "member_name": "user_61584024082644",
+        "member_link": "https://www.facebook.com/groups/304814211409397/user/61584024082644/",
+        "reason": "发送成功",
+        "timestamp": "2025-12-18T16:58:16.657199"
+      },
+      "thread": "Thread-27",
+      "thread_id": 8088
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+      "timestamp": "2025-12-18T16:58:28.760408",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_name": "صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 53828,
+        "member": "user_100013239107642"
+      },
+      "thread": "Thread-25",
+      "thread_id": 7184
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_100013239107642",
+      "timestamp": "2025-12-18T16:58:28.896251",
+      "success": true,
+      "details": {
+        "member_name": "user_100013239107642",
+        "member_link": "https://www.facebook.com/groups/304814211409397/user/100013239107642/",
+        "reason": "发送成功",
+        "timestamp": "2025-12-18T16:58:28.896251"
+      },
+      "thread": "Thread-25",
+      "thread_id": 7184
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61584755215675",
+      "timestamp": "2025-12-18T16:58:36.402362",
+      "success": false,
+      "details": {
+        "member_name": "user_61584755215675",
+        "member_link": "https://www.facebook.com/groups/304814211409397/user/61584755215675/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-18T16:58:36.402362"
+      },
+      "thread": "Thread-26",
+      "thread_id": 9708
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+      "timestamp": "2025-12-18T16:58:36.411305",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_name": "صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 53759,
+        "member": "user_61584755215675",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-26",
+      "thread_id": 9708
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61551861220229",
+      "timestamp": "2025-12-18T16:58:37.426679",
+      "success": false,
+      "details": {
+        "member_name": "user_61551861220229",
+        "member_link": "https://www.facebook.com/groups/304814211409397/user/61551861220229/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-18T16:58:37.426679"
+      },
+      "thread": "Thread-28",
+      "thread_id": 3776
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+      "timestamp": "2025-12-18T16:58:37.435631",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_name": "صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 53690,
+        "member": "user_61551861220229",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-28",
+      "thread_id": 3776
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+      "timestamp": "2025-12-18T16:58:56.149713",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_name": "صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 53621,
+        "member": "user_61581896018305"
+      },
+      "thread": "Thread-27",
+      "thread_id": 8088
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61581896018305",
+      "timestamp": "2025-12-18T16:58:56.271389",
+      "success": true,
+      "details": {
+        "member_name": "user_61581896018305",
+        "member_link": "https://www.facebook.com/groups/304814211409397/user/61581896018305/",
+        "reason": "发送成功",
+        "timestamp": "2025-12-18T16:58:56.271389"
+      },
+      "thread": "Thread-27",
+      "thread_id": 8088
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61583533532958",
+      "timestamp": "2025-12-18T16:59:04.935661",
+      "success": false,
+      "details": {
+        "member_name": "user_61583533532958",
+        "member_link": "https://www.facebook.com/groups/304814211409397/user/61583533532958/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-18T16:59:04.935661"
+      },
+      "thread": "Thread-26",
+      "thread_id": 9708
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+      "timestamp": "2025-12-18T16:59:04.945634",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_name": "صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 53552,
+        "member": "user_61583533532958",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-26",
+      "thread_id": 9708
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61581071955658",
+      "timestamp": "2025-12-18T16:59:05.998159",
+      "success": false,
+      "details": {
+        "member_name": "user_61581071955658",
+        "member_link": "https://www.facebook.com/groups/304814211409397/user/61581071955658/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-18T16:59:05.998159"
+      },
+      "thread": "Thread-28",
+      "thread_id": 3776
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+      "timestamp": "2025-12-18T16:59:06.007134",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_name": "صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 53483,
+        "member": "user_61581071955658",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-28",
+      "thread_id": 3776
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61584418194808",
+      "timestamp": "2025-12-18T16:59:33.119467",
+      "success": false,
+      "details": {
+        "member_name": "user_61584418194808",
+        "member_link": "https://www.facebook.com/groups/304814211409397/user/61584418194808/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-18T16:59:33.119467"
+      },
+      "thread": "Thread-26",
+      "thread_id": 9708
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+      "timestamp": "2025-12-18T16:59:33.132429",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_name": "صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 53414,
+        "member": "user_61584418194808",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-26",
+      "thread_id": 9708
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61583324267765",
+      "timestamp": "2025-12-18T16:59:34.197000",
+      "success": false,
+      "details": {
+        "member_name": "user_61583324267765",
+        "member_link": "https://www.facebook.com/groups/304814211409397/user/61583324267765/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-18T16:59:34.197000"
+      },
+      "thread": "Thread-28",
+      "thread_id": 3776
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+      "timestamp": "2025-12-18T16:59:34.213957",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_name": "صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 53345,
+        "member": "user_61583324267765",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-28",
+      "thread_id": 3776
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+      "timestamp": "2025-12-18T16:59:36.078628",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_name": "صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 53276,
+        "member": "user_61552329767724"
+      },
+      "thread": "Thread-27",
+      "thread_id": 8088
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61552329767724",
+      "timestamp": "2025-12-18T16:59:36.201296",
+      "success": true,
+      "details": {
+        "member_name": "user_61552329767724",
+        "member_link": "https://www.facebook.com/groups/304814211409397/user/61552329767724/",
+        "reason": "发送成功",
+        "timestamp": "2025-12-18T16:59:36.201296"
+      },
+      "thread": "Thread-27",
+      "thread_id": 8088
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61584905577454",
+      "timestamp": "2025-12-18T17:00:02.519585",
+      "success": false,
+      "details": {
+        "member_name": "user_61584905577454",
+        "member_link": "https://www.facebook.com/groups/304814211409397/user/61584905577454/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-18T17:00:02.519585"
+      },
+      "thread": "Thread-28",
+      "thread_id": 3776
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+      "timestamp": "2025-12-18T17:00:02.528560",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_name": "صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 53207,
+        "member": "user_61584905577454",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-28",
+      "thread_id": 3776
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_100069848784086",
+      "timestamp": "2025-12-18T17:00:02.852722",
+      "success": false,
+      "details": {
+        "member_name": "user_100069848784086",
+        "member_link": "https://www.facebook.com/groups/304814211409397/user/100069848784086/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-18T17:00:02.852722"
+      },
+      "thread": "Thread-26",
+      "thread_id": 9708
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+      "timestamp": "2025-12-18T17:00:02.861670",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_name": "صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 53137,
+        "member": "user_100069848784086",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-26",
+      "thread_id": 9708
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+      "timestamp": "2025-12-18T17:00:16.037424",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_name": "صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 53068,
+        "member": "user_61583786823451"
+      },
+      "thread": "Thread-27",
+      "thread_id": 8088
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61583786823451",
+      "timestamp": "2025-12-18T17:00:16.149125",
+      "success": true,
+      "details": {
+        "member_name": "user_61583786823451",
+        "member_link": "https://www.facebook.com/groups/304814211409397/user/61583786823451/",
+        "reason": "发送成功",
+        "timestamp": "2025-12-18T17:00:16.149125"
+      },
+      "thread": "Thread-27",
+      "thread_id": 8088
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61582103796269",
+      "timestamp": "2025-12-18T17:00:31.097019",
+      "success": false,
+      "details": {
+        "member_name": "user_61582103796269",
+        "member_link": "https://www.facebook.com/groups/304814211409397/user/61582103796269/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-18T17:00:31.097019"
+      },
+      "thread": "Thread-28",
+      "thread_id": 3776
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+      "timestamp": "2025-12-18T17:00:31.104998",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_name": "صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 52999,
+        "member": "user_61582103796269",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-28",
+      "thread_id": 3776
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61584898610615",
+      "timestamp": "2025-12-18T17:00:31.207513",
+      "success": false,
+      "details": {
+        "member_name": "user_61584898610615",
+        "member_link": "https://www.facebook.com/groups/304814211409397/user/61584898610615/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-18T17:00:31.207513"
+      },
+      "thread": "Thread-26",
+      "thread_id": 9708
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+      "timestamp": "2025-12-18T17:00:31.219479",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_name": "صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 52930,
+        "member": "user_61584898610615",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-26",
+      "thread_id": 9708
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+      "timestamp": "2025-12-18T17:00:32.450458",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_name": "صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 52861,
+        "member": "user_61581093720428"
+      },
+      "thread": "Thread-25",
+      "thread_id": 7184
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61581093720428",
+      "timestamp": "2025-12-18T17:00:32.569513",
+      "success": true,
+      "details": {
+        "member_name": "user_61581093720428",
+        "member_link": "https://www.facebook.com/groups/304814211409397/user/61581093720428/",
+        "reason": "发送成功",
+        "timestamp": "2025-12-18T17:00:32.569513"
+      },
+      "thread": "Thread-25",
+      "thread_id": 7184
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+      "timestamp": "2025-12-18T17:00:56.424714",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_name": "صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 52791,
+        "member": "user_100052762384547"
+      },
+      "thread": "Thread-27",
+      "thread_id": 8088
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_100052762384547",
+      "timestamp": "2025-12-18T17:00:56.546421",
+      "success": true,
+      "details": {
+        "member_name": "user_100052762384547",
+        "member_link": "https://www.facebook.com/groups/304814211409397/user/100052762384547/",
+        "reason": "发送成功",
+        "timestamp": "2025-12-18T17:00:56.546421"
+      },
+      "thread": "Thread-27",
+      "thread_id": 8088
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61567654888307",
+      "timestamp": "2025-12-18T17:00:59.200755",
+      "success": false,
+      "details": {
+        "member_name": "user_61567654888307",
+        "member_link": "https://www.facebook.com/groups/304814211409397/user/61567654888307/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-18T17:00:59.200755"
+      },
+      "thread": "Thread-28",
+      "thread_id": 3776
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+      "timestamp": "2025-12-18T17:00:59.213718",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_name": "صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 52722,
+        "member": "user_61567654888307",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-28",
+      "thread_id": 3776
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61585365476885",
+      "timestamp": "2025-12-18T17:01:00.169166",
+      "success": false,
+      "details": {
+        "member_name": "user_61585365476885",
+        "member_link": "https://www.facebook.com/groups/304814211409397/user/61585365476885/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-18T17:01:00.168169"
+      },
+      "thread": "Thread-26",
+      "thread_id": 9708
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+      "timestamp": "2025-12-18T17:01:00.180138",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_name": "صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 52653,
+        "member": "user_61585365476885",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-26",
+      "thread_id": 9708
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+      "timestamp": "2025-12-18T17:01:15.757268",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_name": "صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 52584,
+        "member": "user_61584059662120"
+      },
+      "thread": "Thread-25",
+      "thread_id": 7184
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61584059662120",
+      "timestamp": "2025-12-18T17:01:15.867701",
+      "success": true,
+      "details": {
+        "member_name": "user_61584059662120",
+        "member_link": "https://www.facebook.com/groups/304814211409397/user/61584059662120/",
+        "reason": "发送成功",
+        "timestamp": "2025-12-18T17:01:15.867701"
+      },
+      "thread": "Thread-25",
+      "thread_id": 7184
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61584122813765",
+      "timestamp": "2025-12-18T17:01:27.375483",
+      "success": false,
+      "details": {
+        "member_name": "user_61584122813765",
+        "member_link": "https://www.facebook.com/groups/304814211409397/user/61584122813765/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-18T17:01:27.375483"
+      },
+      "thread": "Thread-28",
+      "thread_id": 3776
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+      "timestamp": "2025-12-18T17:01:27.383461",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_name": "صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 52515,
+        "member": "user_61584122813765",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-28",
+      "thread_id": 3776
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61584491589369",
+      "timestamp": "2025-12-18T17:01:29.682292",
+      "success": false,
+      "details": {
+        "member_name": "user_61584491589369",
+        "member_link": "https://www.facebook.com/groups/304814211409397/user/61584491589369/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-18T17:01:29.682292"
+      },
+      "thread": "Thread-26",
+      "thread_id": 9708
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+      "timestamp": "2025-12-18T17:01:29.692265",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_name": "صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 52446,
+        "member": "user_61584491589369",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-26",
+      "thread_id": 9708
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+      "timestamp": "2025-12-18T17:01:36.384149",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_name": "صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 52376,
+        "member": "user_100000583885416"
+      },
+      "thread": "Thread-27",
+      "thread_id": 8088
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_100000583885416",
+      "timestamp": "2025-12-18T17:01:36.495847",
+      "success": true,
+      "details": {
+        "member_name": "user_100000583885416",
+        "member_link": "https://www.facebook.com/groups/304814211409397/user/100000583885416/",
+        "reason": "发送成功",
+        "timestamp": "2025-12-18T17:01:36.495847"
+      },
+      "thread": "Thread-27",
+      "thread_id": 8088
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_100001296217632",
+      "timestamp": "2025-12-18T17:01:55.413766",
+      "success": false,
+      "details": {
+        "member_name": "user_100001296217632",
+        "member_link": "https://www.facebook.com/groups/304814211409397/user/100001296217632/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-18T17:01:55.413766"
+      },
+      "thread": "Thread-28",
+      "thread_id": 3776
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+      "timestamp": "2025-12-18T17:01:55.422717",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_name": "صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 52306,
+        "member": "user_100001296217632",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-28",
+      "thread_id": 3776
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+      "timestamp": "2025-12-18T17:01:57.625864",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_name": "صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 52237,
+        "member": "user_61583351422151"
+      },
+      "thread": "Thread-25",
+      "thread_id": 7184
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61552039166123",
+      "timestamp": "2025-12-18T17:01:57.696703",
+      "success": false,
+      "details": {
+        "member_name": "user_61552039166123",
+        "member_link": "https://www.facebook.com/groups/304814211409397/user/61552039166123/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-18T17:01:57.696703"
+      },
+      "thread": "Thread-26",
+      "thread_id": 9708
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+      "timestamp": "2025-12-18T17:01:57.705650",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_name": "صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 52168,
+        "member": "user_61552039166123",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-26",
+      "thread_id": 9708
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61583351422151",
+      "timestamp": "2025-12-18T17:01:57.755031",
+      "success": true,
+      "details": {
+        "member_name": "user_61583351422151",
+        "member_link": "https://www.facebook.com/groups/304814211409397/user/61583351422151/",
+        "reason": "发送成功",
+        "timestamp": "2025-12-18T17:01:57.755031"
+      },
+      "thread": "Thread-25",
+      "thread_id": 7184
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+      "timestamp": "2025-12-18T17:02:16.054541",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_name": "صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 52099,
+        "member": "user_61583163687443"
+      },
+      "thread": "Thread-27",
+      "thread_id": 8088
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61583163687443",
+      "timestamp": "2025-12-18T17:02:16.175118",
+      "success": true,
+      "details": {
+        "member_name": "user_61583163687443",
+        "member_link": "https://www.facebook.com/groups/304814211409397/user/61583163687443/",
+        "reason": "发送成功",
+        "timestamp": "2025-12-18T17:02:16.175118"
+      },
+      "thread": "Thread-27",
+      "thread_id": 8088
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61584106416071",
+      "timestamp": "2025-12-18T17:02:23.687376",
+      "success": false,
+      "details": {
+        "member_name": "user_61584106416071",
+        "member_link": "https://www.facebook.com/groups/304814211409397/user/61584106416071/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-18T17:02:23.687376"
+      },
+      "thread": "Thread-28",
+      "thread_id": 3776
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+      "timestamp": "2025-12-18T17:02:23.697350",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_name": "صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 52030,
+        "member": "user_61584106416071",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-28",
+      "thread_id": 3776
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61580599241220",
+      "timestamp": "2025-12-18T17:02:25.759363",
+      "success": false,
+      "details": {
+        "member_name": "user_61580599241220",
+        "member_link": "https://www.facebook.com/groups/304814211409397/user/61580599241220/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-18T17:02:25.759363"
+      },
+      "thread": "Thread-26",
+      "thread_id": 9708
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+      "timestamp": "2025-12-18T17:02:25.768315",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_name": "صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 51961,
+        "member": "user_61580599241220",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-26",
+      "thread_id": 9708
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+      "timestamp": "2025-12-18T17:02:39.382436",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_name": "صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 51892,
+        "member": "user_61582454364068"
+      },
+      "thread": "Thread-25",
+      "thread_id": 7184
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61582454364068",
+      "timestamp": "2025-12-18T17:02:39.494164",
+      "success": true,
+      "details": {
+        "member_name": "user_61582454364068",
+        "member_link": "https://www.facebook.com/groups/304814211409397/user/61582454364068/",
+        "reason": "发送成功",
+        "timestamp": "2025-12-18T17:02:39.494164"
+      },
+      "thread": "Thread-25",
+      "thread_id": 7184
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61584344562588",
+      "timestamp": "2025-12-18T17:02:51.693500",
+      "success": false,
+      "details": {
+        "member_name": "user_61584344562588",
+        "member_link": "https://www.facebook.com/groups/304814211409397/user/61584344562588/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-18T17:02:51.693500"
+      },
+      "thread": "Thread-28",
+      "thread_id": 3776
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+      "timestamp": "2025-12-18T17:02:51.702478",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_name": "صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 51823,
+        "member": "user_61584344562588",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-28",
+      "thread_id": 3776
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61577962891851",
+      "timestamp": "2025-12-18T17:02:54.146094",
+      "success": false,
+      "details": {
+        "member_name": "user_61577962891851",
+        "member_link": "https://www.facebook.com/groups/304814211409397/user/61577962891851/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-18T17:02:54.146094"
+      },
+      "thread": "Thread-26",
+      "thread_id": 9708
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+      "timestamp": "2025-12-18T17:02:54.155080",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_name": "صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 51754,
+        "member": "user_61577962891851",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-26",
+      "thread_id": 9708
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+      "timestamp": "2025-12-18T17:02:55.355315",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_name": "صورة_ملف_足球_NBA_百家乐_博彩_平台出租_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 51684,
+        "member": "user_100070013757281"
+      },
+      "thread": "Thread-27",
+      "thread_id": 8088
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_100070013757281",
+      "timestamp": "2025-12-18T17:02:55.474136",
+      "success": true,
+      "details": {
+        "member_name": "user_100070013757281",
+        "member_link": "https://www.facebook.com/groups/304814211409397/user/100070013757281/",
+        "reason": "发送成功",
+        "timestamp": "2025-12-18T17:02:55.474136"
+      },
+      "thread": "Thread-27",
+      "thread_id": 8088
+    },
+    {
+      "event": "BUTTON_CLICK",
+      "action": "私信成员-停止",
+      "timestamp": "2025-12-18T17:02:57.083338",
+      "success": true,
+      "details": {
+        "button": "私信成员-停止",
+        "page": "GreetsSpider页面",
+        "enabled": true,
+        "click_time": "17:02:57.083"
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "SPIDER_STOP",
+      "action": "Stopping GreetsSpider",
+      "timestamp": "2025-12-18T17:02:57.084335",
+      "success": true,
+      "details": {
+        "spider": "GreetsSpider",
+        "reason": "用户点击停止",
+        "stop_time": "2025-12-18T17:02:57.084335"
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "CLEANUP",
+      "action": "开始清理 greets spider (保持stop_event设置)",
+      "timestamp": "2025-12-18T17:02:58.079523",
+      "success": true,
+      "details": {
+        "tab_index": 3
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "CLEANUP",
+      "action": "greets_stop_event 保持设置状态: True",
+      "timestamp": "2025-12-18T17:02:58.079523",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "开始重新启用按钮",
+      "timestamp": "2025-12-18T17:02:58.080506",
+      "success": true,
+      "details": {
+        "tab_index": 3
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersSpiderStart",
+      "timestamp": "2025-12-18T17:02:58.081502",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpiderStart",
+      "timestamp": "2025-12-18T17:02:58.081502",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersSpiderStart",
+      "timestamp": "2025-12-18T17:02:58.081502",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGreetsSpiderStart",
+      "timestamp": "2025-12-18T17:02:58.081502",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpecifiedStart",
+      "timestamp": "2025-12-18T17:02:58.081502",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersRapidStart",
+      "timestamp": "2025-12-18T17:02:58.081502",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "SIDEBAR_ENABLED",
+      "action": "侧边栏已启用",
+      "timestamp": "2025-12-18T17:02:58.082524",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "按钮重新启用完成",
+      "timestamp": "2025-12-18T17:02:58.082524",
+      "success": true,
+      "details": {
+        "tab_index": 3,
+        "success": true
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "CLEANUP",
+      "action": "清理完成 greets spider",
+      "timestamp": "2025-12-18T17:02:58.082524",
+      "success": true,
+      "details": {
+        "success": true
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "FINAL_CLEANUP",
+      "action": "已清理 greets_stop_event，可以重新启动",
+      "timestamp": "2025-12-18T17:03:05.077195",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "CONTROL_UPDATE",
+      "action": "更新控件状态",
+      "timestamp": "2025-12-18T17:03:26.430953",
+      "success": true,
+      "details": {
+        "stop": true,
+        "index": 4
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "开始重新启用按钮",
+      "timestamp": "2025-12-18T17:03:26.924502",
+      "success": true,
+      "details": {
+        "tab_index": 4
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGreetsSpiderStart",
+      "timestamp": "2025-12-18T17:03:26.925471",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpiderStart",
+      "timestamp": "2025-12-18T17:03:26.926468",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersSpiderStart",
+      "timestamp": "2025-12-18T17:03:26.927465",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGreetsSpiderStart",
+      "timestamp": "2025-12-18T17:03:26.928462",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpecifiedStart",
+      "timestamp": "2025-12-18T17:03:26.928462",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersRapidStart",
+      "timestamp": "2025-12-18T17:03:26.929459",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "SIDEBAR_ENABLED",
+      "action": "侧边栏已启用",
+      "timestamp": "2025-12-18T17:03:26.932450",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "按钮重新启用完成",
+      "timestamp": "2025-12-18T17:03:26.932450",
+      "success": true,
+      "details": {
+        "tab_index": 4,
+        "success": true
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: FB小组指定采集",
+      "timestamp": "2025-12-18T17:03:41.556434",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "FB小组指定采集",
+        "timestamp": "2025-12-18T17:03:41.555424",
+        "index": 5
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: FB小组成员极速采集",
+      "timestamp": "2025-12-18T17:03:42.536349",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "FB小组成员极速采集",
+        "timestamp": "2025-12-18T17:03:42.536349",
+        "index": 6
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: FB小组帖子采集",
+      "timestamp": "2025-12-18T17:03:43.219708",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "FB小组帖子采集",
+        "timestamp": "2025-12-18T17:03:43.219708",
+        "index": 7
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: INS用户粉丝采集",
+      "timestamp": "2025-12-18T17:03:43.693211",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "INS用户粉丝采集",
+        "timestamp": "2025-12-18T17:03:43.692213",
+        "index": 9
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: FB公共主页采集",
+      "timestamp": "2025-12-18T17:03:44.243920",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "FB公共主页采集",
+        "timestamp": "2025-12-18T17:03:44.243920",
+        "index": 8
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: INS用户粉丝采集",
+      "timestamp": "2025-12-18T17:03:44.964448",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "INS用户粉丝采集",
+        "timestamp": "2025-12-18T17:03:44.964448",
+        "index": 9
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: INS用户关注采集",
+      "timestamp": "2025-12-18T17:03:45.392398",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "INS用户关注采集",
+        "timestamp": "2025-12-18T17:03:45.392398",
+        "index": 10
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: INS用户简介采集",
+      "timestamp": "2025-12-18T17:03:45.459224",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "INS用户简介采集",
+        "timestamp": "2025-12-18T17:03:45.459224",
+        "index": 11
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: 🤍 自动点赞",
+      "timestamp": "2025-12-18T17:03:45.835154",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "🤍 自动点赞",
+        "timestamp": "2025-12-18T17:03:45.835154",
+        "index": 13
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: 💬 自动评论",
+      "timestamp": "2025-12-18T17:03:46.372485",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "💬 自动评论",
+        "timestamp": "2025-12-18T17:03:46.372485",
+        "index": 14
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: 👥 自动关注",
+      "timestamp": "2025-12-18T17:03:47.008610",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "👥 自动关注",
+        "timestamp": "2025-12-18T17:03:47.008610",
+        "index": 15
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: 📊 主控制台",
+      "timestamp": "2025-12-18T17:03:47.880968",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "📊 主控制台",
+        "timestamp": "2025-12-18T17:03:47.880968",
+        "index": 1
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: ⚙️ 配置向导",
+      "timestamp": "2025-12-18T17:03:49.581913",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "⚙️ 配置向导",
+        "timestamp": "2025-12-18T17:03:49.581913",
+        "index": 0
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: 📊 主控制台",
+      "timestamp": "2025-12-18T17:03:51.074120",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "📊 主控制台",
+        "timestamp": "2025-12-18T17:03:51.074120",
+        "index": 1
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: 采集群组",
+      "timestamp": "2025-12-18T17:03:51.797148",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "采集群组",
+        "timestamp": "2025-12-18T17:03:51.797148",
+        "index": 2
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: 📊 主控制台",
+      "timestamp": "2025-12-18T17:03:55.738881",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "📊 主控制台",
+        "timestamp": "2025-12-18T17:03:55.738881",
+        "index": 1
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: 采集群组",
+      "timestamp": "2025-12-18T17:03:57.300724",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "采集群组",
+        "timestamp": "2025-12-18T17:03:57.300724",
+        "index": 2
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: 采集成员",
+      "timestamp": "2025-12-18T17:03:58.180555",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "采集成员",
+        "timestamp": "2025-12-18T17:03:58.180555",
+        "index": 3
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: 私信成员",
+      "timestamp": "2025-12-18T17:03:58.685042",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "私信成员",
+        "timestamp": "2025-12-18T17:03:58.685042",
+        "index": 4
+      },
+      "thread": "MainThread",
+      "thread_id": 12000
+    },
+    {
+      "event": "APP_CLOSE",
+      "action": "用户请求关闭应用",
+      "timestamp": "2025-12-18T17:11:36.336269",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 12000
+    }
+  ],
+  "errors": [],
+  "terminal_output": []
+}

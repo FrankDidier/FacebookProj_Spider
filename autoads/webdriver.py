@@ -370,32 +370,72 @@ class WebDriverPool:
             self.service_url = ads_api.start_service()  # 开启ads power global 进程
 
     def get_size(self, ads_id, driver_count):
+        """
+        自动排列浏览器窗口 - Auto-arrange browser windows in grid layout
+        
+        For 1 browser: Full width
+        For 2 browsers: Side by side
+        For 4 browsers: 2x2 grid
+        For 8 browsers: 4x2 grid
+        
+        Args:
+            ads_id: Browser ID
+            driver_count: Total number of browsers
+        
+        Returns:
+            [x, y, width, height] - Window position and size
+        """
         if ads_id in self.queue_chrome:
             return self.queue_chrome[ads_id]
-        if self.queue_size_param.empty():
-            x = 1
-            y = 1
-            if driver_count == 1:
-                # 默认只设置大小为1024*800
-                self.queue_chrome[ads_id] = [x, y, 1024, 800]
-            else:
-                long = 1024
-                high = 800
-                reslution_x = 1920
-                self.queue_size_param.add([x, y, long, high])
-                for i in range(driver_count):
-                    if (x + long / 8 >= reslution_x):
-                        y = y + high
-                        x = 1
-                    else:
-                        x = x + long / 8
-                        y += 50
-                        self.queue_size_param.add([x, y, long, high])
-
-                self.queue_chrome[ads_id] = self.queue_size_param.get()
+        
+        # Get screen resolution from config or use defaults
+        try:
+            screen_width = int(getattr(config, 'screen_width', 1920))
+            screen_height = int(getattr(config, 'screen_height', 1080))
+        except:
+            screen_width = 1920
+            screen_height = 1080
+        
+        # Calculate grid layout based on driver count
+        if driver_count == 1:
+            cols, rows = 1, 1
+        elif driver_count == 2:
+            cols, rows = 2, 1
+        elif driver_count <= 4:
+            cols, rows = 2, 2
+        elif driver_count <= 6:
+            cols, rows = 3, 2
+        elif driver_count <= 8:
+            cols, rows = 4, 2
+        elif driver_count <= 9:
+            cols, rows = 3, 3
+        elif driver_count <= 12:
+            cols, rows = 4, 3
         else:
+            # For more than 12, calculate best fit
+            cols = min(int(driver_count ** 0.5) + 1, 6)
+            rows = (driver_count + cols - 1) // cols
+        
+        # Calculate window size
+        window_width = screen_width // cols
+        window_height = (screen_height - 50) // rows  # Leave space for taskbar
+        
+        # Generate positions if not already done
+        if self.queue_size_param.empty():
+            for row in range(rows):
+                for col in range(cols):
+                    x = col * window_width
+                    y = row * window_height
+                    self.queue_size_param.add([x, y, window_width, window_height])
+        
+        # Get position for this browser
+        if not self.queue_size_param.empty():
             self.queue_chrome[ads_id] = self.queue_size_param.get()
-
+        else:
+            # Fallback: default position
+            self.queue_chrome[ads_id] = [1, 1, 1024, 800]
+        
+        log.info(f"Browser {ads_id} positioned at {self.queue_chrome[ads_id]}")
         return self.queue_chrome[ads_id]
 
     def get_index(self, ads_id):
@@ -403,6 +443,12 @@ class WebDriverPool:
             return list(self.queue.keys()).index(ads_id)
         else:
             return -1
+
+    def reset_window_positions(self):
+        """Reset window position cache for new spider run"""
+        self.queue_chrome = {}
+        self.queue_size_param = MemoryDB()
+        log.info("Browser window position cache cleared")
 
     def get(self, ads_id, ms=None, ui=None, stop_event=None) -> WebDriver:
         with self.lock:
