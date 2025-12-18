@@ -1,0 +1,4 @@
+{"group_link": "https://www.facebook.com/groups/earnfromweb/?__tn__=%3C", "group_name": "Test Group"}
+{"group_link": "https://www.facebook.com/groups/zhuanqianyizu/?__tn__=%3C", "group_name": "Test Group"}
+{"group_link": "https://www.facebook.com/groups/142172259539128/?__tn__=%3C", "group_name": "Test Group"}
+{"group_link": "https://www.facebook.com/groups/1692390621089423/?__tn__=%3C", "group_name": "Test Group"}
