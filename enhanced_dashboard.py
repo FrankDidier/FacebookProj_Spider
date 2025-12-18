@@ -1073,6 +1073,11 @@ class EnhancedDashboard(QWidget):
     def log(self, message, level="INFO"):
         self.log_panel.add_log(message, level)
 
+    def set_account_manager(self, account_manager):
+        """Set the account manager for the account panel"""
+        self.account_panel.account_manager = account_manager
+        self.account_panel.load_accounts()
+
 
 class ScriptSelectionPanel(QGroupBox):
     """Script Selection Panel (脚本选择) - for Add Friend tab"""
