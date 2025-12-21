@@ -266,31 +266,35 @@ class GreetsSpider(autoads.AirSpider):
                             tools.delay_time(2)
 
                             # 直接更新这条记录status=send
-                            member: MemberItem = request.member
-                            
-                            # Determine the correct member file to update/delete from
-                            if self.selected_member_file:
-                                member_file = self.selected_member_file
-                            else:
-                                member_file = self.config.members_table + tools.make_safe_filename(
-                                    member.group_name) + '.txt'
-                            
-                            member.__table_name__ = member_file
-                            member.status = 'send'
-                            yield member.to_UpdateItem()
-                            
-                            # 自动删除已发送的条目，避免重复发送
-                            # Auto-delete the sent entry to prevent duplicate sending
-                            tools.delete_entry_from_file(member_file, 'member_link', member.member_link)
-                            app_logger.log_file_operation("DELETE", member_file, True, {"member": member.member_name})
-                            
-                            # 云端去重标记 - Mark as processed in cloud dedup
-                            if cloud_dedup.enabled:
-                                cloud_dedup.mark_processed(member.member_link, 'message', request.ads_id)
+                            # Check if request has member attribute (it won't for home page requests with index=-1)
+                            if hasattr(request, 'member') and request.member:
+                                member: MemberItem = request.member
+                                
+                                # Determine the correct member file to update/delete from
+                                if self.selected_member_file:
+                                    member_file = self.selected_member_file
+                                else:
+                                    member_file = self.config.members_table + tools.make_safe_filename(
+                                        member.group_name) + '.txt'
+                                
+                                member.__table_name__ = member_file
+                                member.status = 'send'
+                                yield member.to_UpdateItem()
+                                
+                                # 自动删除已发送的条目，避免重复发送
+                                # Auto-delete the sent entry to prevent duplicate sending
+                                tools.delete_entry_from_file(member_file, 'member_link', member.member_link)
+                                app_logger.log_file_operation("DELETE", member_file, True, {"member": member.member_name})
+                                
+                                # 云端去重标记 - Mark as processed in cloud dedup
+                                if cloud_dedup.enabled:
+                                    cloud_dedup.mark_processed(member.member_link, 'message', request.ads_id)
 
-                            # 记录私信发送成功
-                            app_logger.log_message_send(member.member_name, member.member_link, True, "发送成功")
-                            tools.send_message_to_ui(ms=self.ms, ui=self.ui, message=f'私信发送成功！已从列表中删除')
+                                # 记录私信发送成功
+                                app_logger.log_message_send(member.member_name, member.member_link, True, "发送成功")
+                                tools.send_message_to_ui(ms=self.ms, ui=self.ui, message=f'私信发送成功！已从列表中删除')
+                            else:
+                                log.warning(f'Request has no member attribute, skipping member update (request index={request.index})')
                             tools.delay_time(3)
 
                             # //div[@data-testid="mwchat-tab"]/div[contains(@class,"pfnyh3mw")]/div/span  关闭

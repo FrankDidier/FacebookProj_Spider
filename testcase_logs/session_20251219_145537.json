@@ -1,0 +1,3724 @@
+{
+  "session_id": "20251219_145537",
+  "start_time": "2025-12-19T14:55:37.807393",
+  "end_time": "2025-12-19T15:28:16.698635",
+  "duration_seconds": 1958.891242,
+  "duration_formatted": "32m 38s",
+  "total_actions": 286,
+  "total_errors": 0,
+  "total_terminal_output": 0,
+  "event_counts": {
+    "SESSION_START": 1,
+    "CONTROL_UPDATE": 11,
+    "BUTTON_REENABLE": 18,
+    "BUTTON_ENABLED": 53,
+    "SIDEBAR_ENABLED": 9,
+    "UI_EVENT": 16,
+    "BUTTON_CLICK": 8,
+    "VALIDATION": 15,
+    "CONFIG_CHANGE": 2,
+    "MEMBER_SPIDER": 1,
+    "SPIDER_STOP": 3,
+    "CLEANUP": 9,
+    "FINAL_CLEANUP": 3,
+    "BROWSE": 2,
+    "FILE_OP": 67,
+    "MESSAGE_SEND": 67,
+    "APP_CLOSE": 1
+  },
+  "log_file": "./logs/session_20251219_145537.log",
+  "json_log_file": "./logs/session_20251219_145537.json",
+  "actions": [
+    {
+      "event": "SESSION_START",
+      "timestamp": "2025-12-19T14:55:37.807393",
+      "session_id": "20251219_145537",
+      "system": {
+        "platform": "Windows",
+        "platform_version": "10.0.19045",
+        "platform_release": "10",
+        "machine": "AMD64",
+        "processor": "Intel64 Family 6 Model 158 Stepping 9, GenuineIntel",
+        "python_version": "3.9.13 (tags/v3.9.13:6de2ca5, May 17 2022, 16:36:42) [MSC v.1929 64 bit (AMD64)]",
+        "python_executable": "D:\\FB脚本\\FacebookMarketingTool.exe"
+      },
+      "working_directory": "D:\\FB脚本",
+      "user": "hao"
+    },
+    {
+      "event": "CONTROL_UPDATE",
+      "action": "更新控件状态",
+      "timestamp": "2025-12-19T14:55:40.189229",
+      "success": true,
+      "details": {
+        "stop": true,
+        "index": 0
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "开始重新启用按钮",
+      "timestamp": "2025-12-19T14:55:40.680040",
+      "success": true,
+      "details": {
+        "tab_index": 0
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpiderStart",
+      "timestamp": "2025-12-19T14:55:40.681077",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersSpiderStart",
+      "timestamp": "2025-12-19T14:55:40.682073",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGreetsSpiderStart",
+      "timestamp": "2025-12-19T14:55:40.682073",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpecifiedStart",
+      "timestamp": "2025-12-19T14:55:40.683071",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersRapidStart",
+      "timestamp": "2025-12-19T14:55:40.683071",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "SIDEBAR_ENABLED",
+      "action": "侧边栏已启用",
+      "timestamp": "2025-12-19T14:55:40.687050",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "按钮重新启用完成",
+      "timestamp": "2025-12-19T14:55:40.687050",
+      "success": true,
+      "details": {
+        "tab_index": 0,
+        "success": true
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: 📊 主控制台",
+      "timestamp": "2025-12-19T14:56:19.222232",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "📊 主控制台",
+        "timestamp": "2025-12-19T14:56:19.222232",
+        "index": 1
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: 采集群组",
+      "timestamp": "2025-12-19T14:56:22.079520",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "采集群组",
+        "timestamp": "2025-12-19T14:56:22.079520",
+        "index": 2
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: 采集成员",
+      "timestamp": "2025-12-19T14:56:23.917454",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "采集成员",
+        "timestamp": "2025-12-19T14:56:23.917454",
+        "index": 3
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_CLICK",
+      "action": "采集成员-启动",
+      "timestamp": "2025-12-19T14:56:35.217979",
+      "success": true,
+      "details": {
+        "button": "采集成员-启动",
+        "page": "MembersSpider页面",
+        "enabled": true,
+        "click_time": "14:56:35.217"
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "VALIDATION",
+      "action": "开始验证配置 - 采集成员",
+      "timestamp": "2025-12-19T14:56:35.217979",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "VALIDATION",
+      "action": "浏览器类型: BitBrowser",
+      "timestamp": "2025-12-19T14:56:35.217979",
+      "success": true,
+      "details": {
+        "browser_type": "bitbrowser"
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "VALIDATION",
+      "action": "采集成员-配置检查",
+      "timestamp": "2025-12-19T14:56:36.166139",
+      "success": true,
+      "details": {
+        "check": "采集成员-配置检查",
+        "passed": true,
+        "message": ""
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "CONFIG_CHANGE",
+      "action": "main.account_nums",
+      "timestamp": "2025-12-19T14:56:36.172123",
+      "success": true,
+      "details": {
+        "section": "main",
+        "key": "account_nums",
+        "old_value": "",
+        "new_value": "4",
+        "changed_at": "2025-12-19T14:56:36.172123"
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "CONFIG_CHANGE",
+      "action": "main.group_nums",
+      "timestamp": "2025-12-19T14:56:36.173120",
+      "success": true,
+      "details": {
+        "section": "main",
+        "key": "group_nums",
+        "old_value": "",
+        "new_value": "10",
+        "changed_at": "2025-12-19T14:56:36.172123"
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "MEMBER_SPIDER",
+      "action": "使用默认群组目录",
+      "timestamp": "2025-12-19T14:56:36.175115",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "CONTROL_UPDATE",
+      "action": "更新控件状态",
+      "timestamp": "2025-12-19T14:56:36.775513",
+      "success": true,
+      "details": {
+        "stop": false,
+        "index": 3
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_CLICK",
+      "action": "采集成员-停止",
+      "timestamp": "2025-12-19T15:02:25.674876",
+      "success": true,
+      "details": {
+        "button": "采集成员-停止",
+        "page": "MembersSpider页面",
+        "enabled": true,
+        "click_time": "15:02:25.673"
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "SPIDER_STOP",
+      "action": "Stopping MembersSpider",
+      "timestamp": "2025-12-19T15:02:25.674876",
+      "success": true,
+      "details": {
+        "spider": "MembersSpider",
+        "reason": "用户点击停止",
+        "stop_time": "2025-12-19T15:02:25.674876"
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "CLEANUP",
+      "action": "开始清理 member spider (保持stop_event设置)",
+      "timestamp": "2025-12-19T15:02:26.671736",
+      "success": true,
+      "details": {
+        "tab_index": 2
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "CLEANUP",
+      "action": "member_stop_event 保持设置状态: True",
+      "timestamp": "2025-12-19T15:02:26.671736",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "开始重新启用按钮",
+      "timestamp": "2025-12-19T15:02:26.671736",
+      "success": true,
+      "details": {
+        "tab_index": 2
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpiderStart",
+      "timestamp": "2025-12-19T15:02:26.672736",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpiderStart",
+      "timestamp": "2025-12-19T15:02:26.672736",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersSpiderStart",
+      "timestamp": "2025-12-19T15:02:26.672736",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGreetsSpiderStart",
+      "timestamp": "2025-12-19T15:02:26.672736",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpecifiedStart",
+      "timestamp": "2025-12-19T15:02:26.673732",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersRapidStart",
+      "timestamp": "2025-12-19T15:02:26.673732",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "SIDEBAR_ENABLED",
+      "action": "侧边栏已启用",
+      "timestamp": "2025-12-19T15:02:26.673732",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "按钮重新启用完成",
+      "timestamp": "2025-12-19T15:02:26.674741",
+      "success": true,
+      "details": {
+        "tab_index": 2,
+        "success": true
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "CLEANUP",
+      "action": "清理完成 member spider",
+      "timestamp": "2025-12-19T15:02:26.674741",
+      "success": true,
+      "details": {
+        "success": true
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "CONTROL_UPDATE",
+      "action": "更新控件状态",
+      "timestamp": "2025-12-19T15:02:33.303191",
+      "success": true,
+      "details": {
+        "stop": true,
+        "index": 3
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "FINAL_CLEANUP",
+      "action": "已清理 member_stop_event，可以重新启动",
+      "timestamp": "2025-12-19T15:02:33.675190",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "开始重新启用按钮",
+      "timestamp": "2025-12-19T15:02:33.817909",
+      "success": true,
+      "details": {
+        "tab_index": 3
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersSpiderStart",
+      "timestamp": "2025-12-19T15:02:33.817909",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpiderStart",
+      "timestamp": "2025-12-19T15:02:33.818906",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersSpiderStart",
+      "timestamp": "2025-12-19T15:02:33.819903",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGreetsSpiderStart",
+      "timestamp": "2025-12-19T15:02:33.819903",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpecifiedStart",
+      "timestamp": "2025-12-19T15:02:33.819903",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersRapidStart",
+      "timestamp": "2025-12-19T15:02:33.819903",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "SIDEBAR_ENABLED",
+      "action": "侧边栏已启用",
+      "timestamp": "2025-12-19T15:02:33.820900",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "按钮重新启用完成",
+      "timestamp": "2025-12-19T15:02:33.820900",
+      "success": true,
+      "details": {
+        "tab_index": 3,
+        "success": true
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: 私信成员",
+      "timestamp": "2025-12-19T15:04:11.146110",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "私信成员",
+        "timestamp": "2025-12-19T15:04:11.146110",
+        "index": 4
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_CLICK",
+      "action": "私信成员-启动",
+      "timestamp": "2025-12-19T15:11:10.298296",
+      "success": true,
+      "details": {
+        "button": "私信成员-启动",
+        "page": "GreetsSpider页面",
+        "enabled": true,
+        "click_time": "15:11:10.298"
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "VALIDATION",
+      "action": "开始验证配置 - 私信成员",
+      "timestamp": "2025-12-19T15:11:10.298296",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "VALIDATION",
+      "action": "浏览器类型: BitBrowser",
+      "timestamp": "2025-12-19T15:11:10.299293",
+      "success": true,
+      "details": {
+        "browser_type": "bitbrowser"
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "VALIDATION",
+      "action": "私信成员-配置检查",
+      "timestamp": "2025-12-19T15:11:11.242738",
+      "success": true,
+      "details": {
+        "check": "私信成员-配置检查",
+        "passed": true,
+        "message": ""
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "CONTROL_UPDATE",
+      "action": "更新控件状态",
+      "timestamp": "2025-12-19T15:11:11.829639",
+      "success": true,
+      "details": {
+        "stop": false,
+        "index": 4
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "CONTROL_UPDATE",
+      "action": "更新控件状态",
+      "timestamp": "2025-12-19T15:11:16.483107",
+      "success": true,
+      "details": {
+        "stop": true,
+        "index": 4
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "开始重新启用按钮",
+      "timestamp": "2025-12-19T15:11:16.977503",
+      "success": true,
+      "details": {
+        "tab_index": 4
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGreetsSpiderStart",
+      "timestamp": "2025-12-19T15:11:16.978500",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpiderStart",
+      "timestamp": "2025-12-19T15:11:16.978500",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersSpiderStart",
+      "timestamp": "2025-12-19T15:11:16.979499",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGreetsSpiderStart",
+      "timestamp": "2025-12-19T15:11:16.979499",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpecifiedStart",
+      "timestamp": "2025-12-19T15:11:16.979499",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersRapidStart",
+      "timestamp": "2025-12-19T15:11:16.979499",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "SIDEBAR_ENABLED",
+      "action": "侧边栏已启用",
+      "timestamp": "2025-12-19T15:11:16.980495",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "按钮重新启用完成",
+      "timestamp": "2025-12-19T15:11:16.980495",
+      "success": true,
+      "details": {
+        "tab_index": 4,
+        "success": true
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_CLICK",
+      "action": "私信成员-启动",
+      "timestamp": "2025-12-19T15:11:47.162027",
+      "success": true,
+      "details": {
+        "button": "私信成员-启动",
+        "page": "GreetsSpider页面",
+        "enabled": true,
+        "click_time": "15:11:47.162"
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "VALIDATION",
+      "action": "开始验证配置 - 私信成员",
+      "timestamp": "2025-12-19T15:11:47.162027",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "VALIDATION",
+      "action": "浏览器类型: BitBrowser",
+      "timestamp": "2025-12-19T15:11:47.162027",
+      "success": true,
+      "details": {
+        "browser_type": "bitbrowser"
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "VALIDATION",
+      "action": "私信成员-配置检查",
+      "timestamp": "2025-12-19T15:11:48.110501",
+      "success": true,
+      "details": {
+        "check": "私信成员-配置检查",
+        "passed": true,
+        "message": ""
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "CONTROL_UPDATE",
+      "action": "更新控件状态",
+      "timestamp": "2025-12-19T15:11:48.702721",
+      "success": true,
+      "details": {
+        "stop": false,
+        "index": 4
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "CONTROL_UPDATE",
+      "action": "更新控件状态",
+      "timestamp": "2025-12-19T15:11:53.364584",
+      "success": true,
+      "details": {
+        "stop": true,
+        "index": 4
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "开始重新启用按钮",
+      "timestamp": "2025-12-19T15:11:53.859708",
+      "success": true,
+      "details": {
+        "tab_index": 4
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGreetsSpiderStart",
+      "timestamp": "2025-12-19T15:11:53.860705",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpiderStart",
+      "timestamp": "2025-12-19T15:11:53.861758",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersSpiderStart",
+      "timestamp": "2025-12-19T15:11:53.862755",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGreetsSpiderStart",
+      "timestamp": "2025-12-19T15:11:53.863752",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpecifiedStart",
+      "timestamp": "2025-12-19T15:11:53.863752",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersRapidStart",
+      "timestamp": "2025-12-19T15:11:53.864750",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "SIDEBAR_ENABLED",
+      "action": "侧边栏已启用",
+      "timestamp": "2025-12-19T15:11:53.867742",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "按钮重新启用完成",
+      "timestamp": "2025-12-19T15:11:53.867742",
+      "success": true,
+      "details": {
+        "tab_index": 4,
+        "success": true
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BROWSE",
+      "action": "点击浏览成员文件按钮",
+      "timestamp": "2025-12-19T15:12:00.514130",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BROWSE",
+      "action": "选择成员文件: D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:12:09.199411",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_CLICK",
+      "action": "私信成员-启动",
+      "timestamp": "2025-12-19T15:12:10.946392",
+      "success": true,
+      "details": {
+        "button": "私信成员-启动",
+        "page": "GreetsSpider页面",
+        "enabled": true,
+        "click_time": "15:12:10.946"
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "VALIDATION",
+      "action": "开始验证配置 - 私信成员",
+      "timestamp": "2025-12-19T15:12:10.946392",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "VALIDATION",
+      "action": "浏览器类型: BitBrowser",
+      "timestamp": "2025-12-19T15:12:10.946392",
+      "success": true,
+      "details": {
+        "browser_type": "bitbrowser"
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "VALIDATION",
+      "action": "私信成员-配置检查",
+      "timestamp": "2025-12-19T15:12:11.888051",
+      "success": true,
+      "details": {
+        "check": "私信成员-配置检查",
+        "passed": true,
+        "message": ""
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "CONTROL_UPDATE",
+      "action": "更新控件状态",
+      "timestamp": "2025-12-19T15:12:12.486449",
+      "success": true,
+      "details": {
+        "stop": false,
+        "index": 4
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_CLICK",
+      "action": "私信成员-停止",
+      "timestamp": "2025-12-19T15:12:56.994401",
+      "success": true,
+      "details": {
+        "button": "私信成员-停止",
+        "page": "GreetsSpider页面",
+        "enabled": true,
+        "click_time": "15:12:56.994"
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "SPIDER_STOP",
+      "action": "Stopping GreetsSpider",
+      "timestamp": "2025-12-19T15:12:56.995398",
+      "success": true,
+      "details": {
+        "spider": "GreetsSpider",
+        "reason": "用户点击停止",
+        "stop_time": "2025-12-19T15:12:56.995398"
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "CLEANUP",
+      "action": "开始清理 greets spider (保持stop_event设置)",
+      "timestamp": "2025-12-19T15:12:58.004679",
+      "success": true,
+      "details": {
+        "tab_index": 3
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "CLEANUP",
+      "action": "greets_stop_event 保持设置状态: True",
+      "timestamp": "2025-12-19T15:12:58.005677",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "开始重新启用按钮",
+      "timestamp": "2025-12-19T15:12:58.006674",
+      "success": true,
+      "details": {
+        "tab_index": 3
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersSpiderStart",
+      "timestamp": "2025-12-19T15:12:58.007669",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpiderStart",
+      "timestamp": "2025-12-19T15:12:58.007669",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersSpiderStart",
+      "timestamp": "2025-12-19T15:12:58.008666",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGreetsSpiderStart",
+      "timestamp": "2025-12-19T15:12:58.008666",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpecifiedStart",
+      "timestamp": "2025-12-19T15:12:58.008666",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersRapidStart",
+      "timestamp": "2025-12-19T15:12:58.008666",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "SIDEBAR_ENABLED",
+      "action": "侧边栏已启用",
+      "timestamp": "2025-12-19T15:12:58.010661",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "按钮重新启用完成",
+      "timestamp": "2025-12-19T15:12:58.010661",
+      "success": true,
+      "details": {
+        "tab_index": 3,
+        "success": true
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "CLEANUP",
+      "action": "清理完成 greets spider",
+      "timestamp": "2025-12-19T15:12:58.010661",
+      "success": true,
+      "details": {
+        "success": true
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "FINAL_CLEANUP",
+      "action": "已清理 greets_stop_event，可以重新启动",
+      "timestamp": "2025-12-19T15:13:04.993989",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "CONTROL_UPDATE",
+      "action": "更新控件状态",
+      "timestamp": "2025-12-19T15:13:15.966139",
+      "success": true,
+      "details": {
+        "stop": true,
+        "index": 4
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "开始重新启用按钮",
+      "timestamp": "2025-12-19T15:13:16.471165",
+      "success": true,
+      "details": {
+        "tab_index": 4
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGreetsSpiderStart",
+      "timestamp": "2025-12-19T15:13:16.473123",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpiderStart",
+      "timestamp": "2025-12-19T15:13:16.474119",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersSpiderStart",
+      "timestamp": "2025-12-19T15:13:16.475132",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGreetsSpiderStart",
+      "timestamp": "2025-12-19T15:13:16.476118",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpecifiedStart",
+      "timestamp": "2025-12-19T15:13:16.476118",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersRapidStart",
+      "timestamp": "2025-12-19T15:13:16.476118",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "SIDEBAR_ENABLED",
+      "action": "侧边栏已启用",
+      "timestamp": "2025-12-19T15:13:16.479163",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "按钮重新启用完成",
+      "timestamp": "2025-12-19T15:13:16.480157",
+      "success": true,
+      "details": {
+        "tab_index": 4,
+        "success": true
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_CLICK",
+      "action": "私信成员-启动",
+      "timestamp": "2025-12-19T15:13:18.706669",
+      "success": true,
+      "details": {
+        "button": "私信成员-启动",
+        "page": "GreetsSpider页面",
+        "enabled": true,
+        "click_time": "15:13:18.706"
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "VALIDATION",
+      "action": "开始验证配置 - 私信成员",
+      "timestamp": "2025-12-19T15:13:18.706669",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "VALIDATION",
+      "action": "浏览器类型: BitBrowser",
+      "timestamp": "2025-12-19T15:13:18.707667",
+      "success": true,
+      "details": {
+        "browser_type": "bitbrowser"
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "VALIDATION",
+      "action": "私信成员-配置检查",
+      "timestamp": "2025-12-19T15:13:19.669336",
+      "success": true,
+      "details": {
+        "check": "私信成员-配置检查",
+        "passed": true,
+        "message": ""
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "CONTROL_UPDATE",
+      "action": "更新控件状态",
+      "timestamp": "2025-12-19T15:13:20.286741",
+      "success": true,
+      "details": {
+        "stop": false,
+        "index": 4
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:14:38.234687",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 18133,
+        "member": "user_61572629223193"
+      },
+      "thread": "Thread-31",
+      "thread_id": 14860
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61572629223193",
+      "timestamp": "2025-12-19T15:14:38.373732",
+      "success": true,
+      "details": {
+        "member_name": "user_61572629223193",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/61572629223193/",
+        "reason": "发送成功",
+        "timestamp": "2025-12-19T15:14:38.373732"
+      },
+      "thread": "Thread-31",
+      "thread_id": 14860
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61578286104888",
+      "timestamp": "2025-12-19T15:14:38.711245",
+      "success": false,
+      "details": {
+        "member_name": "user_61578286104888",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/61578286104888/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-19T15:14:38.711245"
+      },
+      "thread": "Thread-34",
+      "thread_id": 2376
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:14:38.716248",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 18064,
+        "member": "user_61578286104888",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-34",
+      "thread_id": 2376
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:14:42.420225",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 17994,
+        "member": "user_100075111820592"
+      },
+      "thread": "Thread-33",
+      "thread_id": 17992
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_100075111820592",
+      "timestamp": "2025-12-19T15:14:42.530954",
+      "success": true,
+      "details": {
+        "member_name": "user_100075111820592",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/100075111820592/",
+        "reason": "发送成功",
+        "timestamp": "2025-12-19T15:14:42.530954"
+      },
+      "thread": "Thread-33",
+      "thread_id": 17992
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_100092121963935",
+      "timestamp": "2025-12-19T15:14:49.124873",
+      "success": false,
+      "details": {
+        "member_name": "user_100092121963935",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/100092121963935/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-19T15:14:49.124873"
+      },
+      "thread": "Thread-32",
+      "thread_id": 10380
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:14:49.129836",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 17924,
+        "member": "user_100092121963935",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-32",
+      "thread_id": 10380
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61573103343495",
+      "timestamp": "2025-12-19T15:15:17.770207",
+      "success": false,
+      "details": {
+        "member_name": "user_61573103343495",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/61573103343495/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-19T15:15:17.770207"
+      },
+      "thread": "Thread-32",
+      "thread_id": 10380
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:15:17.774196",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 17855,
+        "member": "user_61573103343495",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-32",
+      "thread_id": 10380
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_100081785363839",
+      "timestamp": "2025-12-19T15:15:47.331580",
+      "success": false,
+      "details": {
+        "member_name": "user_100081785363839",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/100081785363839/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-19T15:15:47.331580"
+      },
+      "thread": "Thread-32",
+      "thread_id": 10380
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:15:47.336567",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 17785,
+        "member": "user_100081785363839",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-32",
+      "thread_id": 10380
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:15:57.539295",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 17716,
+        "member": "user_61580919194822"
+      },
+      "thread": "Thread-31",
+      "thread_id": 14860
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61580919194822",
+      "timestamp": "2025-12-19T15:15:57.647003",
+      "success": true,
+      "details": {
+        "member_name": "user_61580919194822",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/61580919194822/",
+        "reason": "发送成功",
+        "timestamp": "2025-12-19T15:15:57.647003"
+      },
+      "thread": "Thread-31",
+      "thread_id": 14860
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61584338610285",
+      "timestamp": "2025-12-19T15:16:09.182724",
+      "success": false,
+      "details": {
+        "member_name": "user_61584338610285",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/61584338610285/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-19T15:16:09.182724"
+      },
+      "thread": "Thread-34",
+      "thread_id": 2376
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:16:09.186714",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 17647,
+        "member": "user_61584338610285",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-34",
+      "thread_id": 2376
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61583528131842",
+      "timestamp": "2025-12-19T15:16:16.184506",
+      "success": false,
+      "details": {
+        "member_name": "user_61583528131842",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/61583528131842/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-19T15:16:16.184506"
+      },
+      "thread": "Thread-32",
+      "thread_id": 10380
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:16:16.191517",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 17578,
+        "member": "user_61583528131842",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-32",
+      "thread_id": 10380
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61574881254640",
+      "timestamp": "2025-12-19T15:16:38.393773",
+      "success": false,
+      "details": {
+        "member_name": "user_61574881254640",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/61574881254640/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-19T15:16:38.393773"
+      },
+      "thread": "Thread-34",
+      "thread_id": 2376
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:16:38.398759",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 17509,
+        "member": "user_61574881254640",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-34",
+      "thread_id": 2376
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:16:40.837344",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 17440,
+        "member": "user_61579887688953"
+      },
+      "thread": "Thread-31",
+      "thread_id": 14860
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61579887688953",
+      "timestamp": "2025-12-19T15:16:40.957023",
+      "success": true,
+      "details": {
+        "member_name": "user_61579887688953",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/61579887688953/",
+        "reason": "发送成功",
+        "timestamp": "2025-12-19T15:16:40.957023"
+      },
+      "thread": "Thread-31",
+      "thread_id": 14860
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:16:42.928397",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 17371,
+        "member": "user_61583900368484"
+      },
+      "thread": "Thread-33",
+      "thread_id": 17992
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61583900368484",
+      "timestamp": "2025-12-19T15:16:43.044089",
+      "success": true,
+      "details": {
+        "member_name": "user_61583900368484",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/61583900368484/",
+        "reason": "发送成功",
+        "timestamp": "2025-12-19T15:16:43.044089"
+      },
+      "thread": "Thread-33",
+      "thread_id": 17992
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61573439438226",
+      "timestamp": "2025-12-19T15:16:44.062038",
+      "success": false,
+      "details": {
+        "member_name": "user_61573439438226",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/61573439438226/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-19T15:16:44.062038"
+      },
+      "thread": "Thread-32",
+      "thread_id": 10380
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:16:44.070021",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 17233,
+        "member": "user_61573439438226",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-32",
+      "thread_id": 10380
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61584959030396",
+      "timestamp": "2025-12-19T15:17:06.802238",
+      "success": false,
+      "details": {
+        "member_name": "user_61584959030396",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/61584959030396/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-19T15:17:06.802238"
+      },
+      "thread": "Thread-34",
+      "thread_id": 2376
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:17:06.807224",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 17164,
+        "member": "user_61584959030396",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-34",
+      "thread_id": 2376
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_100079242673473",
+      "timestamp": "2025-12-19T15:17:12.159485",
+      "success": false,
+      "details": {
+        "member_name": "user_100079242673473",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/100079242673473/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-19T15:17:12.159485"
+      },
+      "thread": "Thread-32",
+      "thread_id": 10380
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:17:12.163452",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 17094,
+        "member": "user_100079242673473",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-32",
+      "thread_id": 10380
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:17:22.507757",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 17024,
+        "member": "user_100092283533681"
+      },
+      "thread": "Thread-31",
+      "thread_id": 14860
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_100092283533681",
+      "timestamp": "2025-12-19T15:17:22.620961",
+      "success": true,
+      "details": {
+        "member_name": "user_100092283533681",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/100092283533681/",
+        "reason": "发送成功",
+        "timestamp": "2025-12-19T15:17:22.620961"
+      },
+      "thread": "Thread-31",
+      "thread_id": 14860
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:17:30.949455",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 16955,
+        "member": "user_61584444174099"
+      },
+      "thread": "Thread-33",
+      "thread_id": 17992
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61584444174099",
+      "timestamp": "2025-12-19T15:17:31.082085",
+      "success": true,
+      "details": {
+        "member_name": "user_61584444174099",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/61584444174099/",
+        "reason": "发送成功",
+        "timestamp": "2025-12-19T15:17:31.082085"
+      },
+      "thread": "Thread-33",
+      "thread_id": 17992
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_100068873620721",
+      "timestamp": "2025-12-19T15:17:35.436932",
+      "success": false,
+      "details": {
+        "member_name": "user_100068873620721",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/100068873620721/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-19T15:17:35.436932"
+      },
+      "thread": "Thread-34",
+      "thread_id": 2376
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:17:35.440922",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 16885,
+        "member": "user_100068873620721",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-34",
+      "thread_id": 2376
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61551215630351",
+      "timestamp": "2025-12-19T15:17:40.001375",
+      "success": false,
+      "details": {
+        "member_name": "user_61551215630351",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/61551215630351/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-19T15:17:40.001375"
+      },
+      "thread": "Thread-32",
+      "thread_id": 10380
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:17:40.006361",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 16816,
+        "member": "user_61551215630351",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-32",
+      "thread_id": 10380
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61584202746775",
+      "timestamp": "2025-12-19T15:18:03.648959",
+      "success": false,
+      "details": {
+        "member_name": "user_61584202746775",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/61584202746775/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-19T15:18:03.648959"
+      },
+      "thread": "Thread-34",
+      "thread_id": 2376
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:18:03.653950",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 16747,
+        "member": "user_61584202746775",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-34",
+      "thread_id": 2376
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:18:04.097596",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 16677,
+        "member": "user_100026988379354"
+      },
+      "thread": "Thread-31",
+      "thread_id": 14860
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_100026988379354",
+      "timestamp": "2025-12-19T15:18:04.209296",
+      "success": true,
+      "details": {
+        "member_name": "user_100026988379354",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/100026988379354/",
+        "reason": "发送成功",
+        "timestamp": "2025-12-19T15:18:04.209296"
+      },
+      "thread": "Thread-31",
+      "thread_id": 14860
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61584747192834",
+      "timestamp": "2025-12-19T15:18:07.896661",
+      "success": false,
+      "details": {
+        "member_name": "user_61584747192834",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/61584747192834/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-19T15:18:07.896661"
+      },
+      "thread": "Thread-32",
+      "thread_id": 10380
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:18:07.901673",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 16608,
+        "member": "user_61584747192834",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-32",
+      "thread_id": 10380
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:18:10.669640",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 16539,
+        "member": "user_61583777740516"
+      },
+      "thread": "Thread-33",
+      "thread_id": 17992
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61583777740516",
+      "timestamp": "2025-12-19T15:18:10.785076",
+      "success": true,
+      "details": {
+        "member_name": "user_61583777740516",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/61583777740516/",
+        "reason": "发送成功",
+        "timestamp": "2025-12-19T15:18:10.785076"
+      },
+      "thread": "Thread-33",
+      "thread_id": 17992
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61583205689746",
+      "timestamp": "2025-12-19T15:18:32.379080",
+      "success": false,
+      "details": {
+        "member_name": "user_61583205689746",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/61583205689746/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-19T15:18:32.379080"
+      },
+      "thread": "Thread-34",
+      "thread_id": 2376
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:18:32.384036",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 16470,
+        "member": "user_61583205689746",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-34",
+      "thread_id": 2376
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61584650723785",
+      "timestamp": "2025-12-19T15:18:35.928192",
+      "success": false,
+      "details": {
+        "member_name": "user_61584650723785",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/61584650723785/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-19T15:18:35.928192"
+      },
+      "thread": "Thread-32",
+      "thread_id": 10380
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:18:35.936170",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 16401,
+        "member": "user_61584650723785",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-32",
+      "thread_id": 10380
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:18:45.906745",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 16331,
+        "member": "user_100019637917945"
+      },
+      "thread": "Thread-31",
+      "thread_id": 14860
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_100019637917945",
+      "timestamp": "2025-12-19T15:18:46.047321",
+      "success": true,
+      "details": {
+        "member_name": "user_100019637917945",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/100019637917945/",
+        "reason": "发送成功",
+        "timestamp": "2025-12-19T15:18:46.047321"
+      },
+      "thread": "Thread-31",
+      "thread_id": 14860
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:18:49.980768",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 16261,
+        "member": "user_100072182048760"
+      },
+      "thread": "Thread-33",
+      "thread_id": 17992
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_100072182048760",
+      "timestamp": "2025-12-19T15:18:50.084492",
+      "success": true,
+      "details": {
+        "member_name": "user_100072182048760",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/100072182048760/",
+        "reason": "发送成功",
+        "timestamp": "2025-12-19T15:18:50.084492"
+      },
+      "thread": "Thread-33",
+      "thread_id": 17992
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61584228441796",
+      "timestamp": "2025-12-19T15:19:00.580907",
+      "success": false,
+      "details": {
+        "member_name": "user_61584228441796",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/61584228441796/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-19T15:19:00.580907"
+      },
+      "thread": "Thread-34",
+      "thread_id": 2376
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:19:00.586891",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 16192,
+        "member": "user_61584228441796",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-34",
+      "thread_id": 2376
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_100014661632009",
+      "timestamp": "2025-12-19T15:19:03.927947",
+      "success": false,
+      "details": {
+        "member_name": "user_100014661632009",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/100014661632009/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-19T15:19:03.927947"
+      },
+      "thread": "Thread-32",
+      "thread_id": 10380
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:19:03.931936",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 16122,
+        "member": "user_100014661632009",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-32",
+      "thread_id": 10380
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:19:27.612858",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 16052,
+        "member": "user_100041648133206"
+      },
+      "thread": "Thread-31",
+      "thread_id": 14860
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_100041648133206",
+      "timestamp": "2025-12-19T15:19:27.744502",
+      "success": true,
+      "details": {
+        "member_name": "user_100041648133206",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/100041648133206/",
+        "reason": "发送成功",
+        "timestamp": "2025-12-19T15:19:27.744502"
+      },
+      "thread": "Thread-31",
+      "thread_id": 14860
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_100093423519361",
+      "timestamp": "2025-12-19T15:19:28.689616",
+      "success": false,
+      "details": {
+        "member_name": "user_100093423519361",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/100093423519361/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-19T15:19:28.689616"
+      },
+      "thread": "Thread-34",
+      "thread_id": 2376
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:19:28.695599",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 15982,
+        "member": "user_100093423519361",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-34",
+      "thread_id": 2376
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:19:31.050664",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 15912,
+        "member": "user_100025097797236"
+      },
+      "thread": "Thread-33",
+      "thread_id": 17992
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_100025097797236",
+      "timestamp": "2025-12-19T15:19:31.186266",
+      "success": true,
+      "details": {
+        "member_name": "user_100025097797236",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/100025097797236/",
+        "reason": "发送成功",
+        "timestamp": "2025-12-19T15:19:31.186266"
+      },
+      "thread": "Thread-33",
+      "thread_id": 17992
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61574641479111",
+      "timestamp": "2025-12-19T15:19:31.867693",
+      "success": false,
+      "details": {
+        "member_name": "user_61574641479111",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/61574641479111/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-19T15:19:31.867693"
+      },
+      "thread": "Thread-32",
+      "thread_id": 10380
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:19:31.872691",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 15843,
+        "member": "user_61574641479111",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-32",
+      "thread_id": 10380
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_100091951510610",
+      "timestamp": "2025-12-19T15:19:56.845502",
+      "success": false,
+      "details": {
+        "member_name": "user_100091951510610",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/100091951510610/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-19T15:19:56.845502"
+      },
+      "thread": "Thread-34",
+      "thread_id": 2376
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:19:56.855474",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 15773,
+        "member": "user_100091951510610",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-34",
+      "thread_id": 2376
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61574209852378",
+      "timestamp": "2025-12-19T15:19:59.454142",
+      "success": false,
+      "details": {
+        "member_name": "user_61574209852378",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/61574209852378/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-19T15:19:59.454142"
+      },
+      "thread": "Thread-32",
+      "thread_id": 10380
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:19:59.461123",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 15704,
+        "member": "user_61574209852378",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-32",
+      "thread_id": 10380
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:20:11.266481",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 15634,
+        "member": "user_100092204607807"
+      },
+      "thread": "Thread-33",
+      "thread_id": 17992
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_100092204607807",
+      "timestamp": "2025-12-19T15:20:11.378176",
+      "success": true,
+      "details": {
+        "member_name": "user_100092204607807",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/100092204607807/",
+        "reason": "发送成功",
+        "timestamp": "2025-12-19T15:20:11.378176"
+      },
+      "thread": "Thread-33",
+      "thread_id": 17992
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61573872985897",
+      "timestamp": "2025-12-19T15:20:24.857618",
+      "success": false,
+      "details": {
+        "member_name": "user_61573872985897",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/61573872985897/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-19T15:20:24.857618"
+      },
+      "thread": "Thread-34",
+      "thread_id": 2376
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:20:24.862603",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 15565,
+        "member": "user_61573872985897",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-34",
+      "thread_id": 2376
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61584547439239",
+      "timestamp": "2025-12-19T15:20:27.455436",
+      "success": false,
+      "details": {
+        "member_name": "user_61584547439239",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/61584547439239/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-19T15:20:27.455436"
+      },
+      "thread": "Thread-32",
+      "thread_id": 10380
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:20:27.460423",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 15496,
+        "member": "user_61584547439239",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-32",
+      "thread_id": 10380
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:20:50.713109",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 15427,
+        "member": "user_61550709913821"
+      },
+      "thread": "Thread-33",
+      "thread_id": 17992
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61550709913821",
+      "timestamp": "2025-12-19T15:20:50.830167",
+      "success": true,
+      "details": {
+        "member_name": "user_61550709913821",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/61550709913821/",
+        "reason": "发送成功",
+        "timestamp": "2025-12-19T15:20:50.830167"
+      },
+      "thread": "Thread-33",
+      "thread_id": 17992
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:20:50.966803",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 15357,
+        "member": "user_100059193660130"
+      },
+      "thread": "Thread-31",
+      "thread_id": 14860
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_100059193660130",
+      "timestamp": "2025-12-19T15:20:51.121369",
+      "success": true,
+      "details": {
+        "member_name": "user_100059193660130",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/100059193660130/",
+        "reason": "发送成功",
+        "timestamp": "2025-12-19T15:20:51.121369"
+      },
+      "thread": "Thread-31",
+      "thread_id": 14860
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_100003921818578",
+      "timestamp": "2025-12-19T15:20:52.900106",
+      "success": false,
+      "details": {
+        "member_name": "user_100003921818578",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/100003921818578/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-19T15:20:52.900106"
+      },
+      "thread": "Thread-34",
+      "thread_id": 2376
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:20:52.904095",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 15287,
+        "member": "user_100003921818578",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-34",
+      "thread_id": 2376
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61584485681004",
+      "timestamp": "2025-12-19T15:20:55.129781",
+      "success": false,
+      "details": {
+        "member_name": "user_61584485681004",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/61584485681004/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-19T15:20:55.128782"
+      },
+      "thread": "Thread-32",
+      "thread_id": 10380
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:20:55.134767",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 15218,
+        "member": "user_61584485681004",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-32",
+      "thread_id": 10380
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_100076630661304",
+      "timestamp": "2025-12-19T15:21:21.110982",
+      "success": false,
+      "details": {
+        "member_name": "user_100076630661304",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/100076630661304/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-19T15:21:21.110982"
+      },
+      "thread": "Thread-34",
+      "thread_id": 2376
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:21:21.114972",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 15148,
+        "member": "user_100076630661304",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-34",
+      "thread_id": 2376
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61584385838759",
+      "timestamp": "2025-12-19T15:21:23.225470",
+      "success": false,
+      "details": {
+        "member_name": "user_61584385838759",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/61584385838759/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-19T15:21:23.225470"
+      },
+      "thread": "Thread-32",
+      "thread_id": 10380
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:21:23.230488",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 15079,
+        "member": "user_61584385838759",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-32",
+      "thread_id": 10380
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:21:30.739574",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 15010,
+        "member": "user_61583840126953"
+      },
+      "thread": "Thread-33",
+      "thread_id": 17992
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61583840126953",
+      "timestamp": "2025-12-19T15:21:30.869424",
+      "success": true,
+      "details": {
+        "member_name": "user_61583840126953",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/61583840126953/",
+        "reason": "发送成功",
+        "timestamp": "2025-12-19T15:21:30.869424"
+      },
+      "thread": "Thread-33",
+      "thread_id": 17992
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:21:33.065140",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 14940,
+        "member": "user_100054807666638"
+      },
+      "thread": "Thread-31",
+      "thread_id": 14860
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_100054807666638",
+      "timestamp": "2025-12-19T15:21:33.171180",
+      "success": true,
+      "details": {
+        "member_name": "user_100054807666638",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/100054807666638/",
+        "reason": "发送成功",
+        "timestamp": "2025-12-19T15:21:33.171180"
+      },
+      "thread": "Thread-31",
+      "thread_id": 14860
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61584498908642",
+      "timestamp": "2025-12-19T15:21:51.262898",
+      "success": false,
+      "details": {
+        "member_name": "user_61584498908642",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/61584498908642/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-19T15:21:51.262898"
+      },
+      "thread": "Thread-32",
+      "thread_id": 10380
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:21:51.268882",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 14871,
+        "member": "user_61584498908642",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-32",
+      "thread_id": 10380
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61584142171247",
+      "timestamp": "2025-12-19T15:21:51.339694",
+      "success": false,
+      "details": {
+        "member_name": "user_61584142171247",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/61584142171247/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-19T15:21:51.339694"
+      },
+      "thread": "Thread-34",
+      "thread_id": 2376
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:21:51.344680",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 14802,
+        "member": "user_61584142171247",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-34",
+      "thread_id": 2376
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:22:10.087005",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 14733,
+        "member": "user_61583781698325"
+      },
+      "thread": "Thread-33",
+      "thread_id": 17992
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61583781698325",
+      "timestamp": "2025-12-19T15:22:10.194718",
+      "success": true,
+      "details": {
+        "member_name": "user_61583781698325",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/61583781698325/",
+        "reason": "发送成功",
+        "timestamp": "2025-12-19T15:22:10.194718"
+      },
+      "thread": "Thread-33",
+      "thread_id": 17992
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:22:15.063979",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 14664,
+        "member": "user_61580967552039"
+      },
+      "thread": "Thread-31",
+      "thread_id": 14860
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61580967552039",
+      "timestamp": "2025-12-19T15:22:15.169928",
+      "success": true,
+      "details": {
+        "member_name": "user_61580967552039",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/61580967552039/",
+        "reason": "发送成功",
+        "timestamp": "2025-12-19T15:22:15.169928"
+      },
+      "thread": "Thread-31",
+      "thread_id": 14860
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61568155226294",
+      "timestamp": "2025-12-19T15:22:19.198936",
+      "success": false,
+      "details": {
+        "member_name": "user_61568155226294",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/61568155226294/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-19T15:22:19.198936"
+      },
+      "thread": "Thread-32",
+      "thread_id": 10380
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:22:19.203925",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 14595,
+        "member": "user_61568155226294",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-32",
+      "thread_id": 10380
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61584069495624",
+      "timestamp": "2025-12-19T15:22:47.436039",
+      "success": false,
+      "details": {
+        "member_name": "user_61584069495624",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/61584069495624/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-19T15:22:47.436039"
+      },
+      "thread": "Thread-32",
+      "thread_id": 10380
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:22:47.443024",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 14526,
+        "member": "user_61584069495624",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-32",
+      "thread_id": 10380
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:22:49.338856",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 14457,
+        "member": "user_61576338997618"
+      },
+      "thread": "Thread-33",
+      "thread_id": 17992
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61576338997618",
+      "timestamp": "2025-12-19T15:22:49.442024",
+      "success": true,
+      "details": {
+        "member_name": "user_61576338997618",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/61576338997618/",
+        "reason": "发送成功",
+        "timestamp": "2025-12-19T15:22:49.442024"
+      },
+      "thread": "Thread-33",
+      "thread_id": 17992
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:22:56.919022",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 14388,
+        "member": "user_61560323702815"
+      },
+      "thread": "Thread-31",
+      "thread_id": 14860
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61560323702815",
+      "timestamp": "2025-12-19T15:22:57.031715",
+      "success": true,
+      "details": {
+        "member_name": "user_61560323702815",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/61560323702815/",
+        "reason": "发送成功",
+        "timestamp": "2025-12-19T15:22:57.031715"
+      },
+      "thread": "Thread-31",
+      "thread_id": 14860
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61578681832593",
+      "timestamp": "2025-12-19T15:22:57.278117",
+      "success": false,
+      "details": {
+        "member_name": "user_61578681832593",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/61578681832593/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-19T15:22:57.278117"
+      },
+      "thread": "Thread-34",
+      "thread_id": 2376
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:22:57.284124",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 14319,
+        "member": "user_61578681832593",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-34",
+      "thread_id": 2376
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61579523434736",
+      "timestamp": "2025-12-19T15:23:15.761826",
+      "success": false,
+      "details": {
+        "member_name": "user_61579523434736",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/61579523434736/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-19T15:23:15.760829"
+      },
+      "thread": "Thread-32",
+      "thread_id": 10380
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:23:15.765815",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 14250,
+        "member": "user_61579523434736",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-32",
+      "thread_id": 10380
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61583551936354",
+      "timestamp": "2025-12-19T15:23:25.655362",
+      "success": false,
+      "details": {
+        "member_name": "user_61583551936354",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/61583551936354/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-19T15:23:25.655362"
+      },
+      "thread": "Thread-34",
+      "thread_id": 2376
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:23:25.660347",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 14181,
+        "member": "user_61583551936354",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-34",
+      "thread_id": 2376
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:23:38.584592",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 14112,
+        "member": "user_61558689676134"
+      },
+      "thread": "Thread-31",
+      "thread_id": 14860
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61558689676134",
+      "timestamp": "2025-12-19T15:23:38.679395",
+      "success": true,
+      "details": {
+        "member_name": "user_61558689676134",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/61558689676134/",
+        "reason": "发送成功",
+        "timestamp": "2025-12-19T15:23:38.679395"
+      },
+      "thread": "Thread-31",
+      "thread_id": 14860
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61583817487285",
+      "timestamp": "2025-12-19T15:23:44.217378",
+      "success": false,
+      "details": {
+        "member_name": "user_61583817487285",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/61583817487285/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-19T15:23:44.217378"
+      },
+      "thread": "Thread-32",
+      "thread_id": 10380
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:23:44.221375",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 14043,
+        "member": "user_61583817487285",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-32",
+      "thread_id": 10380
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61583026226428",
+      "timestamp": "2025-12-19T15:23:53.968689",
+      "success": false,
+      "details": {
+        "member_name": "user_61583026226428",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/61583026226428/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-19T15:23:53.968689"
+      },
+      "thread": "Thread-34",
+      "thread_id": 2376
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:23:53.973674",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 13974,
+        "member": "user_61583026226428",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-34",
+      "thread_id": 2376
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:24:20.105901",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 13905,
+        "member": "user_61553756294825"
+      },
+      "thread": "Thread-33",
+      "thread_id": 17992
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61553756294825",
+      "timestamp": "2025-12-19T15:24:20.254759",
+      "success": true,
+      "details": {
+        "member_name": "user_61553756294825",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/61553756294825/",
+        "reason": "发送成功",
+        "timestamp": "2025-12-19T15:24:20.254759"
+      },
+      "thread": "Thread-33",
+      "thread_id": 17992
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:24:22.107246",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 13836,
+        "member": "user_61581665189228"
+      },
+      "thread": "Thread-31",
+      "thread_id": 14860
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61581665189228",
+      "timestamp": "2025-12-19T15:24:22.237967",
+      "success": true,
+      "details": {
+        "member_name": "user_61581665189228",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/61581665189228/",
+        "reason": "发送成功",
+        "timestamp": "2025-12-19T15:24:22.237967"
+      },
+      "thread": "Thread-31",
+      "thread_id": 14860
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61584054430501",
+      "timestamp": "2025-12-19T15:24:22.386567",
+      "success": false,
+      "details": {
+        "member_name": "user_61584054430501",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/61584054430501/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-19T15:24:22.386567"
+      },
+      "thread": "Thread-34",
+      "thread_id": 2376
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:24:22.392551",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 13767,
+        "member": "user_61584054430501",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-34",
+      "thread_id": 2376
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61584112166167",
+      "timestamp": "2025-12-19T15:24:50.322529",
+      "success": false,
+      "details": {
+        "member_name": "user_61584112166167",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/61584112166167/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-19T15:24:50.322529"
+      },
+      "thread": "Thread-34",
+      "thread_id": 2376
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:24:50.328490",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 13698,
+        "member": "user_61584112166167",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-34",
+      "thread_id": 2376
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:24:59.745816",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 13628,
+        "member": "user_100001569395054"
+      },
+      "thread": "Thread-33",
+      "thread_id": 17992
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_100001569395054",
+      "timestamp": "2025-12-19T15:24:59.861507",
+      "success": true,
+      "details": {
+        "member_name": "user_100001569395054",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/100001569395054/",
+        "reason": "发送成功",
+        "timestamp": "2025-12-19T15:24:59.861507"
+      },
+      "thread": "Thread-33",
+      "thread_id": 17992
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:25:03.730252",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 13558,
+        "member": "user_100036243033246"
+      },
+      "thread": "Thread-31",
+      "thread_id": 14860
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_100036243033246",
+      "timestamp": "2025-12-19T15:25:03.851953",
+      "success": true,
+      "details": {
+        "member_name": "user_100036243033246",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/100036243033246/",
+        "reason": "发送成功",
+        "timestamp": "2025-12-19T15:25:03.851953"
+      },
+      "thread": "Thread-31",
+      "thread_id": 14860
+    },
+    {
+      "event": "MESSAGE_SEND",
+      "action": "Message to user_61583486562392",
+      "timestamp": "2025-12-19T15:25:18.329973",
+      "success": false,
+      "details": {
+        "member_name": "user_61583486562392",
+        "member_link": "https://www.facebook.com/groups/279601841329659/user/61583486562392/",
+        "reason": "没有发消息按钮",
+        "timestamp": "2025-12-19T15:25:18.329973"
+      },
+      "thread": "Thread-34",
+      "thread_id": 2376
+    },
+    {
+      "event": "FILE_OP",
+      "action": "DELETE: صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+      "timestamp": "2025-12-19T15:25:18.334960",
+      "success": true,
+      "details": {
+        "operation": "DELETE",
+        "file": "D:/FB脚本/fb/member/صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_name": "صورة_ملف_pg电子棋牌麻将胡了台子游戏_الشخصي_links.txt",
+        "file_exists": true,
+        "file_size_bytes": 13489,
+        "member": "user_61583486562392",
+        "reason": "不能发消息"
+      },
+      "thread": "Thread-34",
+      "thread_id": 2376
+    },
+    {
+      "event": "BUTTON_CLICK",
+      "action": "私信成员-停止",
+      "timestamp": "2025-12-19T15:25:25.288312",
+      "success": true,
+      "details": {
+        "button": "私信成员-停止",
+        "page": "GreetsSpider页面",
+        "enabled": true,
+        "click_time": "15:25:25.288"
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "SPIDER_STOP",
+      "action": "Stopping GreetsSpider",
+      "timestamp": "2025-12-19T15:25:25.288312",
+      "success": true,
+      "details": {
+        "spider": "GreetsSpider",
+        "reason": "用户点击停止",
+        "stop_time": "2025-12-19T15:25:25.288312"
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "CLEANUP",
+      "action": "开始清理 greets spider (保持stop_event设置)",
+      "timestamp": "2025-12-19T15:25:26.288876",
+      "success": true,
+      "details": {
+        "tab_index": 3
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "CLEANUP",
+      "action": "greets_stop_event 保持设置状态: True",
+      "timestamp": "2025-12-19T15:25:26.288876",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "开始重新启用按钮",
+      "timestamp": "2025-12-19T15:25:26.289874",
+      "success": true,
+      "details": {
+        "tab_index": 3
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersSpiderStart",
+      "timestamp": "2025-12-19T15:25:26.289874",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpiderStart",
+      "timestamp": "2025-12-19T15:25:26.290872",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersSpiderStart",
+      "timestamp": "2025-12-19T15:25:26.290872",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGreetsSpiderStart",
+      "timestamp": "2025-12-19T15:25:26.290872",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpecifiedStart",
+      "timestamp": "2025-12-19T15:25:26.291870",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersRapidStart",
+      "timestamp": "2025-12-19T15:25:26.291870",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "SIDEBAR_ENABLED",
+      "action": "侧边栏已启用",
+      "timestamp": "2025-12-19T15:25:26.292866",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "按钮重新启用完成",
+      "timestamp": "2025-12-19T15:25:26.292866",
+      "success": true,
+      "details": {
+        "tab_index": 3,
+        "success": true
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "CLEANUP",
+      "action": "清理完成 greets spider",
+      "timestamp": "2025-12-19T15:25:26.292866",
+      "success": true,
+      "details": {
+        "success": true
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "FINAL_CLEANUP",
+      "action": "已清理 greets_stop_event，可以重新启动",
+      "timestamp": "2025-12-19T15:25:33.295602",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "CONTROL_UPDATE",
+      "action": "更新控件状态",
+      "timestamp": "2025-12-19T15:25:54.928165",
+      "success": true,
+      "details": {
+        "stop": true,
+        "index": 4
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "开始重新启用按钮",
+      "timestamp": "2025-12-19T15:25:55.416044",
+      "success": true,
+      "details": {
+        "tab_index": 4
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGreetsSpiderStart",
+      "timestamp": "2025-12-19T15:25:55.417043",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpiderStart",
+      "timestamp": "2025-12-19T15:25:55.418039",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersSpiderStart",
+      "timestamp": "2025-12-19T15:25:55.419036",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGreetsSpiderStart",
+      "timestamp": "2025-12-19T15:25:55.420034",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonGroupSpecifiedStart",
+      "timestamp": "2025-12-19T15:25:55.420034",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_ENABLED",
+      "action": "启用按钮: pushButtonMembersRapidStart",
+      "timestamp": "2025-12-19T15:25:55.421032",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "SIDEBAR_ENABLED",
+      "action": "侧边栏已启用",
+      "timestamp": "2025-12-19T15:25:55.424024",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "BUTTON_REENABLE",
+      "action": "按钮重新启用完成",
+      "timestamp": "2025-12-19T15:25:55.425021",
+      "success": true,
+      "details": {
+        "tab_index": 4,
+        "success": true
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: FB小组指定采集",
+      "timestamp": "2025-12-19T15:27:41.575910",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "FB小组指定采集",
+        "timestamp": "2025-12-19T15:27:41.575910",
+        "index": 5
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: FB小组成员极速采集",
+      "timestamp": "2025-12-19T15:27:49.565702",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "FB小组成员极速采集",
+        "timestamp": "2025-12-19T15:27:49.565702",
+        "index": 6
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: FB小组帖子采集",
+      "timestamp": "2025-12-19T15:27:50.072756",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "FB小组帖子采集",
+        "timestamp": "2025-12-19T15:27:50.072756",
+        "index": 7
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: INS用户粉丝采集",
+      "timestamp": "2025-12-19T15:27:50.478529",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "INS用户粉丝采集",
+        "timestamp": "2025-12-19T15:27:50.478529",
+        "index": 9
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: FB公共主页采集",
+      "timestamp": "2025-12-19T15:27:51.075940",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "FB公共主页采集",
+        "timestamp": "2025-12-19T15:27:51.075940",
+        "index": 8
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: INS用户粉丝采集",
+      "timestamp": "2025-12-19T15:27:51.960220",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "INS用户粉丝采集",
+        "timestamp": "2025-12-19T15:27:51.960220",
+        "index": 9
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: INS用户关注采集",
+      "timestamp": "2025-12-19T15:27:57.239145",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "INS用户关注采集",
+        "timestamp": "2025-12-19T15:27:57.239145",
+        "index": 10
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: 🤍 自动点赞",
+      "timestamp": "2025-12-19T15:27:57.765469",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "🤍 自动点赞",
+        "timestamp": "2025-12-19T15:27:57.765469",
+        "index": 13
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: 💬 自动评论",
+      "timestamp": "2025-12-19T15:28:02.182938",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "💬 自动评论",
+        "timestamp": "2025-12-19T15:28:02.182938",
+        "index": 14
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: 👥 自动关注",
+      "timestamp": "2025-12-19T15:28:02.700663",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "👥 自动关注",
+        "timestamp": "2025-12-19T15:28:02.700663",
+        "index": 15
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: ➕ 自动添加好友",
+      "timestamp": "2025-12-19T15:28:03.336968",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "➕ 自动添加好友",
+        "timestamp": "2025-12-19T15:28:03.336968",
+        "index": 16
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "UI_EVENT",
+      "action": "PAGE_CHANGE: 📊 主控制台",
+      "timestamp": "2025-12-19T15:28:05.460476",
+      "success": true,
+      "details": {
+        "event_type": "PAGE_CHANGE",
+        "widget": "📊 主控制台",
+        "timestamp": "2025-12-19T15:28:05.460476",
+        "index": 1
+      },
+      "thread": "MainThread",
+      "thread_id": 7792
+    },
+    {
+      "event": "APP_CLOSE",
+      "action": "用户请求关闭应用",
+      "timestamp": "2025-12-19T15:28:16.698635",
+      "success": true,
+      "details": {},
+      "thread": "MainThread",
+      "thread_id": 7792
+    }
+  ],
+  "errors": [],
+  "terminal_output": []
+}

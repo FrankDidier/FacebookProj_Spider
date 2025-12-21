@@ -88,39 +88,66 @@ class FilePipeline(BasePipeline):
 
             is_links_file = '_links.txt' in table or table.endswith('_links.txt')
 
-            with codecs.open(table, 'r', encoding='utf-8') as fi, \
-                    codecs.open(new_table, 'w', encoding='utf-8') as fo:
+            # Retry logic for file locking issues
+            import time
+            import threading
+            max_retries = 3
+            retry_delay = 0.5
+            thread_id = threading.current_thread().ident or 0
+            new_table = table + f'.temp_{thread_id}'
+            
+            for attempt in range(max_retries):
+                try:
+                    with codecs.open(table, 'r', encoding='utf-8') as fi, \
+                            codecs.open(new_table, 'w', encoding='utf-8') as fo:
 
-                for line in fi:
-                    line_stripped = line.strip()
-                    if not line_stripped:
-                        continue
-                    
-                    # Try JSON parsing first
+                        for line in fi:
+                            line_stripped = line.strip()
+                            if not line_stripped:
+                                continue
+                            
+                            # Try JSON parsing first
+                            try:
+                                dictobj = json.loads(line_stripped)
+                                if dictobj.get(unique_key) in keys:
+                                    item = items[keys.index(dictobj[unique_key])]
+                                    for uk in update_keys:
+                                        dictobj[uk] = item.get(uk, dictobj.get(uk))
+                                    fo.write(json.dumps(dictobj, ensure_ascii=False) + '\n')
+                                else:
+                                    fo.write(line)
+                            except json.JSONDecodeError:
+                                # Plain URL file - check if this URL should be deleted
+                                if is_links_file:
+                                    # For _links.txt files, delete processed entries
+                                    if line_stripped in member_links:
+                                        log.debug(f"Removing processed URL from links file: {line_stripped}")
+                                        continue  # Skip writing this line (delete it)
+                                fo.write(line)
+
+                    # Atomic file replacement
                     try:
-                        dictobj = json.loads(line_stripped)
-                        if dictobj.get(unique_key) in keys:
-                            item = items[keys.index(dictobj[unique_key])]
-                            for uk in update_keys:
-                                dictobj[uk] = item.get(uk, dictobj.get(uk))
-                            fo.write(json.dumps(dictobj, ensure_ascii=False) + '\n')
-                        else:
-                            fo.write(line)
-                    except json.JSONDecodeError:
-                        # Plain URL file - check if this URL should be deleted
-                        if is_links_file:
-                            # For _links.txt files, delete processed entries
-                            if line_stripped in member_links:
-                                log.debug(f"Removing processed URL from links file: {line_stripped}")
-                                continue  # Skip writing this line (delete it)
-                        fo.write(line)
-
-            os.remove(table)  # remove original
-            os.rename(new_table, table)  # rename temp to original name
+                        os.replace(new_table, table)
+                    except PermissionError:
+                        os.remove(table)
+                        os.rename(new_table, table)
+                    break  # Success, exit retry loop
+                except PermissionError:
+                    if attempt < max_retries - 1:
+                        log.warning(f"File locked, retry {attempt + 1}/{max_retries}: {table}")
+                        time.sleep(retry_delay * (attempt + 1))
+                        continue
+                    raise  # Re-raise after all retries
 
             return True
         except Exception as e:
             log.error(f"Error in update_items for {table}: {e}")
+            # Clean up temp file if it exists
+            if 'new_table' in locals() and os.path.exists(new_table):
+                try:
+                    os.remove(new_table)
+                except:
+                    pass
             return True  # Return True to not block pipeline
 
     def dictToObj(self, dictObj, item: Item):

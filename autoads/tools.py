@@ -2773,63 +2773,95 @@ def delete_entry_from_file(file_path, unique_key_or_url, unique_value=None):
     :param unique_value: 要删除的条目的值 (JSON模式), None表示纯URL模式
     :return: True 如果删除成功, False 如果失败
     """
-    try:
-        file_path = abspath(file_path)
-        if not os.path.exists(file_path):
-            log.warning(f"File not found: {file_path}")
-            return False
-        
-        # Determine mode: JSON or plain URL
-        is_plain_url_mode = unique_value is None
-        if is_plain_url_mode:
-            target_url = unique_key_or_url.strip()
-        else:
-            unique_key = unique_key_or_url
-            target_value = unique_value
-        
-        # 创建临时文件
-        split_index = file_path.rfind('.')
-        temp_file = file_path[:split_index] + '_temp' + file_path[split_index:]
-        
-        deleted = False
-        with codecs.open(file_path, 'r', encoding='utf-8') as fi, \
-                codecs.open(temp_file, 'w', encoding='utf-8') as fo:
-            for line in fi:
-                line_stripped = line.strip()
-                if not line_stripped:
-                    continue
-                
-                # Try JSON parsing first
+    import time
+    max_retries = 3
+    retry_delay = 0.5
+    
+    for attempt in range(max_retries):
+        try:
+            file_path = abspath(file_path)
+            if not os.path.exists(file_path):
+                log.warning(f"File not found: {file_path}")
+                return False
+            
+            # Determine mode: JSON or plain URL
+            is_plain_url_mode = unique_value is None
+            if is_plain_url_mode:
+                target_url = unique_key_or_url.strip()
+            else:
+                unique_key = unique_key_or_url
+                target_value = unique_value
+            
+            # 创建临时文件 with thread-safe naming
+            import threading
+            thread_id = threading.current_thread().ident or 0
+            split_index = file_path.rfind('.')
+            temp_file = file_path[:split_index] + f'_temp_{thread_id}' + file_path[split_index:]
+            
+            deleted = False
+            with codecs.open(file_path, 'r', encoding='utf-8') as fi, \
+                    codecs.open(temp_file, 'w', encoding='utf-8') as fo:
+                for line in fi:
+                    line_stripped = line.strip()
+                    if not line_stripped:
+                        continue
+                    
+                    # Try JSON parsing first
+                    try:
+                        dictobj = json.loads(line_stripped)
+                        # JSON mode
+                        if not is_plain_url_mode and dictobj.get(unique_key) == target_value:
+                            deleted = True
+                            log.info(f"Deleted entry: {target_value} from {file_path}")
+                            continue  # 跳过这行，不写入新文件
+                        fo.write(line)
+                    except json.JSONDecodeError:
+                        # Line is not JSON - could be plain URL
+                        # Check if it matches our target (either in plain URL mode or JSON mode with URL value)
+                        if is_plain_url_mode and line_stripped == target_url:
+                            deleted = True
+                            log.info(f"Deleted entry (plain URL mode): {target_url} from {file_path}")
+                            continue  # 跳过这行，不写入新文件
+                        elif not is_plain_url_mode and line_stripped == target_value:
+                            # JSON mode but file contains plain URLs - still delete if URL matches
+                            deleted = True
+                            log.info(f"Deleted entry (URL in JSON mode): {target_value} from {file_path}")
+                            continue  # 跳过这行，不写入新文件
+                        fo.write(line)
+            
+            # 替换原文件 - use os.replace for atomic operation
+            try:
+                os.replace(temp_file, file_path)
+            except PermissionError:
+                # On Windows, sometimes need to remove first
+                os.remove(file_path)
+                os.rename(temp_file, file_path)
+            
+            return deleted
+        except PermissionError as e:
+            if attempt < max_retries - 1:
+                log.warning(f"File locked, retry {attempt + 1}/{max_retries}: {file_path}")
+                time.sleep(retry_delay * (attempt + 1))  # Exponential backoff
+                continue
+            log.error(f"Permission denied after {max_retries} attempts: {file_path}")
+            # Clean up temp file if it exists
+            if 'temp_file' in locals() and os.path.exists(temp_file):
                 try:
-                    dictobj = json.loads(line_stripped)
-                    # JSON mode
-                    if not is_plain_url_mode and dictobj.get(unique_key) == target_value:
-                        deleted = True
-                        log.info(f"Deleted entry: {target_value} from {file_path}")
-                        continue  # 跳过这行，不写入新文件
-                    fo.write(line)
-                except json.JSONDecodeError:
-                    # Line is not JSON - could be plain URL
-                    # Check if it matches our target (either in plain URL mode or JSON mode with URL value)
-                    if is_plain_url_mode and line_stripped == target_url:
-                        deleted = True
-                        log.info(f"Deleted entry (plain URL mode): {target_url} from {file_path}")
-                        continue  # 跳过这行，不写入新文件
-                    elif not is_plain_url_mode and line_stripped == target_value:
-                        # JSON mode but file contains plain URLs - still delete if URL matches
-                        deleted = True
-                        log.info(f"Deleted entry (URL in JSON mode): {target_value} from {file_path}")
-                        continue  # 跳过这行，不写入新文件
-                    fo.write(line)
-        
-        # 替换原文件
-        os.remove(file_path)
-        os.rename(temp_file, file_path)
-        
-        return deleted
-    except Exception as e:
-        log.error(f"Error deleting entry from file: {e}")
-        return False
+                    os.remove(temp_file)
+                except:
+                    pass
+            return False
+        except Exception as e:
+            log.error(f"Error deleting entry from file: {e}")
+            # Clean up temp file if it exists
+            if 'temp_file' in locals() and os.path.exists(temp_file):
+                try:
+                    os.remove(temp_file)
+                except:
+                    pass
+            return False
+    
+    return False  # All retries exhausted
 
 
 def delete_entries_batch(file_path, unique_key, unique_values):
