@@ -195,14 +195,15 @@ class GreetsSpider(autoads.AirSpider):
                     tools.send_message_to_ui(ms=self.ms, ui=self.ui, message=f'点击发送消息按钮等待页面加载消息对话框 | 打开异常')
                     log.error(e)
 
-                # 等待输入框的出现，不然就有可能是卡死了，我们等待8秒,每0.5秒会去看一下是不是已经出现了
+                # 等待输入框的出现，不然就有可能是卡死了，我们等待15秒,每0.5秒会去看一下是不是已经出现了
                 try:
                     xpath_content=self.config.greets_xpath_mwchat_textbox[0]
-                    WebDriverWait(browser, 8).until(EC.visibility_of_element_located(
+                    WebDriverWait(browser, 15).until(EC.visibility_of_element_located(
                         ('xpath', xpath_content)))
                 except Exception as e:
-                    tools.send_message_to_ui(ms=self.ms, ui=self.ui, message=f'[{xpath_content}] | 访问异常')
-                    log.error(e)
+                    error_msg = str(e)[:100] if str(e) else "WebDriverWait timeout"
+                    tools.send_message_to_ui(ms=self.ms, ui=self.ui, message=f'等待输入框超时(15秒): {error_msg}')
+                    log.error(f'WebDriverWait timeout for xpath [{xpath_content}] on {request.url}: {error_msg}')
 
                 # 判断是否有图片需要上传，如果有，先上传图片
                 pics, text = (self.config.members_images, random.choice(self.config.members_texts))
