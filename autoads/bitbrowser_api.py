@@ -99,8 +99,12 @@ def check_login_status():
         return False, str(e)
 
 
-def get_browser_list(page=0, page_size=100):
+def get_browser_list(page=0, page_size=200):
     """获取浏览器列表 - 需要用户已登录 BitBrowser
+    
+    Args:
+        page: 页码，从0开始
+        page_size: 每页大小，默认200以支持30-50+浏览器
     
     Returns:
         list: 浏览器列表，如果未登录或失败返回空列表
@@ -111,7 +115,7 @@ def get_browser_list(page=0, page_size=100):
         headers = {"Content-Type": "application/json"}
         
         # BitBrowser 使用 POST 请求，JSON body 格式
-        # 确保参数是整数类型
+        # 确保参数是整数类型 - 支持50+浏览器
         body = {
             "page": int(page),
             "pageSize": int(page_size)

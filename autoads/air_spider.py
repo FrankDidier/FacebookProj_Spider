@@ -100,8 +100,14 @@ class AirSpider(Thread):
     def run(self):
         # print(f'threading.current_thread()={threading.current_thread().__class__.__name__}')
         log.info(f'主线程开始启动，准备开启{self._thread_count}个ParserControl线程')
+        
+        # Log thread count info for debugging multi-threading issues
+        if self._thread_count == 1:
+            log.warning(f'⚠️ 只有1个线程！请检查: 1) BitBrowser浏览器数量 2) UI中的线程数设置')
+        else:
+            log.info(f'✅ 多线程启动: {self._thread_count}个线程将同时运行')
 
-        tools.send_message_to_ui(self.ms, self.ui, '采集器启动中...')
+        tools.send_message_to_ui(self.ms, self.ui, f'采集器启动中... (线程数: {self._thread_count})')
 
         # Reset window position cache for new run to ensure proper auto-arrangement
         try:

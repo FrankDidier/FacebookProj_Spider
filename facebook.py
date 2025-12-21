@@ -417,15 +417,28 @@ class MainWindow(QMainWindow):
         """Browse for a group links file"""
         app_logger.log_action("BROWSE", "点击浏览群组文件按钮")
         try:
+            # Process pending events to keep UI responsive
+            QApplication.processEvents()
+            
             file_name, _ = QFileDialog.getOpenFileName(
                 self, '选择群组链接文件', '.', 
                 '文本文件 (*.txt);;CSV文件 (*.csv);;JSON文件 (*.json);;所有文件 (*.*)'
             )
             if file_name:
                 app_logger.log_action("BROWSE", f"选择文件: {file_name}")
+                
+                # Check file size - warn if too large
+                import os
+                file_size = os.path.getsize(file_name) if os.path.exists(file_name) else 0
+                if file_size > 10 * 1024 * 1024:  # 10MB
+                    app_logger.log_warning("BROWSE", f"文件较大({file_size/1024/1024:.1f}MB)，可能影响性能")
+                
                 combo = self.ui.comboBoxMemberGroupFile
                 combo.addItem(file_name)
                 combo.setCurrentText(file_name)
+                
+                # Update UI
+                QApplication.processEvents()
             else:
                 app_logger.log_action("BROWSE", "用户取消选择")
         except Exception as e:
@@ -456,15 +469,31 @@ class MainWindow(QMainWindow):
         """Browse for a member data file"""
         app_logger.log_action("BROWSE", "点击浏览成员文件按钮")
         try:
+            # Process pending events to keep UI responsive
+            QApplication.processEvents()
+            
             file_name, _ = QFileDialog.getOpenFileName(
                 self, '选择成员数据文件', '.', 
                 '文本文件 (*.txt);;CSV文件 (*.csv);;JSON文件 (*.json);;所有文件 (*.*)'
             )
             if file_name:
                 app_logger.log_action("BROWSE", f"选择成员文件: {file_name}")
+                
+                # Check file size - warn if too large
+                import os
+                file_size = os.path.getsize(file_name) if os.path.exists(file_name) else 0
+                if file_size > 10 * 1024 * 1024:  # 10MB
+                    app_logger.log_warning("BROWSE", f"成员文件较大({file_size/1024/1024:.1f}MB)，可能影响性能")
+                
                 combo = self.ui.comboBoxGreetsMemberFile
                 combo.addItem(file_name)
                 combo.setCurrentText(file_name)
+                
+                # Also set to config for spider to use
+                config.members_selected_file = file_name
+                
+                # Update UI
+                QApplication.processEvents()
             else:
                 app_logger.log_action("BROWSE", "用户取消选择成员文件")
         except Exception as e:
