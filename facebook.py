@@ -250,6 +250,9 @@ class MainWindow(QMainWindow):
         self.ui.pushButtonGreetsSpiderStart.clicked.connect(self.on_greets_spider_start)
         self.ui.pushButtonGreetsSpiderStop.clicked.connect(self.on_greets_spider_stop)
         
+        # Add import buttons for PM text and images
+        self._add_import_buttons()
+        
         # New features button connections (with error handling)
         try:
             self.ui.pushButtonGroupSpecifiedStart.clicked.connect(self.on_group_specified_spider_start)
@@ -521,6 +524,105 @@ class MainWindow(QMainWindow):
         except:
             pass
         return None
+
+    def _add_import_buttons(self):
+        """Add import buttons for PM text and images - 添加私信文本和图片的导入按钮"""
+        try:
+            from PySide2.QtWidgets import QPushButton, QHBoxLayout
+            
+            # Find the greets tab and add import buttons
+            if hasattr(self.ui, 'tabGreetsSpider'):
+                # Create import button for PM text
+                if hasattr(self.ui, 'plainTextEditGreetsContent'):
+                    btn_import_text = QPushButton("📄 导入文本")
+                    btn_import_text.setToolTip("从文件导入私信文本内容")
+                    btn_import_text.clicked.connect(self._import_pm_text_from_file)
+                    
+                    # Find parent layout and add button
+                    parent = self.ui.plainTextEditGreetsContent.parent()
+                    if parent:
+                        layout = parent.layout()
+                        if layout:
+                            layout.addWidget(btn_import_text)
+                    
+                    log.info("Added PM text import button")
+                
+                # Create import button for images
+                if hasattr(self.ui, 'plainTextEditGreetsImage'):
+                    btn_import_images = QPushButton("🖼️ 浏览图片")
+                    btn_import_images.setToolTip("选择要发送的图片文件")
+                    btn_import_images.clicked.connect(self._import_pm_images)
+                    
+                    parent = self.ui.plainTextEditGreetsImage.parent()
+                    if parent:
+                        layout = parent.layout()
+                        if layout:
+                            layout.addWidget(btn_import_images)
+                    
+                    log.info("Added PM images import button")
+        except Exception as e:
+            log.warning(f"Could not add import buttons: {e}")
+    
+    def _import_pm_text_from_file(self):
+        """Import PM text content from a text file - 从文件导入私信文本"""
+        app_logger.log_action("IMPORT", "点击导入私信文本按钮")
+        try:
+            QApplication.processEvents()
+            
+            file_name, _ = QFileDialog.getOpenFileName(
+                self, '选择私信文本文件', '.', 
+                '文本文件 (*.txt);;所有文件 (*.*)'
+            )
+            
+            if file_name:
+                app_logger.log_action("IMPORT", f"导入私信文本: {file_name}")
+                
+                # Read file content
+                with open(file_name, 'r', encoding='utf-8') as f:
+                    lines = f.readlines()
+                
+                # Clear existing content and add new
+                self.ui.plainTextEditGreetsContent.clear()
+                for line in lines:
+                    line = line.strip()
+                    if line:  # Skip empty lines
+                        self.ui.plainTextEditGreetsContent.appendPlainText(line)
+                
+                QMessageBox.information(self, "导入成功", f"已导入 {len([l for l in lines if l.strip()])} 条私信文本")
+                app_logger.log_action("IMPORT", f"成功导入 {len([l for l in lines if l.strip()])} 条私信文本")
+            else:
+                app_logger.log_action("IMPORT", "用户取消导入")
+        except Exception as e:
+            app_logger.log_error("IMPORT_ERROR", "导入私信文本失败", e)
+            QMessageBox.critical(self, "错误", f"导入失败: {str(e)}")
+    
+    def _import_pm_images(self):
+        """Browse and import image files for PM - 浏览并导入私信图片"""
+        app_logger.log_action("IMPORT", "点击导入私信图片按钮")
+        try:
+            QApplication.processEvents()
+            
+            file_names, _ = QFileDialog.getOpenFileNames(
+                self, '选择图片文件', '.', 
+                '图片文件 (*.jpg *.jpeg *.png *.gif *.bmp);;所有文件 (*.*)'
+            )
+            
+            if file_names:
+                app_logger.log_action("IMPORT", f"选择了 {len(file_names)} 个图片文件")
+                
+                # Add to text box with absolute paths
+                for img_path in file_names:
+                    # Convert to absolute path
+                    abs_path = os.path.abspath(img_path)
+                    self.ui.plainTextEditGreetsImage.appendPlainText(abs_path)
+                
+                QMessageBox.information(self, "导入成功", f"已添加 {len(file_names)} 个图片文件")
+                app_logger.log_action("IMPORT", f"成功添加 {len(file_names)} 个图片")
+            else:
+                app_logger.log_action("IMPORT", "用户取消选择图片")
+        except Exception as e:
+            app_logger.log_error("IMPORT_ERROR", "导入图片失败", e)
+            QMessageBox.critical(self, "错误", f"导入图片失败: {str(e)}")
 
     def on_select_file(self):
         file_name = QFileDialog.getOpenFileName(self, caption='选择文件', dir='.', filter='*.exe')

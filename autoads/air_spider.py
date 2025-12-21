@@ -65,19 +65,31 @@ class AirSpider(Thread):
     def all_thread_is_done(self):
         # if hasattr(self, 'stop_event') and self.stop_event.isSet():
         #     return True
+        
+        # Track if we've already shown stop message to avoid spamming
+        if not hasattr(self, '_stop_message_shown'):
+            self._stop_message_shown = False
 
         for i in range(3):  # 降低偶然性, 因为各个环节不是并发的，很有可能当时状态为假，但检测下一条时该状态为真。一次检测很有可能遇到这种偶然性
             # 检测 parser_control 状态
+            active_threads = 0
             for parser_control in self._parser_controls:
                 if not parser_control.is_not_task():
-                    if hasattr(self, 'stop_event') and self.stop_event and self.stop_event.isSet():
-                        tools.send_message_to_ui(self.ms, self.ui, '正在终止多个采集器...')
-                    return False
+                    active_threads += 1
+            
+            if active_threads > 0:
+                if hasattr(self, 'stop_event') and self.stop_event and self.stop_event.isSet():
+                    if not self._stop_message_shown:
+                        tools.send_message_to_ui(self.ms, self.ui, f'正在终止 {active_threads} 个采集器，请稍候...')
+                        self._stop_message_shown = True
+                return False
 
             # 检测 任务队列 状态
             if not self._memory_db.empty():
                 if hasattr(self, 'stop_event') and self.stop_event and self.stop_event.isSet():
-                    tools.send_message_to_ui(self.ms, self.ui, f'正在清空请求库...')
+                    if not self._stop_message_shown:
+                        tools.send_message_to_ui(self.ms, self.ui, f'正在清空请求库...')
+                        self._stop_message_shown = True
                 return False
 
             # 检测 item_buffer 状态
@@ -86,7 +98,9 @@ class AirSpider(Thread):
                     or self._item_buffer.is_adding_to_db()
             ):
                 if hasattr(self, 'stop_event') and self.stop_event.isSet():
-                    tools.send_message_to_ui(self.ms, self.ui, f'还有{self._item_buffer.get_items_count()}条数据没有保存')
+                    if not self._stop_message_shown:
+                        tools.send_message_to_ui(self.ms, self.ui, f'还有{self._item_buffer.get_items_count()}条数据没有保存')
+                        self._stop_message_shown = True
                 return False
 
             tools.delay_time(1)
