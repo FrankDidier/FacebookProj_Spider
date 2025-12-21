@@ -1,0 +1,158 @@
+{
+  "timestamp": "2025-12-22 04:08:09",
+  "passed": 28,
+  "failed": 2,
+  "pass_rate": "93.3%",
+  "results": [
+    {
+      "name": "BitBrowser page_size >= 200",
+      "passed": true,
+      "details": "Supports 50+ browsers"
+    },
+    {
+      "name": "Thread count warning for single thread",
+      "passed": true,
+      "details": "Warns user if only 1 thread"
+    },
+    {
+      "name": "config.account_nums accessible",
+      "passed": true,
+      "details": "Current value: 2"
+    },
+    {
+      "name": "_browse_member_group_file has processEvents",
+      "passed": true,
+      "details": "Prevents UI freeze"
+    },
+    {
+      "name": "Browse file size warning",
+      "passed": true,
+      "details": "Warns for files > 10MB"
+    },
+    {
+      "name": "IP pool config section exists",
+      "passed": true,
+      "details": "enabled = False"
+    },
+    {
+      "name": "IP pool assignment_mode",
+      "passed": true,
+      "details": "mode = round_robin"
+    },
+    {
+      "name": "IPPoolManager instantiation",
+      "passed": true,
+      "details": "IP pool manager works"
+    },
+    {
+      "name": "config.members_save_links_only",
+      "passed": true,
+      "details": "Value: True"
+    },
+    {
+      "name": "FilePipeline checks save_links_only",
+      "passed": true,
+      "details": "Skips JSON when enabled"
+    },
+    {
+      "name": "delete_entry_from_file (JSON mode)",
+      "passed": true,
+      "details": "3 → 2 entries"
+    },
+    {
+      "name": "delete_entry_from_file (URL mode)",
+      "passed": true,
+      "details": "3 → 2 URLs"
+    },
+    {
+      "name": "Stop event with 8s delay",
+      "passed": true,
+      "details": "Delay ensures threads stop properly"
+    },
+    {
+      "name": "STOP_IGNORED for no running task",
+      "passed": true,
+      "details": "Friendly message when no task running"
+    },
+    {
+      "name": "GreetsSpider._load_links_file exists",
+      "passed": true,
+      "details": "Can load plain URL files"
+    },
+    {
+      "name": "PM spider checks hasattr(request, 'member')",
+      "passed": true,
+      "details": "Fixes 'Request' has no attribute 'member' error"
+    },
+    {
+      "name": "WebDriverWait timeout = 15s",
+      "passed": true,
+      "details": "Increased from 8s"
+    },
+    {
+      "name": "config.screen_width",
+      "passed": true,
+      "details": "Value: 1920"
+    },
+    {
+      "name": "config.screen_height",
+      "passed": true,
+      "details": "Value: 1080"
+    },
+    {
+      "name": "WebDriverPool.reset_window_positions exists",
+      "passed": false,
+      "details": "Clears position cache for new runs"
+    },
+    {
+      "name": "tools.create_consolidated_member_file exists",
+      "passed": true,
+      "details": "Merges all member files"
+    },
+    {
+      "name": "Consolidated member file creation",
+      "passed": false,
+      "details": "Merged 9 members from 3 files"
+    },
+    {
+      "name": "CloudDeduplication instantiation",
+      "passed": true,
+      "details": "enabled=True, mode=local"
+    },
+    {
+      "name": "AccountManager instantiation",
+      "passed": true,
+      "details": "Account manager works"
+    },
+    {
+      "name": "AccountManager.import_from_file alias",
+      "passed": true,
+      "details": "Alias for import_accounts"
+    },
+    {
+      "name": "AccountManager.clear_all alias",
+      "passed": true,
+      "details": "Alias for clear_accounts"
+    },
+    {
+      "name": "Thread-safe temp file naming",
+      "passed": true,
+      "details": "Uses thread ID for temp files"
+    },
+    {
+      "name": "File operation retry mechanism",
+      "passed": true,
+      "details": "Handles file locking"
+    },
+    {
+      "name": "AppLogger instantiation",
+      "passed": true,
+      "details": "Logger works"
+    },
+    {
+      "name": "Logs directory exists or can be created",
+      "passed": true,
+      "details": "Path: ./logs"
+    }
+  ]
+}
