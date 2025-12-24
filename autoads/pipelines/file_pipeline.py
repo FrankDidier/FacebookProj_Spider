@@ -40,11 +40,19 @@ class FilePipeline(BasePipeline):
         
         # Check if we should only save links (not JSON) for member files
         is_member_file = 'member' in table.lower()
-        save_links_only = getattr(config, 'members_save_links_only', False)
+        is_group_file = 'group' in table.lower() and 'member' not in table.lower()
         
-        if is_member_file and save_links_only:
+        members_save_links_only = getattr(config, 'members_save_links_only', False)
+        groups_save_links_only = getattr(config, 'groups_save_links_only', False)
+        
+        if is_member_file and members_save_links_only:
             # Skip saving JSON format - links are saved separately by spider
-            log.debug(f"Skipping JSON save for {table} (save_links_only=true)")
+            log.debug(f"Skipping JSON save for {table} (members_save_links_only=true)")
+            return True
+        
+        if is_group_file and groups_save_links_only:
+            # Skip saving JSON format for groups - links are saved separately
+            log.debug(f"Skipping JSON save for {table} (groups_save_links_only=true)")
             return True
 
         file_dir = os.path.split(table)[0]

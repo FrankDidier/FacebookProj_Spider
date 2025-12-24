@@ -48,7 +48,7 @@ class MembersSpider(autoads.AirSpider):
         # self.ads_ids = tools.get_ads_id(config.account_nums)  # 总共有多少个账户同时搜集
 
         request_dict = {}
-        if not (hasattr(self,'ads_id') and self.ads_ids):
+        if not (hasattr(self, 'ads_ids') and self.ads_ids):
             self.ads_ids = tools.get_ads_id()
 
         for ads_id in self.ads_ids:

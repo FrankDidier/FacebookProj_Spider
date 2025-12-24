@@ -812,6 +812,11 @@ class Config(object):
             return self.get_option('members', 'selected_file')
         except:
             return ''
+    
+    @members_selected_file.setter
+    def members_selected_file(self, value):
+        """Set the selected member file path"""
+        self.set_option('members', 'selected_file', value if value else '')
 
     @property
     def members_save_links_only(self):
@@ -828,6 +833,15 @@ class Config(object):
             return self.get_option('groups', 'selected_file')
         except:
             return ''
+
+    @property
+    def groups_save_links_only(self):
+        """只保存links文件 - Only save links file for groups (no JSON format)"""
+        try:
+            val = self.get_option('groups', 'save_links_only')
+            return val.lower() == 'true' if val else False
+        except:
+            return True  # Default to true per client request
 
     @property
     def screen_width(self):
