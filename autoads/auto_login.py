@@ -348,6 +348,11 @@ class AutoLogin:
         with self._lock:
             return self._browser_account_map.get(browser_id)
     
+    # Alias for compatibility
+    def get_bound_account(self, browser_id):
+        """Alias for get_account_for_browser"""
+        return self.get_account_for_browser(browser_id)
+    
     def unbind_browser(self, browser_id):
         """解除浏览器绑定 - Unbind browser"""
         with self._lock:

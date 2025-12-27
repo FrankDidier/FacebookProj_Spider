@@ -1,0 +1,212 @@
+{
+  "passed": [
+    {
+      "name": "AutoLogin Singleton",
+      "detail": "Same instance returned"
+    },
+    {
+      "name": "Cookie Parsing (JSON)",
+      "detail": "Parsed 2 cookies"
+    },
+    {
+      "name": "Cookie Parsing (Key=Value)",
+      "detail": "Parsed 3 cookies"
+    },
+    {
+      "name": "2FA Code Generation",
+      "detail": "Generated valid code: 178914"
+    },
+    {
+      "name": "Account-Browser Binding",
+      "detail": "Account bound correctly"
+    },
+    {
+      "name": "Account Unbinding",
+      "detail": "Account unbound successfully"
+    },
+    {
+      "name": "AutoLogin Methods",
+      "detail": "All 5 core methods exist"
+    },
+    {
+      "name": "AutoLogin Full Flow Method",
+      "detail": "Auto-login flow method defined"
+    },
+    {
+      "name": "IPPoolManager Singleton",
+      "detail": "Same instance returned"
+    },
+    {
+      "name": "Proxy Parsing (Simple)",
+      "detail": "host:port parsed correctly"
+    },
+    {
+      "name": "Proxy Parsing (With Auth)",
+      "detail": "host:port:user:pass parsed correctly"
+    },
+    {
+      "name": "Proxy Parsing (URL with Auth)",
+      "detail": "URL format parsed correctly"
+    },
+    {
+      "name": "Proxy Parsing (SOCKS5)",
+      "detail": "SOCKS5 type detected"
+    },
+    {
+      "name": "Load Proxies from File",
+      "detail": "Loaded 4 proxies, 0 failed"
+    },
+    {
+      "name": "Get Proxy for Browser",
+      "detail": "Method exists (proxy assignment may require config)"
+    },
+    {
+      "name": "Clear All Proxies",
+      "detail": "All data cleared (manual clear)"
+    },
+    {
+      "name": "IPPoolManager Methods",
+      "detail": "All 6 required methods exist"
+    },
+    {
+      "name": "Account Class",
+      "detail": "Account created correctly"
+    },
+    {
+      "name": "Account to_dict",
+      "detail": "Serialization works"
+    },
+    {
+      "name": "AccountManager Init",
+      "detail": "Created with 0 accounts"
+    },
+    {
+      "name": "Add Account",
+      "detail": "Account added successfully"
+    },
+    {
+      "name": "Import Accounts (TXT)",
+      "detail": "Imported 3 accounts"
+    },
+    {
+      "name": "Import Accounts (CSV)",
+      "detail": "Imported 2 accounts"
+    },
+    {
+      "name": "Get Unused Accounts",
+      "detail": "Found 4 unused accounts"
+    },
+    {
+      "name": "Mark In Use",
+      "detail": "Status updated to in_use"
+    },
+    {
+      "name": "Export Accounts",
+      "detail": "Export file created"
+    },
+    {
+      "name": "import_from_file Alias",
+      "detail": "Alias exists"
+    },
+    {
+      "name": "AccountManager Methods",
+      "detail": "All 7 required methods exist"
+    },
+    {
+      "name": "Delete from JSON file",
+      "detail": "Entry deleted, 2 remaining"
+    },
+    {
+      "name": "Delete from Links file",
+      "detail": "URL deleted, 2 remaining"
+    },
+    {
+      "name": "Consolidated Member File",
+      "detail": "Created at default location with 0 members"
+    },
+    {
+      "name": "WebDriverPool.get_size",
+      "detail": "Method defined in source"
+    },
+    {
+      "name": "WebDriverPool.reset_window_positions",
+      "detail": "Method defined in source"
+    },
+    {
+      "name": "WebDriverPool.chrome_driver",
+      "detail": "Method defined in source"
+    },
+    {
+      "name": "WebDriverPool auto-login integration",
+      "detail": "Auto-login referenced in code"
+    },
+    {
+      "name": "WebDriver Module",
+      "detail": "Source file exists and is readable"
+    },
+    {
+      "name": "Screen Dimensions",
+      "detail": "1920x1080"
+    },
+    {
+      "name": "members_save_links_only",
+      "detail": "Value: True"
+    },
+    {
+      "name": "groups_save_links_only",
+      "detail": "Value: True"
+    },
+    {
+      "name": "members_selected_file setter",
+      "detail": "Setter property exists"
+    },
+    {
+      "name": "MembersSpider Class",
+      "detail": "Found in fb_members.py"
+    },
+    {
+      "name": "MembersSpider.start_requests",
+      "detail": "Method defined"
+    },
+    {
+      "name": "MembersSpider.parse",
+      "detail": "Method defined"
+    },
+    {
+      "name": "GroupSpider Class",
+      "detail": "Found in fb_group.py"
+    },
+    {
+      "name": "GroupSpider.start_requests",
+      "detail": "Method defined"
+    },
+    {
+      "name": "GroupSpider.parse",
+      "detail": "Method defined"
+    },
+    {
+      "name": "GreetsSpider Class",
+      "detail": "Found in fb_greets.py"
+    },
+    {
+      "name": "GreetsSpider.start_requests",
+      "detail": "Method defined"
+    },
+    {
+      "name": "GreetsSpider.parse",
+      "detail": "Method defined"
+    },
+    {
+      "name": "BitBrowser API Import",
+      "detail": "Functions imported"
+    }
+  ],
+  "failed": [],
+  "skipped": [
+    {
+      "name": "BitBrowser Live Test",
+      "reason": "Requires running BitBrowser"
+    }
+  ],
+  "timestamp": "2025-12-28 02:56:17"
+}
