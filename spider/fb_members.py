@@ -44,6 +44,18 @@ class MembersSpider(autoads.AirSpider):
         else:
             log.info('Using default group directory')
             groups = self.pipeline.load_items(group_template)
+        
+        # Check if groups generator is empty - provide helpful message
+        groups_list = list(groups)
+        if not groups_list:
+            log.warning('⚠️ 没有找到群组文件！请先运行「采集群组」功能采集一些群组。')
+            tools.send_message_to_ui(ms=self.ms, ui=self.ui, 
+                message='💡 提示: 没有找到群组数据。\n\n请按以下步骤操作:\n1. 先点击「采集群组」页面\n2. 输入关键词并点击「启动」\n3. 等待群组采集完成\n4. 再回来运行「采集成员」')
+            return  # Exit early, no requests to process
+        
+        # Convert back to generator for compatibility
+        groups = iter(groups_list)
+        log.info(f'找到 {len(groups_list)} 条群组数据')
 
         # self.ads_ids = tools.get_ads_id(config.account_nums)  # 总共有多少个账户同时搜集
 

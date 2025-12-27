@@ -448,6 +448,64 @@ class ConfigWizardPage(QWidget):
         account_mgmt_group.setLayout(account_mgmt_layout)
         layout.addWidget(account_mgmt_group)
         
+        # ========== IP Pool Section (代理IP池) ==========
+        ip_pool_group = QGroupBox("🌐 代理IP池配置")
+        ip_pool_layout = QVBoxLayout()
+        
+        ip_pool_info = QLabel("📌 <b>作用:</b> 为每个浏览器分配独立的代理IP，实现IP隔离。只需选择IP文件，脚本自动检测可用IP并分配给浏览器。<br><b>支持格式:</b> host:port:username:password 或 host:port 或 http://user:pass@host:port")
+        ip_pool_info.setWordWrap(True)
+        ip_pool_info.setStyleSheet("color: #666; font-size: 11px; padding: 8px; background-color: #f0f0f0; border-radius: 4px; margin-bottom: 5px;")
+        ip_pool_layout.addWidget(ip_pool_info)
+        
+        # IP Pool stats
+        self.ip_pool_stats_label = QLabel("📊 IP池状态: 未加载")
+        ip_pool_layout.addWidget(self.ip_pool_stats_label)
+        
+        # Import IP file button
+        ip_import_row = QHBoxLayout()
+        self.ip_import_btn = QPushButton("📂 选择IP文件")
+        self.ip_import_btn.setToolTip("选择包含代理IP列表的文本文件\n每行一个IP，格式: host:port:username:password")
+        self.ip_import_btn.clicked.connect(self.import_ip_file)
+        self.ip_import_btn.setStyleSheet("""
+            QPushButton {
+                background-color: #4CAF50;
+                color: white;
+                padding: 10px;
+                border-radius: 5px;
+                font-weight: bold;
+            }
+            QPushButton:hover {
+                background-color: #45a049;
+            }
+        """)
+        
+        self.ip_test_btn = QPushButton("🔍 测试IP")
+        self.ip_test_btn.setToolTip("测试所有已加载的代理IP是否可用")
+        self.ip_test_btn.clicked.connect(self.test_all_proxies)
+        
+        self.ip_clear_btn = QPushButton("🗑️ 清空IP")
+        self.ip_clear_btn.setToolTip("清空所有代理配置")
+        self.ip_clear_btn.clicked.connect(self.clear_ip_pool)
+        self.ip_clear_btn.setStyleSheet("color: #d32f2f;")
+        
+        ip_import_row.addWidget(self.ip_import_btn)
+        ip_import_row.addWidget(self.ip_test_btn)
+        ip_import_row.addWidget(self.ip_clear_btn)
+        ip_pool_layout.addLayout(ip_import_row)
+        
+        # IP test progress
+        self.ip_test_progress = QProgressBar()
+        self.ip_test_progress.setVisible(False)
+        ip_pool_layout.addWidget(self.ip_test_progress)
+        
+        # IP test result label
+        self.ip_test_result_label = QLabel("")
+        self.ip_test_result_label.setWordWrap(True)
+        ip_pool_layout.addWidget(self.ip_test_result_label)
+        
+        ip_pool_group.setLayout(ip_pool_layout)
+        layout.addWidget(ip_pool_group)
+        
         # Help Section
         help_group = QGroupBox("📖 设置指南")
         help_layout = QVBoxLayout()
@@ -638,6 +696,12 @@ class ConfigWizardPage(QWidget):
             # Load account stats
             try:
                 self.update_account_stats()
+            except:
+                pass
+            
+            # Load IP pool stats
+            try:
+                self.update_ip_pool_stats()
             except:
                 pass
             
@@ -898,4 +962,139 @@ class ConfigWizardPage(QWidget):
         except Exception as e:
             self.account_stats_label.setText("📊 账号统计: 加载失败")
             log.debug(f"Could not load account stats: {e}")
+    
+    # ========== IP Pool Methods ==========
+    def import_ip_file(self):
+        """Import proxy IPs from text file - 一键导入代理IP"""
+        try:
+            file_path, _ = QFileDialog.getOpenFileName(
+                self, "选择IP代理文件",
+                "",
+                "文本文件 (*.txt);;所有文件 (*.*)"
+            )
+            
+            if not file_path:
+                return
+            
+            from autoads.ip_pool import ip_pool
+            loaded, failed, error_msg = ip_pool.load_proxies_from_file(file_path)
+            
+            if error_msg:
+                QMessageBox.critical(self, "错误", f"加载失败:\n{error_msg}")
+                return
+            
+            # Update stats
+            self.update_ip_pool_stats()
+            
+            if failed > 0:
+                QMessageBox.warning(self, "部分成功", 
+                    f"成功加载: {loaded} 个代理\n"
+                    f"解析失败: {failed} 个 (格式不正确)\n\n"
+                    f"提示: 正确格式为 host:port:username:password")
+            else:
+                QMessageBox.information(self, "成功", 
+                    f"✓ 成功加载 {loaded} 个代理IP！\n\n"
+                    f"代理已启用，将自动分配给浏览器。\n"
+                    f"您可以点击「测试IP」验证代理是否可用。")
+                
+        except Exception as e:
+            QMessageBox.critical(self, "错误", f"导入IP失败:\n{str(e)}")
+    
+    def test_all_proxies(self):
+        """Test all loaded proxies - 测试所有代理IP"""
+        try:
+            from autoads.ip_pool import ip_pool
+            
+            if not ip_pool._proxies:
+                QMessageBox.warning(self, "提示", "请先导入IP文件")
+                return
+            
+            self.ip_test_progress.setVisible(True)
+            self.ip_test_progress.setRange(0, len(ip_pool._proxies))
+            self.ip_test_progress.setValue(0)
+            self.ip_test_result_label.setText("正在测试代理...")
+            
+            # Process events to update UI
+            from PySide2.QtWidgets import QApplication
+            QApplication.processEvents()
+            
+            def progress_callback(proxy_str, index, total, is_working):
+                self.ip_test_progress.setValue(index)
+                status = "✓ 可用" if is_working else "✗ 不可用"
+                self.ip_test_result_label.setText(f"测试中 ({index}/{total}): {proxy_str[:30]}... {status}")
+                QApplication.processEvents()
+            
+            working, failed = ip_pool.test_all_proxies(callback=progress_callback)
+            
+            self.ip_test_progress.setVisible(False)
+            
+            if working > 0:
+                self.ip_test_result_label.setText(
+                    f"✓ 测试完成: {working} 个可用, {failed} 个不可用"
+                )
+                self.ip_test_result_label.setStyleSheet("color: #28a745; font-weight: bold;")
+                QMessageBox.information(self, "测试完成", 
+                    f"代理测试结果:\n\n"
+                    f"✓ 可用: {working} 个\n"
+                    f"✗ 不可用: {failed} 个\n\n"
+                    f"可用的代理将自动分配给浏览器。")
+            else:
+                self.ip_test_result_label.setText(f"✗ 所有 {failed} 个代理都不可用")
+                self.ip_test_result_label.setStyleSheet("color: #dc3545; font-weight: bold;")
+                QMessageBox.warning(self, "测试完成", 
+                    f"所有 {failed} 个代理都无法连接！\n\n"
+                    f"请检查:\n"
+                    f"1. 代理格式是否正确\n"
+                    f"2. 代理服务是否正常\n"
+                    f"3. 网络是否可用")
+                    
+            self.update_ip_pool_stats()
+            
+        except Exception as e:
+            self.ip_test_progress.setVisible(False)
+            QMessageBox.critical(self, "错误", f"测试代理失败:\n{str(e)}")
+    
+    def clear_ip_pool(self):
+        """Clear all proxy configurations - 清空代理配置"""
+        try:
+            reply = QMessageBox.question(
+                self, "确认清空",
+                "确定要清空所有代理IP配置吗？",
+                QMessageBox.Yes | QMessageBox.No
+            )
+            
+            if reply != QMessageBox.Yes:
+                return
+            
+            from autoads.ip_pool import ip_pool
+            ip_pool.clear_all()
+            
+            self.update_ip_pool_stats()
+            self.ip_test_result_label.setText("")
+            QMessageBox.information(self, "成功", "已清空所有代理配置")
+            
+        except Exception as e:
+            QMessageBox.critical(self, "错误", f"清空失败:\n{str(e)}")
+    
+    def update_ip_pool_stats(self):
+        """Update IP pool statistics display"""
+        try:
+            from autoads.ip_pool import ip_pool
+            status = ip_pool.get_status()
+            
+            if status['enabled'] and status['total_proxies'] > 0:
+                self.ip_pool_stats_label.setText(
+                    f"📊 IP池状态: ✓ 已启用 | "
+                    f"总数 {status['total_proxies']} | "
+                    f"可用 {status['available_proxies']} | "
+                    f"失败 {status['failed_proxies']} | "
+                    f"已分配 {status['assigned_browsers']}"
+                )
+                self.ip_pool_stats_label.setStyleSheet("color: #28a745; font-weight: bold;")
+            else:
+                self.ip_pool_stats_label.setText("📊 IP池状态: 未加载 (点击「选择IP文件」导入)")
+                self.ip_pool_stats_label.setStyleSheet("")
+        except Exception as e:
+            self.ip_pool_stats_label.setText("📊 IP池状态: 加载失败")
+            log.debug(f"Could not load IP pool stats: {e}")
 

@@ -229,6 +229,118 @@ class IPPoolManager:
                 log.info(f"Removed proxy: {proxy_str}")
                 return True
         return False
+    
+    def load_proxies_from_file(self, file_path):
+        """
+        Load proxies from a text file
+        支持的格式:
+        - host:port:username:password (客户最常用的格式)
+        - host:port
+        - http://user:pass@host:port
+        - socks5://user:pass@host:port
+        
+        Returns: (loaded_count, failed_count, error_message)
+        """
+        loaded = 0
+        failed = 0
+        error_msg = None
+        
+        try:
+            with open(file_path, 'r', encoding='utf-8') as f:
+                lines = f.readlines()
+            
+            new_proxies = []
+            for line in lines:
+                line = line.strip()
+                if not line or line.startswith('#'):
+                    continue
+                    
+                # Validate the proxy can be parsed
+                parsed = self.parse_proxy(line)
+                if parsed and parsed.get('proxy_host'):
+                    new_proxies.append(line)
+                    loaded += 1
+                else:
+                    failed += 1
+                    log.warning(f"无法解析代理: {line}")
+            
+            if new_proxies:
+                with self._lock:
+                    self._proxies = new_proxies
+                    self._failed_proxies.clear()
+                    self._browser_proxy_map.clear()
+                    # Save to config
+                    import json
+                    config.set_option('ip_pool', 'proxies', json.dumps(new_proxies))
+                    config.set_option('ip_pool', 'enabled', 'True')
+                    log.info(f"已从文件加载 {loaded} 个代理")
+                    
+        except FileNotFoundError:
+            error_msg = f"文件不存在: {file_path}"
+            log.error(error_msg)
+        except Exception as e:
+            error_msg = f"读取文件失败: {str(e)}"
+            log.error(error_msg)
+        
+        return (loaded, failed, error_msg)
+    
+    def test_all_proxies(self, callback=None):
+        """
+        Test all proxies and mark failed ones
+        callback: function(proxy_str, index, total, is_working) for progress updates
+        Returns: (working_count, failed_count)
+        """
+        working = 0
+        failed = 0
+        
+        with self._lock:
+            proxies_copy = self._proxies.copy()
+        
+        total = len(proxies_copy)
+        for i, proxy_str in enumerate(proxies_copy):
+            proxy_config = self.parse_proxy(proxy_str)
+            is_working = self.test_proxy(proxy_config)
+            
+            if is_working:
+                working += 1
+            else:
+                failed += 1
+                with self._lock:
+                    self._failed_proxies.add(proxy_str)
+            
+            if callback:
+                callback(proxy_str, i + 1, total, is_working)
+        
+        return (working, failed)
+    
+    def assign_proxies_to_browsers(self, browser_ids):
+        """
+        Assign proxies to a list of browser IDs
+        Returns: dict mapping browser_id to proxy_config
+        """
+        assignments = {}
+        available_proxies = [p for p in self._proxies if p not in self._failed_proxies]
+        
+        for i, browser_id in enumerate(browser_ids):
+            if i < len(available_proxies):
+                proxy_str = available_proxies[i % len(available_proxies)]
+                proxy_config = self.parse_proxy(proxy_str)
+                self._browser_proxy_map[browser_id] = proxy_str
+                assignments[browser_id] = proxy_config
+                log.info(f"分配代理 {proxy_config.get('proxy_host')}:{proxy_config.get('proxy_port')} 给浏览器 {browser_id}")
+        
+        return assignments
+    
+    def clear_all(self):
+        """Clear all proxies and assignments"""
+        with self._lock:
+            self._proxies.clear()
+            self._failed_proxies.clear()
+            self._browser_proxy_map.clear()
+            self._current_index = 0
+            config.set_option('ip_pool', 'proxies', '[]')
+            config.set_option('ip_pool', 'enabled', 'False')
+            log.info("已清空所有代理配置")
 
 
 # Global instance
