@@ -402,25 +402,55 @@ class ConfigWizardPage(QWidget):
         dedup_group.setLayout(dedup_layout)
         layout.addWidget(dedup_group)
         
-        # Account Management Section (账号管理)
-        account_mgmt_group = QGroupBox("👤 账号管理")
+        # Account Management Section (账号管理) - Enhanced with Cookie/2FA
+        account_mgmt_group = QGroupBox("👤 账号管理 (Cookie + 2FA 一键导入)")
         account_mgmt_layout = QVBoxLayout()
         
-        account_mgmt_info = QLabel("📌 <b>作用:</b> 管理 Facebook 账号信息，支持导入账号、导出未使用账号、清空账号列表。账号信息包括: 账号、密码、2FA、Cookie、代理等。")
+        account_mgmt_info = QLabel(
+            "📌 <b>作用:</b> 一键导入账号，支持 <b>Cookie自动登录</b> 和 <b>2FA自动填写</b>！<br>"
+            "<b>支持格式:</b><br>"
+            "• <b>JSON:</b> [{\"username\": \"\", \"password\": \"\", \"cookie\": \"\", \"two_fa\": \"\", ...}]<br>"
+            "• <b>CSV:</b> 账号,密码,2FA,Cookie,代理 (第一行为表头)<br>"
+            "• <b>TXT:</b> 账号----密码----2FA----Cookie----代理 (每行一个)"
+        )
         account_mgmt_info.setWordWrap(True)
-        account_mgmt_info.setStyleSheet("color: #666; font-size: 11px; padding: 8px; background-color: #f0f0f0; border-radius: 4px; margin-bottom: 5px;")
+        account_mgmt_info.setStyleSheet("color: #666; font-size: 11px; padding: 8px; background-color: #e8f5e9; border-radius: 4px; margin-bottom: 5px;")
         account_mgmt_layout.addWidget(account_mgmt_info)
         
         # Account stats
         self.account_stats_label = QLabel("📊 账号统计: 加载中...")
+        self.account_stats_label.setStyleSheet("font-weight: bold; padding: 5px;")
         account_mgmt_layout.addWidget(self.account_stats_label)
         
-        # Account management buttons
-        account_btn_row = QHBoxLayout()
+        # Account management buttons - First row
+        account_btn_row1 = QHBoxLayout()
         
-        self.import_account_btn = QPushButton("📥 导入账号")
-        self.import_account_btn.setToolTip("从文件导入账号 (支持 JSON, CSV, TXT 格式)")
+        self.import_account_btn = QPushButton("📥 一键导入账号")
+        self.import_account_btn.setToolTip("从文件导入账号 (支持 JSON, CSV, TXT 格式)\n包含Cookie和2FA密钥将实现自动登录！")
         self.import_account_btn.clicked.connect(self.import_accounts)
+        self.import_account_btn.setStyleSheet("""
+            QPushButton {
+                background-color: #4CAF50;
+                color: white;
+                padding: 10px;
+                border-radius: 5px;
+                font-weight: bold;
+            }
+            QPushButton:hover {
+                background-color: #45a049;
+            }
+        """)
+        
+        self.bind_accounts_btn = QPushButton("🔗 绑定到浏览器")
+        self.bind_accounts_btn.setToolTip("自动将账号分配给BitBrowser浏览器配置")
+        self.bind_accounts_btn.clicked.connect(self.auto_bind_accounts)
+        
+        account_btn_row1.addWidget(self.import_account_btn)
+        account_btn_row1.addWidget(self.bind_accounts_btn)
+        account_mgmt_layout.addLayout(account_btn_row1)
+        
+        # Account management buttons - Second row
+        account_btn_row2 = QHBoxLayout()
         
         self.export_unused_btn = QPushButton("📤 导出未使用")
         self.export_unused_btn.setToolTip("导出所有未使用的账号")
@@ -431,10 +461,23 @@ class ConfigWizardPage(QWidget):
         self.clear_accounts_btn.clicked.connect(self.clear_accounts)
         self.clear_accounts_btn.setStyleSheet("color: #d32f2f;")
         
-        account_btn_row.addWidget(self.import_account_btn)
-        account_btn_row.addWidget(self.export_unused_btn)
-        account_btn_row.addWidget(self.clear_accounts_btn)
-        account_mgmt_layout.addLayout(account_btn_row)
+        account_btn_row2.addWidget(self.export_unused_btn)
+        account_btn_row2.addWidget(self.clear_accounts_btn)
+        account_mgmt_layout.addLayout(account_btn_row2)
+        
+        # Auto-login options
+        autologin_row = QHBoxLayout()
+        self.auto_login_check = QCheckBox("启用Cookie自动登录")
+        self.auto_login_check.setToolTip("启用后，浏览器打开时自动注入Cookie登录")
+        self.auto_login_check.setChecked(True)
+        
+        self.auto_2fa_check = QCheckBox("启用2FA自动填写")
+        self.auto_2fa_check.setToolTip("启用后，遇到2FA验证时自动填写验证码")
+        self.auto_2fa_check.setChecked(True)
+        
+        autologin_row.addWidget(self.auto_login_check)
+        autologin_row.addWidget(self.auto_2fa_check)
+        account_mgmt_layout.addLayout(autologin_row)
         
         # Skip used accounts checkbox
         skip_used_row = QHBoxLayout()
@@ -444,6 +487,11 @@ class ConfigWizardPage(QWidget):
         skip_used_row.addWidget(self.skip_used_check)
         skip_used_row.addStretch()
         account_mgmt_layout.addLayout(skip_used_row)
+        
+        # Binding status label
+        self.binding_status_label = QLabel("")
+        self.binding_status_label.setWordWrap(True)
+        account_mgmt_layout.addWidget(self.binding_status_label)
         
         account_mgmt_group.setLayout(account_mgmt_layout)
         layout.addWidget(account_mgmt_group)
@@ -1097,4 +1145,70 @@ class ConfigWizardPage(QWidget):
         except Exception as e:
             self.ip_pool_stats_label.setText("📊 IP池状态: 加载失败")
             log.debug(f"Could not load IP pool stats: {e}")
+    
+    # ========== Auto-Bind Methods ==========
+    def auto_bind_accounts(self):
+        """Auto-bind accounts to browsers - 自动绑定账号到浏览器"""
+        try:
+            from autoads.account_manager import account_manager
+            from autoads.auto_login import auto_login
+            from autoads import bitbrowser_api
+            
+            # Get all accounts
+            accounts = account_manager.get_unused_accounts()
+            if not accounts:
+                accounts = account_manager.get_all_accounts()
+            
+            if not accounts:
+                QMessageBox.warning(self, "提示", "请先导入账号")
+                return
+            
+            # Get browser list from BitBrowser
+            browsers = bitbrowser_api.get_browser_list()
+            if not browsers:
+                QMessageBox.warning(self, "提示", 
+                    "未找到浏览器配置\n\n"
+                    "请确保:\n"
+                    "1. BitBrowser 已打开并登录\n"
+                    "2. 至少创建了一个浏览器配置")
+                return
+            
+            browser_ids = [b.get('id') for b in browsers if b.get('id')]
+            
+            # Auto-bind
+            bindings = auto_login.auto_bind_accounts_to_browsers(browser_ids, accounts)
+            
+            # Update binding status
+            bind_count = len(bindings)
+            self.binding_status_label.setText(
+                f"✓ 已绑定 {bind_count} 个账号到浏览器\n"
+                f"启动任务时将自动使用Cookie登录"
+            )
+            self.binding_status_label.setStyleSheet("color: #28a745; font-weight: bold;")
+            
+            # Save account updates
+            account_manager._save_accounts()
+            
+            QMessageBox.information(self, "绑定成功", 
+                f"✓ 成功绑定 {bind_count} 个账号到浏览器！\n\n"
+                f"下次启动任务时:\n"
+                f"• 浏览器将自动使用对应账号的Cookie登录\n"
+                f"• 遇到2FA验证时将自动填写验证码\n"
+                f"• 无需手动登录，实现无人值守")
+            
+            self.update_account_stats()
+            
+        except Exception as e:
+            QMessageBox.critical(self, "错误", f"绑定失败:\n{str(e)}")
+            log.error(f"Auto-bind failed: {e}")
+    
+    def save_auto_login_settings(self):
+        """Save auto-login settings to config"""
+        try:
+            config.set_option('auto_login', 'cookie_enabled', 
+                str(self.auto_login_check.isChecked()))
+            config.set_option('auto_login', '2fa_enabled', 
+                str(self.auto_2fa_check.isChecked()))
+        except Exception as e:
+            log.debug(f"Could not save auto-login settings: {e}")
 

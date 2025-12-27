@@ -314,6 +314,24 @@ class WebDriver(RemoteWebDriver):
                     chrome_para = self._window_size
                     driver.set_window_size(chrome_para[2], chrome_para[3])
                     driver.set_window_position(chrome_para[0], chrome_para[1])
+                
+                # Auto-login using saved cookies if available
+                if driver:
+                    try:
+                        from autoads.auto_login import auto_login
+                        # Try to auto-login with cookie for this browser
+                        if auto_login.auto_login_with_cookie(driver, self._ads_id):
+                            log.info(f"✅ 浏览器 {self._ads_id} Cookie自动登录成功")
+                            tools.send_message_to_ui(ms=self.ms, ui=self.ui,
+                                message=f'Cookie自动登录成功 ✓')
+                            
+                            # Handle 2FA if needed
+                            if auto_login.handle_2fa_if_needed(driver, self._ads_id):
+                                log.info(f"✅ 浏览器 {self._ads_id} 2FA验证通过")
+                    except Exception as e:
+                        log.debug(f"Auto-login check skipped: {e}")
+                        # Not critical - user may login manually
+                        
         except Exception as e:
             log.exception(e)
         finally:
