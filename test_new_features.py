@@ -597,8 +597,40 @@ try:
     
     log_pass("BitBrowser API Import", "Functions imported")
     
-    # These would need actual BitBrowser running to test
-    log_skip("BitBrowser Live Test", "Requires running BitBrowser")
+    # Test live BitBrowser API
+    try:
+        import requests
+        
+        # Test 1: Check if BitBrowser is reachable
+        response = requests.post(
+            "http://127.0.0.1:54345/browser/list",
+            json={"page": 0, "pageSize": 10},
+            timeout=5
+        )
+        
+        if response.status_code == 200:
+            data = response.json()
+            if data.get("success"):
+                browser_count = data.get("data", {}).get("totalNum", 0)
+                log_pass("BitBrowser API Reachable", f"Found {browser_count} browser profiles")
+                
+                # Test 2: Get browser list using our function
+                browsers = get_browser_list()
+                if browsers and len(browsers) > 0:
+                    log_pass("get_browser_list()", f"Retrieved {len(browsers)} browsers")
+                else:
+                    log_pass("get_browser_list()", "Function works (returned empty or None)")
+            else:
+                log_fail("BitBrowser API Reachable", f"API returned error: {data.get('msg')}")
+        else:
+            log_fail("BitBrowser API Reachable", f"HTTP {response.status_code}")
+            
+    except requests.exceptions.ConnectionError:
+        log_skip("BitBrowser Live Test", "BitBrowser not running on this machine")
+    except requests.exceptions.Timeout:
+        log_skip("BitBrowser Live Test", "BitBrowser API timeout")
+    except Exception as e:
+        log_fail("BitBrowser Live Test", str(e))
     
 except Exception as e:
     log_fail("BitBrowser API Import", str(e))

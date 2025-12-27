@@ -14,7 +14,7 @@
     },
     {
       "name": "2FA Code Generation",
-      "detail": "Generated valid code: 178914"
+      "detail": "Generated valid code: 657049"
     },
     {
       "name": "Account-Browser Binding",
@@ -199,14 +199,17 @@
     {
       "name": "BitBrowser API Import",
       "detail": "Functions imported"
+    },
+    {
+      "name": "BitBrowser API Reachable",
+      "detail": "Found 2 browser profiles"
+    },
+    {
+      "name": "get_browser_list()",
+      "detail": "Retrieved 2 browsers"
     }
   ],
   "failed": [],
-  "skipped": [
-    {
-      "name": "BitBrowser Live Test",
-      "reason": "Requires running BitBrowser"
-    }
-  ],
-  "timestamp": "2025-12-28 02:56:17"
+  "skipped": [],
+  "timestamp": "2025-12-28 02:59:33"
 }
