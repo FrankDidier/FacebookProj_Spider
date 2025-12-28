@@ -172,20 +172,45 @@ class FilePipeline(BasePipeline):
         :return:
         """
         table = tools.abspath(item.table_name)  # 这里只是一个目录，我们需要把目录中的文件都要过滤一遍来获取到请求
-        files = glob.glob(table + '/*.txt') + glob.glob(table + '\\*.txt')
+        all_files = glob.glob(table + '/*.txt') + glob.glob(table + '\\*.txt')
+        
+        # Separate JSON files and links files
+        json_files = [f for f in all_files if not f.endswith('_links.txt')]
+        links_files = [f for f in all_files if f.endswith('_links.txt')]
+        
+        # Prefer JSON files, fallback to links files if no JSON exists
+        files = json_files if json_files else links_files
+        
+        if not files:
+            log.warning(f"No files found in {table}")
+            return
+        
+        if not json_files and links_files:
+            log.warning(f"⚠️ 只找到 _links.txt 文件，没有JSON文件。建议将 groups_save_links_only 设为 false")
+            log.warning(f"⚠️ Only found _links.txt files, no JSON files. Set groups_save_links_only=false")
+        
         index = 1
-        for table in files:
-            # Skip clean links files
-            if table.endswith('_links.txt'):
-                continue
-            with open(table, encoding="utf-8") as f:
+        for file_path in files:
+            is_links_file = file_path.endswith('_links.txt')
+            with open(file_path, encoding="utf-8") as f:
                 while True:
                     content = f.readline()
                     if not content:
                         break
                     if index > begin:
+                        # For links files, convert plain URL to minimal JSON format
+                        if is_links_file:
+                            url = content.strip()
+                            if url:
+                                # Create minimal group item JSON from URL
+                                import json as json_mod
+                                content = json_mod.dumps({
+                                    "group_link": url,
+                                    "group_name": url.split('/')[-2] if '/groups/' in url else url,
+                                    "word": "",
+                                    "status": "unknown"
+                                }) + "\n"
                         yield content  # 消费一条
-
                     index += 1
 
     def load_items_from_file(self, item: Item, file_path, begin=0):

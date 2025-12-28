@@ -522,9 +522,13 @@ try:
     else:
         log_fail("members_save_links_only", "Property not found")
     
-    # Test 3: groups_save_links_only option
+    # Test 3: groups_save_links_only option - MUST be False for member spider to work!
     if hasattr(config, 'groups_save_links_only'):
-        log_pass("groups_save_links_only", f"Value: {config.groups_save_links_only}")
+        value = config.groups_save_links_only
+        if value == False:
+            log_pass("groups_save_links_only", f"Value: {value} (Correct! Member spider needs JSON)")
+        else:
+            log_fail("groups_save_links_only", f"Value: {value} - SHOULD BE FALSE! Member spider won't work")
     else:
         log_fail("groups_save_links_only", "Property not found")
     
