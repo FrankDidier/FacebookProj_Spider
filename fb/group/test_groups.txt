@@ -1,0 +1,10 @@
+{"word": "测试关键词", "group_name": "测试群组0", "group_link": "https://facebook.com/groups/test0", "status": "unknown"}
+{"word": "测试关键词", "group_name": "测试群组1", "group_link": "https://facebook.com/groups/test1", "status": "unknown"}
+{"word": "测试关键词", "group_name": "测试群组2", "group_link": "https://facebook.com/groups/test2", "status": "unknown"}
+{"word": "测试关键词", "group_name": "测试群组3", "group_link": "https://facebook.com/groups/test3", "status": "unknown"}
+{"word": "测试关键词", "group_name": "测试群组4", "group_link": "https://facebook.com/groups/test4", "status": "unknown"}
+{"word": "测试关键词", "group_name": "测试群组5", "group_link": "https://facebook.com/groups/test5", "status": "unknown"}
+{"word": "测试关键词", "group_name": "测试群组6", "group_link": "https://facebook.com/groups/test6", "status": "unknown"}
+{"word": "测试关键词", "group_name": "测试群组7", "group_link": "https://facebook.com/groups/test7", "status": "unknown"}
+{"word": "测试关键词", "group_name": "测试群组8", "group_link": "https://facebook.com/groups/test8", "status": "unknown"}
+{"word": "测试关键词", "group_name": "测试群组9", "group_link": "https://facebook.com/groups/test9", "status": "unknown"}
