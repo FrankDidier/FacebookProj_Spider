@@ -1,0 +1,2 @@
+{"word": "测试关键词", "group_name": "测试群组1", "group_link": "https://facebook.com/groups/test1", "status": "unknown"}
+{"word": "测试关键词", "group_name": "测试群组2", "group_link": "https://facebook.com/groups/test2", "status": "unknown"}
