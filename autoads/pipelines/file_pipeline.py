@@ -186,8 +186,8 @@ class FilePipeline(BasePipeline):
             return
         
         if not json_files and links_files:
-            log.warning(f"⚠️ 只找到 _links.txt 文件，没有JSON文件。建议将 groups_save_links_only 设为 false")
-            log.warning(f"⚠️ Only found _links.txt files, no JSON files. Set groups_save_links_only=false")
+            log.info(f"ℹ️ 使用 _links.txt 文件作为群组数据源 (groups_save_links_only=true)")
+            log.info(f"ℹ️ Using _links.txt files as group data source")
         
         index = 1
         for file_path in files:

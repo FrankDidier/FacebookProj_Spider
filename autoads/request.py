@@ -198,7 +198,9 @@ class Request(object):
         self.requests_kwargs.setdefault("verify", False)
 
         if self.render:
-            browser = self._webdriver_pool.get(self.ads_id,ms=ms, ui=ui,stop_event=self.stop_event)
+            # Pass driver_count for window auto-arrangement
+            driver_count = getattr(self, 'driver_count', None)
+            browser = self._webdriver_pool.get(self.ads_id, ms=ms, ui=ui, stop_event=self.stop_event, driver_count=driver_count)
             if browser.get_driver():
 
                 url = self.url

@@ -165,6 +165,79 @@ def get_browser_list(page=0, page_size=200):
         return []
 
 
+def update_browser_proxy(browser_id, proxy_config):
+    """
+    更新浏览器的代理配置
+    
+    BitBrowser API 格式:
+    {
+        "id": "browser_id",
+        "proxyMethod": 2,  # 2=自定义代理
+        "proxyType": "http",  # http, socks5
+        "host": "proxy_host",
+        "port": "proxy_port",
+        "proxyUserName": "username",
+        "proxyPassword": "password"
+    }
+    """
+    try:
+        _rate_limit()
+        base_url = get_bitbrowser_url()
+        
+        # 转换代理配置格式
+        proxy_type = proxy_config.get('proxy_type', 'http')
+        host = proxy_config.get('proxy_host', '')
+        port = proxy_config.get('proxy_port', '')
+        username = proxy_config.get('proxy_user', '')
+        password = proxy_config.get('proxy_password', '')
+        
+        if not host or not port:
+            log.warning(f"代理配置不完整: host={host}, port={port}")
+            return False
+        
+        # BitBrowser 更新浏览器配置 API
+        endpoints = [
+            '/browser/update',
+            '/browser/update/partial',
+            '/api/browser/update'
+        ]
+        
+        headers = {"Content-Type": "application/json"}
+        
+        body = {
+            "id": browser_id,
+            "proxyMethod": 2,  # 自定义代理
+            "proxyType": proxy_type,
+            "host": host,
+            "port": str(port),
+        }
+        
+        if username:
+            body["proxyUserName"] = username
+        if password:
+            body["proxyPassword"] = password
+        
+        for endpoint in endpoints:
+            try:
+                response = requests.post(f"{base_url}{endpoint}", headers=headers, json=body, timeout=30)
+                if response.status_code == 200:
+                    data = response.json()
+                    if data.get('success'):
+                        log.info(f"✅ BitBrowser 代理更新成功: {browser_id} -> {host}:{port}")
+                        return True
+                    else:
+                        log.debug(f"BitBrowser 代理更新返回: {data}")
+            except Exception as e:
+                log.debug(f"BitBrowser 代理更新端点 {endpoint} 失败: {e}")
+                continue
+        
+        log.warning(f"⚠️ BitBrowser 代理更新失败: {browser_id}")
+        return False
+    except Exception as e:
+        log.error(f"更新 BitBrowser 代理失败: {e}")
+        return False
+
+
 def start_browser(browser_id, proxy_config=None):
     """启动浏览器
     Args:
@@ -197,9 +270,14 @@ def start_browser(browser_id, proxy_config=None):
             "id": browser_id
         }
         
-        # 如果有代理配置，添加到请求中
+        # 如果有代理配置，转换为 BitBrowser 格式并更新浏览器配置
         if proxy_config:
-            body.update(proxy_config)
+            # 首先更新浏览器的代理配置
+            proxy_updated = update_browser_proxy(browser_id, proxy_config)
+            if proxy_updated:
+                log.info(f"✅ 代理配置已更新到浏览器 {browser_id}")
+            else:
+                log.warning(f"⚠️ 代理配置更新失败，继续尝试启动浏览器")
         
         for endpoint in endpoints:
             try:

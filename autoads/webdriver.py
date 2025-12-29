@@ -468,7 +468,7 @@ class WebDriverPool:
         self.queue_size_param = MemoryDB()
         log.info("Browser window position cache cleared")
 
-    def get(self, ads_id, ms=None, ui=None, stop_event=None) -> WebDriver:
+    def get(self, ads_id, ms=None, ui=None, stop_event=None, driver_count=None) -> WebDriver:
         with self.lock:
             # 如果已经存在就直接访问，返回
             if ads_id in self.queue:
@@ -480,10 +480,13 @@ class WebDriverPool:
                 kwargs["ads_id"] = ads_id
             if self.service_url:
                 kwargs["service_url"] = self.service_url
-            if 'driver_count' in kwargs:
-                driver_count = kwargs['driver_count']
-                window_size = self.get_size(ads_id, driver_count)
+            
+            # 窗口自动排列 - 使用传入的driver_count或kwargs中的
+            actual_driver_count = driver_count or kwargs.get('driver_count')
+            if actual_driver_count:
+                window_size = self.get_size(ads_id, actual_driver_count)
                 kwargs["window_size"] = window_size
+                log.info(f"🪟 窗口自动排列: 浏览器 {ads_id} 位置 {window_size} (共{actual_driver_count}个浏览器)")
 
             if stop_event:
                 kwargs["stop_event"] = stop_event

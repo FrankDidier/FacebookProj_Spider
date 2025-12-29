@@ -833,24 +833,26 @@ class Config(object):
             return self.get_option('groups', 'selected_file')
         except:
             return ''
+    
+    @groups_selected_file.setter
+    def groups_selected_file(self, value):
+        """Set the selected group file path"""
+        self.set_option('groups', 'selected_file', value if value else '')
 
     @property
     def groups_save_links_only(self):
         """只保存links文件 - Only save links file for groups (no JSON format)
         
-        ⚠️ 重要: 必须设为FALSE! 
-        群组JSON文件包含采集成员所需的关键信息(group_name, status, ads_id等)
-        如果设为TRUE，采集成员功能将无法工作(显示0个请求)
+        TRUE: 只创建 _links.txt 文件 (1个文件)
+        FALSE: 创建 .txt JSON 和 _links.txt 文件 (2个文件)
         
-        Important: Must be FALSE!
-        Group JSON files contain critical info needed by member spider.
-        If TRUE, member spider will fail (shows 0 requests).
+        ✅ 现在支持TRUE: 采集成员功能已修改为可以从 _links.txt 文件读取群组链接
         """
         try:
             val = self.get_option('groups', 'save_links_only')
-            return val.lower() == 'true' if val else False
+            return val.lower() == 'true' if val else True  # Default to TRUE (1 file only)
         except:
-            return False  # MUST be False - member spider needs JSON files!
+            return True  # Default: only save links file
 
     @property
     def screen_width(self):

@@ -377,15 +377,36 @@ class MembersSpider(autoads.AirSpider):
                     # 自动删除已采集完成的群组 - Auto-delete the collected group
                     try:
                         group_files = os.listdir(tools.abspath(self.config.groups_table))
-                        for gf in group_files:
-                            if gf.endswith('.txt') and not gf.endswith('_links.txt'):
+                        deleted = False
+                        
+                        # 优先处理JSON文件，其次处理 _links.txt 文件
+                        json_files = [gf for gf in group_files if gf.endswith('.txt') and not gf.endswith('_links.txt')]
+                        links_files = [gf for gf in group_files if gf.endswith('_links.txt')]
+                        
+                        # 尝试从JSON文件删除
+                        for gf in json_files:
+                            group_file_path = os.path.join(tools.abspath(self.config.groups_table), gf)
+                            deleted = tools.delete_entry_from_file(group_file_path, 'group_link', group.group_link)
+                            if deleted:
+                                tools.send_message_to_ui(ms=self.ms, ui=self.ui, 
+                                    message=f'群组 {group.group_name} 采集完成，已从列表中删除')
+                                log.info(f'Deleted group {group.group_link} from {group_file_path}')
+                                break
+                        
+                        # 如果JSON文件没找到，尝试从 _links.txt 文件删除
+                        if not deleted:
+                            for gf in links_files:
                                 group_file_path = os.path.join(tools.abspath(self.config.groups_table), gf)
-                                deleted = tools.delete_entry_from_file(group_file_path, 'group_link', group.group_link)
+                                # 使用纯URL模式删除
+                                deleted = tools.delete_entry_from_file(group_file_path, group.group_link)
                                 if deleted:
                                     tools.send_message_to_ui(ms=self.ms, ui=self.ui, 
-                                        message=f'群组 {group.group_name} 采集完成，已从列表中删除')
-                                    log.info(f'Deleted group {group.group_link} from {group_file_path}')
+                                        message=f'群组 {group.group_name} 采集完成，已从links列表中删除')
+                                    log.info(f'Deleted group {group.group_link} from {group_file_path} (links mode)')
                                     break
+                        
+                        if not deleted:
+                            log.debug(f'Group {group.group_link} not found in any file for deletion')
                     except Exception as e:
                         log.error(f'Error deleting group after collection: {e}')
                     

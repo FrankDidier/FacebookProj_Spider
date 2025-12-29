@@ -403,16 +403,19 @@ class MainWindow(QMainWindow):
             combo.clear()
             combo.addItem("使用默认采集结果")  # Default option
             
-            group_dir = './group'
+            # Use the same directory as config.groups_table
+            group_dir = config.groups_table if hasattr(config, 'groups_table') else './fb/group/'
             if os.path.exists(group_dir):
                 for f in sorted(os.listdir(group_dir)):
                     if f.endswith('.txt') or f.endswith('.csv') or f.endswith('.json'):
-                        combo.addItem(f"group/{f}")
+                        full_path = os.path.join(group_dir, f)
+                        combo.addItem(full_path)
             
-            # Also check for any txt files in current directory
-            for f in sorted(os.listdir('.')):
-                if f.endswith('.txt') and 'group' in f.lower():
-                    combo.addItem(f)
+            # Also check legacy directory
+            if os.path.exists('./group'):
+                for f in sorted(os.listdir('./group')):
+                    if f.endswith('.txt') or f.endswith('.csv') or f.endswith('.json'):
+                        combo.addItem(f"group/{f}")
         except Exception as e:
             log.warning(f"Error refreshing group files: {e}")
 
@@ -439,6 +442,13 @@ class MainWindow(QMainWindow):
                 combo = self.ui.comboBoxMemberGroupFile
                 combo.addItem(file_name)
                 combo.setCurrentText(file_name)
+                
+                # Save to config for spider to use
+                try:
+                    config.groups_selected_file = file_name
+                    app_logger.log_action("BROWSE", f"已保存选择的群组文件: {file_name}")
+                except Exception as config_error:
+                    app_logger.log_warning("BROWSE", f"保存配置失败: {config_error}")
                 
                 # Update UI
                 QApplication.processEvents()
