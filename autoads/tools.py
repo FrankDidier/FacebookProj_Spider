@@ -2726,37 +2726,98 @@ def abspath(path):
 
 def unique_member(dir, unique_key=None):
     """
-    加载数据，按照一行一行的规则给到浏览器去发请求
-    :return:
+    对目录中的成员文件进行去重
+    Deduplicate member files in a directory
+    
+    支持两种格式:
+    1. JSON格式 (需要指定 unique_key)
+    2. 纯URL格式 (_links.txt 文件)
+    
+    :param dir: 目录路径
+    :param unique_key: JSON格式时的唯一键名 (如 'member_link')
+    :return: 去重后的总数量
     """
-    table = abspath(dir)  # 这里只是一个目录，我们需要把目录中的文件都要过滤一遍来获取到请求
-    files = glob.glob(table + '\*.txt')
-    keys = []
-    repeats = []
-
-    for table in files:
-        # 构建临时文件的地址，用来单个文件处理结束之后重命名
-        split_index = table.rfind('.')
-        new_table = abspath(table[:split_index] + '_temp' + table[split_index:])
-        table = abspath(table)
-        with codecs.open(table, 'r', encoding='utf-8') as fi, \
-                codecs.open(new_table, 'w', encoding='utf-8') as fo:
-
-            for line in fi:
-                if not line:
-                    continue
-
-                dictobj = json.loads(line)
-                if dictobj[unique_key] in keys:  # 如果是重复了
-                    repeats.append({'file': table, 'url': dictobj[unique_key]})
-                else:
-                    keys.append(dictobj[unique_key])  # 临时存储url信息
-                    fo.write(line)
-
-        os.remove(table)  # remove original
-        os.rename(new_table, table)  # rename temp to original name
-
-    log.info(repeats)
+    table = abspath(dir)
+    # 使用跨平台的 glob 模式
+    files = glob.glob(os.path.join(table, '*.txt'))
+    
+    if not files:
+        log.info(f"No files found in {table} for deduplication")
+        return 0
+    
+    all_seen = set()  # 全局去重集合
+    total_removed = 0
+    total_kept = 0
+    
+    for file_path in files:
+        # 跳过临时文件
+        if '_temp' in file_path:
+            continue
+            
+        file_path = abspath(file_path)
+        is_links_file = file_path.endswith('_links.txt')
+        
+        # 构建临时文件路径
+        split_index = file_path.rfind('.')
+        temp_file = file_path[:split_index] + '_temp_dedup' + file_path[split_index:]
+        
+        file_removed = 0
+        file_kept = 0
+        
+        try:
+            with codecs.open(file_path, 'r', encoding='utf-8') as fi, \
+                    codecs.open(temp_file, 'w', encoding='utf-8') as fo:
+                
+                for line in fi:
+                    line = line.strip()
+                    if not line:
+                        continue
+                    
+                    # 提取唯一标识符
+                    if is_links_file:
+                        # 纯URL文件
+                        identifier = line
+                    else:
+                        # JSON文件
+                        try:
+                            dictobj = json.loads(line)
+                            if unique_key:
+                                identifier = dictobj.get(unique_key, line)
+                            else:
+                                # 尝试常见的键名
+                                identifier = dictobj.get('member_link') or dictobj.get('group_link') or dictobj.get('url') or line
+                        except json.JSONDecodeError:
+                            # 不是有效的JSON，当作纯文本
+                            identifier = line
+                    
+                    if identifier in all_seen:
+                        file_removed += 1
+                    else:
+                        all_seen.add(identifier)
+                        fo.write(line + '\n')
+                        file_kept += 1
+            
+            # 替换原文件
+            os.remove(file_path)
+            os.rename(temp_file, file_path)
+            
+            total_removed += file_removed
+            total_kept += file_kept
+            
+            if file_removed > 0:
+                log.info(f"去重文件 {os.path.basename(file_path)}: 保留 {file_kept}, 删除重复 {file_removed}")
+                
+        except Exception as e:
+            log.error(f"去重文件 {file_path} 时出错: {e}")
+            # 清理临时文件
+            if os.path.exists(temp_file):
+                try:
+                    os.remove(temp_file)
+                except:
+                    pass
+    
+    log.info(f"去重完成: 共保留 {total_kept} 条, 删除重复 {total_removed} 条")
+    return total_kept
 
 
 def delete_entry_from_file(file_path, unique_key_or_url, unique_value=None):
@@ -3167,54 +3228,4 @@ def create_consolidated_member_file(member_dir='./fb/member/', output_file='./fb
         return 0
 
 
-def cleanup_temp_files(directories=None):
-    """
-    清理临时文件 - 在程序启动时调用
-    Clean up temp files - called at program startup
-    
-    This cleans up any _temp_ or _temp. files left over from
-    previous runs that may have crashed or been interrupted.
-    
-    :param directories: List of directories to clean, or None for defaults
-    :return: Number of files cleaned
-    """
-    if directories is None:
-        directories = [
-            './fb/group/',
-            './fb/member/',
-            './fb/greet/',
-            './fb/pages/',
-            './fb/posts/',
-        ]
-    
-    cleaned_count = 0
-    for directory in directories:
-        if not os.path.exists(directory):
-            continue
-        
-        try:
-            # Find all temp files (matching patterns like *_temp_*.txt or *_temp.txt)
-            temp_patterns = [
-                os.path.join(directory, '*_temp_*.txt'),
-                os.path.join(directory, '*_temp.txt'),
-                os.path.join(directory, '*_temp_*.json'),
-                os.path.join(directory, '*_temp.json'),
-            ]
-            
-            for pattern in temp_patterns:
-                for temp_file in glob.glob(pattern):
-                    try:
-                        os.remove(temp_file)
-                        cleaned_count += 1
-                        log.info(f"Cleaned up temp file: {temp_file}")
-                    except PermissionError:
-                        log.warning(f"Could not remove temp file (in use): {temp_file}")
-                    except Exception as e:
-                        log.error(f"Error removing temp file {temp_file}: {e}")
-        except Exception as e:
-            log.error(f"Error cleaning temp files in {directory}: {e}")
-    
-    if cleaned_count > 0:
-        log.info(f"Cleaned up {cleaned_count} temp files on startup")
-    
-    return cleaned_count
+# Note: cleanup_temp_files is defined earlier in this file at line ~2867

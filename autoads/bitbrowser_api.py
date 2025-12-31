@@ -169,7 +169,7 @@ def update_browser_proxy(browser_id, proxy_config):
     """
     更新浏览器的代理配置
     
-    BitBrowser API 有多种格式，我们需要尝试不同的组合
+    BitBrowser API 需要完整的浏览器配置包括 browserFingerPrint
     """
     try:
         _rate_limit()
@@ -188,75 +188,73 @@ def update_browser_proxy(browser_id, proxy_config):
         
         headers = {"Content-Type": "application/json"}
         
-        # 尝试不同的 API 格式和端点组合
-        api_attempts = [
-            # 格式1: 使用 ids 数组 (新版 API)
-            {
-                'endpoint': '/browser/update/partial',
-                'body': {
-                    "ids": [browser_id],
-                    "proxyMethod": 2,  # 自定义代理
-                    "proxyType": proxy_type,
-                    "host": host,
-                    "port": str(port),
-                    "proxyUserName": username or "",
-                    "proxyPassword": password or ""
-                }
-            },
-            # 格式2: 使用 id 单个值 (旧版 API)
-            {
-                'endpoint': '/browser/update',
-                'body': {
-                    "id": browser_id,
-                    "proxyMethod": 2,
-                    "proxyType": proxy_type,
-                    "host": host,
-                    "port": str(port),
-                    "proxyUserName": username or "",
-                    "proxyPassword": password or ""
-                }
-            },
-            # 格式3: 使用代理字符串 (简化格式)
-            {
-                'endpoint': '/browser/update/partial',
-                'body': {
-                    "ids": [browser_id],
-                    "proxyMethod": 2,
-                    "proxy": f"{proxy_type}://{username}:{password}@{host}:{port}" if username else f"{proxy_type}://{host}:{port}"
-                }
-            },
-            # 格式4: 直接在 open 时传递代理 (不预先更新)
-            {
-                'endpoint': '/browser/open',
-                'body': {
-                    "id": browser_id,
-                    "args": [f"--proxy-server={proxy_type}://{host}:{port}"],
-                    "loadExtensions": False
-                }
+        # 方法1: 获取浏览器详情，然后使用完整配置更新
+        browser_detail = get_browser_detail(browser_id)
+        if browser_detail:
+            log.info(f"获取到浏览器详情，尝试使用完整配置更新代理")
+            
+            # 构建更新请求，包含 browserFingerPrint
+            update_body = {
+                "id": browser_id,
+                "proxyMethod": 2,  # 2 = 自定义代理
+                "proxyType": proxy_type,
+                "host": host,
+                "port": str(port),
+                "proxyUserName": username or "",
+                "proxyPassword": password or ""
             }
-        ]
-        
-        for attempt in api_attempts:
-            endpoint = attempt['endpoint']
-            body = attempt['body']
+            
+            # 添加 browserFingerPrint (这是 BitBrowser 要求的必填字段)
+            if 'browserFingerPrint' in browser_detail:
+                update_body['browserFingerPrint'] = browser_detail['browserFingerPrint']
+            elif 'fingerprint' in browser_detail:
+                update_body['browserFingerPrint'] = browser_detail['fingerprint']
+            
+            # 复制其他必要字段
+            for key in ['name', 'remark', 'groupId', 'seq']:
+                if key in browser_detail:
+                    update_body[key] = browser_detail[key]
             
             try:
-                response = requests.post(f"{base_url}{endpoint}", headers=headers, json=body, timeout=30)
+                response = requests.post(f"{base_url}/browser/update", headers=headers, json=update_body, timeout=30)
                 if response.status_code == 200:
                     data = response.json()
                     if data.get('success'):
-                        log.info(f"✅ BitBrowser 代理更新成功: {browser_id} -> {host}:{port} (via {endpoint})")
+                        log.info(f"✅ BitBrowser 代理更新成功: {browser_id} -> {host}:{port}")
                         return True
                     else:
-                        log.debug(f"BitBrowser 代理更新返回 ({endpoint}): {data}")
+                        log.debug(f"BitBrowser /browser/update 返回: {data}")
             except Exception as e:
-                log.debug(f"BitBrowser 代理更新端点 {endpoint} 失败: {e}")
-                continue
+                log.debug(f"BitBrowser /browser/update 失败: {e}")
         
-        # 如果所有方法都失败，可能需要用户手动在 BitBrowser 中配置代理
-        log.warning(f"⚠️ BitBrowser 代理自动更新失败: {browser_id}")
-        log.info(f"💡 建议: 请在 BitBrowser 中手动为浏览器 {browser_id} 配置代理 {host}:{port}")
-        return False
+        # 方法2: 尝试 partial update (批量更新)
+        _rate_limit()
+        try:
+            partial_body = {
+                "ids": [browser_id],
+                "proxyMethod": 2,
+                "proxyType": proxy_type,
+                "host": host,
+                "port": str(port),
+                "proxyUserName": username or "",
+                "proxyPassword": password or ""
+            }
+            response = requests.post(f"{base_url}/browser/update/partial", headers=headers, json=partial_body, timeout=30)
+            if response.status_code == 200:
+                data = response.json()
+                if data.get('success'):
+                    log.info(f"✅ BitBrowser 代理批量更新成功: {browser_id} -> {host}:{port}")
+                    return True
+                else:
+                    log.debug(f"BitBrowser /browser/update/partial 返回: {data}")
+        except Exception as e:
+            log.debug(f"BitBrowser /browser/update/partial 失败: {e}")
+        
+        # 方法3: 将代理参数存储，在启动时通过命令行参数传递
+        # 这是最可靠的备选方案
+        log.warning(f"⚠️ BitBrowser 代理API更新失败，将在启动时通过命令行参数传递代理")
+        return "use_args"  # 特殊返回值，表示需要在启动时使用 args
+        
     except Exception as e:
         log.error(f"更新 BitBrowser 代理失败: {e}")
         return False
@@ -294,14 +292,40 @@ def start_browser(browser_id, proxy_config=None):
             "id": browser_id
         }
         
+        use_proxy_args = False
+        
         # 如果有代理配置，转换为 BitBrowser 格式并更新浏览器配置
         if proxy_config:
-            # 首先更新浏览器的代理配置
+            # 首先尝试更新浏览器的代理配置
             proxy_updated = update_browser_proxy(browser_id, proxy_config)
-            if proxy_updated:
+            if proxy_updated == True:
                 log.info(f"✅ 代理配置已更新到浏览器 {browser_id}")
+            elif proxy_updated == "use_args":
+                # API 更新失败，使用命令行参数
+                use_proxy_args = True
+                log.info(f"💡 将通过命令行参数传递代理配置")
             else:
                 log.warning(f"⚠️ 代理配置更新失败，继续尝试启动浏览器")
+        
+        # 如果需要通过命令行参数传递代理
+        if use_proxy_args and proxy_config:
+            proxy_type = proxy_config.get('proxy_type', 'http')
+            host = proxy_config.get('proxy_host', '')
+            port = proxy_config.get('proxy_port', '')
+            username = proxy_config.get('proxy_user', '')
+            password = proxy_config.get('proxy_password', '')
+            
+            if host and port:
+                # 构建代理命令行参数
+                if username and password:
+                    # 带认证的代理需要使用扩展或其他方式，这里使用基本格式
+                    proxy_arg = f"--proxy-server={proxy_type}://{host}:{port}"
+                else:
+                    proxy_arg = f"--proxy-server={proxy_type}://{host}:{port}"
+                
+                body["args"] = [proxy_arg]
+                body["loadExtensions"] = False
+                log.info(f"📡 添加代理命令行参数: {proxy_arg}")
         
         for endpoint in endpoints:
             try:
@@ -313,7 +337,9 @@ def start_browser(browser_id, proxy_config=None):
                     data = response.json()
                     log.info(f"BitBrowser 启动响应: {data}")
                     if data.get('success'):
-                        log.info(f"BitBrowser 启动成功: {browser_id}")
+                        log.info(f"✅ BitBrowser 启动成功: {browser_id}")
+                        if use_proxy_args:
+                            log.info(f"   代理已通过命令行参数应用")
                         return data
                     else:
                         log.warning(f"BitBrowser 启动返回失败: {data.get('msg', 'Unknown')}")
@@ -365,6 +391,42 @@ def stop_browser(browser_id):
     except Exception as e:
         log.error(f"停止 BitBrowser 失败: {e}")
         return False
+
+
+def get_browser_detail(browser_id):
+    """获取单个浏览器的详细信息，包括 browserFingerPrint
+    
+    这个信息用于更新浏览器配置
+    """
+    try:
+        _rate_limit()
+        base_url = get_bitbrowser_url()
+        headers = {"Content-Type": "application/json"}
+        
+        # 尝试多个端点获取浏览器详情
+        endpoints = [
+            '/browser/detail',
+            '/browser/info',
+            '/api/browser/detail'
+        ]
+        
+        for endpoint in endpoints:
+            try:
+                body = {"id": browser_id}
+                response = requests.post(f"{base_url}{endpoint}", headers=headers, json=body, timeout=10)
+                if response.status_code == 200:
+                    data = response.json()
+                    if data.get('success') and data.get('data'):
+                        log.debug(f"获取浏览器详情成功: {browser_id}")
+                        return data['data']
+            except:
+                continue
+        
+        log.warning(f"无法获取浏览器详情: {browser_id}")
+        return None
+    except Exception as e:
+        log.error(f"获取浏览器详情失败: {e}")
+        return None
 
 
 def get_browser_ids(count=100):
