@@ -233,7 +233,25 @@ class GreetsSpider(autoads.AirSpider):
                                     pic_path = os.path.abspath(pic) if not os.path.isabs(pic) else pic
                                     if os.path.exists(pic_path):
                                         log.info(f'线程{threading.current_thread().name}中浏览器{request.ads_id}上传图片-->{pic_path}')
-                                        filebtns[0].send_keys(pic_path)
+                                        try:
+                                            # 每次上传前重新获取文件输入元素，避免 StaleElementReferenceException
+                                            filebtns = tools.get_page_data_mutilxpath(browser, self.config.greets_xpath_mwchat_file)
+                                            if len(filebtns) > 0:
+                                                filebtns[0].send_keys(pic_path)
+                                            else:
+                                                log.warning(f'文件上传控件丢失，尝试使用 JavaScript')
+                                                # 使用 JavaScript 创建并触发文件上传
+                                                browser.execute_script('''
+                                                    var inputs = document.querySelectorAll('input[type="file"]');
+                                                    if (inputs.length > 0) return inputs[0];
+                                                    return null;
+                                                ''')
+                                                file_input = browser.find_elements('css selector', 'input[type="file"]')
+                                                if file_input:
+                                                    file_input[0].send_keys(pic_path)
+                                        except Exception as upload_err:
+                                            log.warning(f'图片上传失败 ({pic}): {upload_err}')
+                                            continue
                                         tools.delay_time(3)  # 等待图片上传完成
                                         tools.send_message_to_ui(ms=self.ms, ui=self.ui, message=f'图片上传成功: {pic}')
                                     else:
