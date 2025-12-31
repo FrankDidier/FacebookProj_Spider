@@ -169,16 +169,7 @@ def update_browser_proxy(browser_id, proxy_config):
     """
     更新浏览器的代理配置
     
-    BitBrowser API 格式:
-    {
-        "id": "browser_id",
-        "proxyMethod": 2,  # 2=自定义代理
-        "proxyType": "http",  # http, socks5
-        "host": "proxy_host",
-        "port": "proxy_port",
-        "proxyUserName": "username",
-        "proxyPassword": "password"
-    }
+    BitBrowser API 有多种格式，我们需要尝试不同的组合
     """
     try:
         _rate_limit()
@@ -195,43 +186,76 @@ def update_browser_proxy(browser_id, proxy_config):
             log.warning(f"代理配置不完整: host={host}, port={port}")
             return False
         
-        # BitBrowser 更新浏览器配置 API
-        endpoints = [
-            '/browser/update',
-            '/browser/update/partial',
-            '/api/browser/update'
-        ]
-        
         headers = {"Content-Type": "application/json"}
         
-        body = {
-            "id": browser_id,
-            "proxyMethod": 2,  # 自定义代理
-            "proxyType": proxy_type,
-            "host": host,
-            "port": str(port),
-        }
+        # 尝试不同的 API 格式和端点组合
+        api_attempts = [
+            # 格式1: 使用 ids 数组 (新版 API)
+            {
+                'endpoint': '/browser/update/partial',
+                'body': {
+                    "ids": [browser_id],
+                    "proxyMethod": 2,  # 自定义代理
+                    "proxyType": proxy_type,
+                    "host": host,
+                    "port": str(port),
+                    "proxyUserName": username or "",
+                    "proxyPassword": password or ""
+                }
+            },
+            # 格式2: 使用 id 单个值 (旧版 API)
+            {
+                'endpoint': '/browser/update',
+                'body': {
+                    "id": browser_id,
+                    "proxyMethod": 2,
+                    "proxyType": proxy_type,
+                    "host": host,
+                    "port": str(port),
+                    "proxyUserName": username or "",
+                    "proxyPassword": password or ""
+                }
+            },
+            # 格式3: 使用代理字符串 (简化格式)
+            {
+                'endpoint': '/browser/update/partial',
+                'body': {
+                    "ids": [browser_id],
+                    "proxyMethod": 2,
+                    "proxy": f"{proxy_type}://{username}:{password}@{host}:{port}" if username else f"{proxy_type}://{host}:{port}"
+                }
+            },
+            # 格式4: 直接在 open 时传递代理 (不预先更新)
+            {
+                'endpoint': '/browser/open',
+                'body': {
+                    "id": browser_id,
+                    "args": [f"--proxy-server={proxy_type}://{host}:{port}"],
+                    "loadExtensions": False
+                }
+            }
+        ]
         
-        if username:
-            body["proxyUserName"] = username
-        if password:
-            body["proxyPassword"] = password
-        
-        for endpoint in endpoints:
+        for attempt in api_attempts:
+            endpoint = attempt['endpoint']
+            body = attempt['body']
+            
             try:
                 response = requests.post(f"{base_url}{endpoint}", headers=headers, json=body, timeout=30)
                 if response.status_code == 200:
                     data = response.json()
                     if data.get('success'):
-                        log.info(f"✅ BitBrowser 代理更新成功: {browser_id} -> {host}:{port}")
+                        log.info(f"✅ BitBrowser 代理更新成功: {browser_id} -> {host}:{port} (via {endpoint})")
                         return True
                     else:
-                        log.debug(f"BitBrowser 代理更新返回: {data}")
+                        log.debug(f"BitBrowser 代理更新返回 ({endpoint}): {data}")
             except Exception as e:
                 log.debug(f"BitBrowser 代理更新端点 {endpoint} 失败: {e}")
                 continue
         
-        log.warning(f"⚠️ BitBrowser 代理更新失败: {browser_id}")
+        # 如果所有方法都失败，可能需要用户手动在 BitBrowser 中配置代理
+        log.warning(f"⚠️ BitBrowser 代理自动更新失败: {browser_id}")
+        log.info(f"💡 建议: 请在 BitBrowser 中手动为浏览器 {browser_id} 配置代理 {host}:{port}")
         return False
     except Exception as e:
         log.error(f"更新 BitBrowser 代理失败: {e}")
