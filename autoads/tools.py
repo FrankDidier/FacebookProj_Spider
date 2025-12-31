@@ -2864,6 +2864,44 @@ def delete_entry_from_file(file_path, unique_key_or_url, unique_value=None):
     return False  # All retries exhausted
 
 
+def cleanup_temp_files(directory=None):
+    """
+    清理所有残留的临时文件 (_temp_ 文件)
+    Clean up any leftover temporary files
+    
+    :param directory: 要清理的目录,默认为 fb 文件夹
+    """
+    import glob
+    
+    dirs_to_clean = [directory] if directory else ['./fb', './fb/group', './fb/member']
+    
+    cleaned = 0
+    for dir_path in dirs_to_clean:
+        if not os.path.exists(dir_path):
+            continue
+        
+        # Find all _temp_ files
+        patterns = [
+            os.path.join(dir_path, '*_temp_*.txt'),
+            os.path.join(dir_path, '*_temp_*.json'),
+            os.path.join(dir_path, '*_temp_*.csv'),
+            os.path.join(dir_path, '*links_temp*'),
+        ]
+        
+        for pattern in patterns:
+            for temp_file in glob.glob(pattern):
+                try:
+                    os.remove(temp_file)
+                    log.info(f"Cleaned up temp file: {temp_file}")
+                    cleaned += 1
+                except Exception as e:
+                    log.warning(f"Failed to clean up {temp_file}: {e}")
+    
+    if cleaned > 0:
+        log.info(f"Cleaned up {cleaned} temporary files")
+    return cleaned
+
+
 def delete_entries_batch(file_path, unique_key, unique_values):
     """
     批量从文件中删除已处理的条目

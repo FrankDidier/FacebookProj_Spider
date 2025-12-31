@@ -376,6 +376,15 @@ class MainWindow(QMainWindow):
         # BYPASS ACTIVATION: Automatically skip to main app page
         self.bypass_activation()
         
+        # Clean up any leftover temp files from previous sessions
+        try:
+            from autoads.tools import cleanup_temp_files
+            cleaned = cleanup_temp_files()
+            if cleaned > 0:
+                log.info(f"🧹 启动时清理了 {cleaned} 个临时文件")
+        except Exception as e:
+            log.debug(f"Temp file cleanup skipped: {e}")
+        
         # Initialize file selectors
         self._init_file_selectors()
 
