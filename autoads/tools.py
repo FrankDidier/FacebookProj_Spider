@@ -3127,3 +3127,56 @@ def create_consolidated_member_file(member_dir='./fb/member/', output_file='./fb
     except Exception as e:
         log.error(f"Error creating consolidated member file: {e}")
         return 0
+
+
+def cleanup_temp_files(directories=None):
+    """
+    清理临时文件 - 在程序启动时调用
+    Clean up temp files - called at program startup
+    
+    This cleans up any _temp_ or _temp. files left over from
+    previous runs that may have crashed or been interrupted.
+    
+    :param directories: List of directories to clean, or None for defaults
+    :return: Number of files cleaned
+    """
+    if directories is None:
+        directories = [
+            './fb/group/',
+            './fb/member/',
+            './fb/greet/',
+            './fb/pages/',
+            './fb/posts/',
+        ]
+    
+    cleaned_count = 0
+    for directory in directories:
+        if not os.path.exists(directory):
+            continue
+        
+        try:
+            # Find all temp files (matching patterns like *_temp_*.txt or *_temp.txt)
+            temp_patterns = [
+                os.path.join(directory, '*_temp_*.txt'),
+                os.path.join(directory, '*_temp.txt'),
+                os.path.join(directory, '*_temp_*.json'),
+                os.path.join(directory, '*_temp.json'),
+            ]
+            
+            for pattern in temp_patterns:
+                for temp_file in glob.glob(pattern):
+                    try:
+                        os.remove(temp_file)
+                        cleaned_count += 1
+                        log.info(f"Cleaned up temp file: {temp_file}")
+                    except PermissionError:
+                        log.warning(f"Could not remove temp file (in use): {temp_file}")
+                    except Exception as e:
+                        log.error(f"Error removing temp file {temp_file}: {e}")
+        except Exception as e:
+            log.error(f"Error cleaning temp files in {directory}: {e}")
+    
+    if cleaned_count > 0:
+        log.info(f"Cleaned up {cleaned_count} temp files on startup")
+    
+    return cleaned_count

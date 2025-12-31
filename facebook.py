@@ -135,6 +135,15 @@ class MainWindow(QMainWindow):
         self.ms.text_print.connect(self.print_to_tui)
         self.ms.update_control_status.connect(self.update_control_enabled)
         self.ms.update_activate.connect(self.on_verify)
+        
+        # 启动时清理临时文件 - Clean up temp files on startup
+        try:
+            from autoads import tools
+            cleaned = tools.cleanup_temp_files()
+            if cleaned > 0:
+                log.info(f"启动时清理了 {cleaned} 个临时文件")
+        except Exception as e:
+            log.warning(f"清理临时文件失败: {e}")
 
         # 定义每个爬虫停止的事件标志
         self.group_stop_event = None
@@ -377,6 +386,8 @@ class MainWindow(QMainWindow):
             if hasattr(self.ui, 'comboBoxMemberGroupFile'):
                 self._refresh_member_group_files()
                 log.info("comboBoxMemberGroupFile found and refreshed")
+                # Connect combo box change to update config - 连接下拉框变化事件
+                self.ui.comboBoxMemberGroupFile.currentTextChanged.connect(self._on_member_group_file_changed)
                 if hasattr(self.ui, 'pushButtonMemberRefreshFiles'):
                     self.ui.pushButtonMemberRefreshFiles.clicked.connect(self._refresh_member_group_files)
                     log.info("pushButtonMemberRefreshFiles connected")
@@ -389,6 +400,8 @@ class MainWindow(QMainWindow):
             # Greets page - select member files  
             if hasattr(self.ui, 'comboBoxGreetsMemberFile'):
                 self._refresh_greets_member_files()
+                # Connect combo box change to update config - 连接下拉框变化事件
+                self.ui.comboBoxGreetsMemberFile.currentTextChanged.connect(self._on_greets_member_file_changed)
                 if hasattr(self.ui, 'pushButtonGreetsRefreshFiles'):
                     self.ui.pushButtonGreetsRefreshFiles.clicked.connect(self._refresh_greets_member_files)
                 if hasattr(self.ui, 'pushButtonGreetsBrowseFile'):
@@ -403,19 +416,26 @@ class MainWindow(QMainWindow):
             combo.clear()
             combo.addItem("使用默认采集结果")  # Default option
             
-            # Use the same directory as config.groups_table
-            group_dir = config.groups_table if hasattr(config, 'groups_table') else './fb/group/'
-            if os.path.exists(group_dir):
-                for f in sorted(os.listdir(group_dir)):
-                    if f.endswith('.txt') or f.endswith('.csv') or f.endswith('.json'):
-                        full_path = os.path.join(group_dir, f)
-                        combo.addItem(full_path)
+            # Check multiple possible directories - 检查多个可能的目录
+            group_dirs = ['./fb/group', './fb/group/', './group']
+            if hasattr(config, 'groups_table') and config.groups_table:
+                group_dirs.insert(0, config.groups_table)
             
-            # Also check legacy directory
-            if os.path.exists('./group'):
-                for f in sorted(os.listdir('./group')):
-                    if f.endswith('.txt') or f.endswith('.csv') or f.endswith('.json'):
-                        combo.addItem(f"group/{f}")
+            found_files = set()  # Avoid duplicates
+            
+            for group_dir in group_dirs:
+                if os.path.exists(group_dir):
+                    for f in sorted(os.listdir(group_dir)):
+                        if f.endswith('.txt') or f.endswith('.csv') or f.endswith('.json'):
+                            full_path = os.path.join(group_dir, f)
+                            # Normalize path to avoid duplicates
+                            norm_path = os.path.normpath(full_path)
+                            if norm_path not in found_files:
+                                found_files.add(norm_path)
+                                combo.addItem(full_path)
+            
+            if combo.count() == 1:  # Only default option
+                log.warning("没有找到群组文件 - 请先采集群组或使用浏览按钮选择文件")
         except Exception as e:
             log.warning(f"Error refreshing group files: {e}")
 
@@ -465,16 +485,27 @@ class MainWindow(QMainWindow):
             combo.clear()
             combo.addItem("使用默认采集结果")  # Default option
             
-            member_dir = './member'
-            if os.path.exists(member_dir):
-                for f in sorted(os.listdir(member_dir)):
-                    if f.endswith('.txt') or f.endswith('.csv') or f.endswith('.json'):
-                        combo.addItem(f"member/{f}")
+            # Check the main member directory - 检查主成员目录
+            member_dirs = ['./fb/member', './fb/member/', './member', config.members_table]
+            found_files = set()  # Avoid duplicates
+            
+            for member_dir in member_dirs:
+                if os.path.exists(member_dir):
+                    for f in sorted(os.listdir(member_dir)):
+                        if f.endswith('.txt') or f.endswith('.csv') or f.endswith('.json'):
+                            full_path = os.path.join(member_dir, f)
+                            if full_path not in found_files:
+                                found_files.add(full_path)
+                                combo.addItem(full_path)
             
             # Also check for any txt files in current directory
             for f in sorted(os.listdir('.')):
                 if f.endswith('.txt') and 'member' in f.lower():
-                    combo.addItem(f)
+                    if f not in found_files:
+                        combo.addItem(f)
+            
+            if combo.count() == 1:  # Only default option
+                log.warning("没有找到成员文件 - 请先采集成员或浏览选择文件")
         except Exception as e:
             log.warning(f"Error refreshing member files: {e}")
 
@@ -512,6 +543,30 @@ class MainWindow(QMainWindow):
         except Exception as e:
             app_logger.log_error("BROWSE_ERROR", "浏览成员文件失败", e)
             QMessageBox.critical(self, "错误", f"浏览文件失败: {str(e)}")
+
+    def _on_member_group_file_changed(self, text):
+        """Handle when the user selects a different group file from dropdown"""
+        try:
+            if text and text != "使用默认采集结果":
+                config.groups_selected_file = text
+                log.info(f"群组文件选择已更新: {text}")
+            else:
+                config.groups_selected_file = ''
+                log.info("使用默认群组文件")
+        except Exception as e:
+            log.warning(f"更新群组文件配置失败: {e}")
+
+    def _on_greets_member_file_changed(self, text):
+        """Handle when the user selects a different member file from dropdown"""
+        try:
+            if text and text != "使用默认采集结果":
+                config.members_selected_file = text
+                log.info(f"成员文件选择已更新: {text}")
+            else:
+                config.members_selected_file = ''
+                log.info("使用默认成员文件")
+        except Exception as e:
+            log.warning(f"更新成员文件配置失败: {e}")
 
     def get_selected_group_file(self):
         """Get the selected group file path, or None for default"""
