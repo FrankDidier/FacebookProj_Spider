@@ -32,6 +32,9 @@ import threading
 class GreetsSpider(autoads.AirSpider):
     pipeline = None
     selected_member_file = None  # Path to selected member file from UI
+    _image_index = 0  # 图片轮询索引 - Image rotation index
+    _text_index = 0   # 文本轮询索引 - Text rotation index
+    _lock = threading.Lock()  # 线程锁保护索引
 
     def _load_links_file(self, filepath):
         """Load plain URLs from a _links.txt file and yield them as an iterator"""
@@ -206,10 +209,33 @@ class GreetsSpider(autoads.AirSpider):
                     log.error(f'WebDriverWait timeout for xpath [{xpath_content}] on {request.url}: {error_msg}')
 
                 # 判断是否有图片需要上传，如果有，先上传图片
-                pics, text = (self.config.members_images, random.choice(self.config.members_texts))
+                # 轮询选择一张图片和一条文本 - Rotate through images and texts (one each)
+                all_pics = self.config.members_images
+                all_texts = self.config.members_texts
+                
+                # 获取当前轮询的图片和文本
+                pic = None
+                text = None
+                
+                with GreetsSpider._lock:
+                    # 选择一张图片 (轮询)
+                    if all_pics and len(all_pics) > 0:
+                        pic = all_pics[GreetsSpider._image_index % len(all_pics)]
+                        GreetsSpider._image_index += 1
+                        log.info(f'🖼️ 轮询选择图片 {GreetsSpider._image_index}/{len(all_pics)}: {pic}')
+                    
+                    # 选择一条文本 (轮询)
+                    if all_texts and len(all_texts) > 0:
+                        text = all_texts[GreetsSpider._text_index % len(all_texts)]
+                        GreetsSpider._text_index += 1
+                        log.info(f'📝 轮询选择文本 {GreetsSpider._text_index}/{len(all_texts)}: {text[:30]}...')
+                
+                # 转为列表格式兼容后续代码
+                pics = [pic] if pic else []
+                
                 log.info(f'线程{threading.current_thread().name}中浏览器{request.ads_id}图片-->{pics}|文本-->{text}')
 
-                tools.send_message_to_ui(ms=self.ms, ui=self.ui, message=f'正在发私信，内容[{text}],图片{pics}')
+                tools.send_message_to_ui(ms=self.ms, ui=self.ui, message=f'正在发私信，内容[{text}],图片[{pic if pic else "无"}]')
 
                 if len(pics) > 0 or text:
                     if len(pics) > 0:
