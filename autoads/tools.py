@@ -3229,3 +3229,84 @@ def create_consolidated_member_file(member_dir='./fb/member/', output_file='./fb
 
 
 # Note: cleanup_temp_files is defined earlier in this file at line ~2867
+
+
+def close_extra_browser_tabs(browser, keep_current=True):
+    """
+    关闭浏览器中的多余标签页，只保留当前页面
+    Close extra browser tabs, keep only current page
+    
+    :param browser: Selenium WebDriver instance
+    :param keep_current: If True, keep the current tab; if False, close all tabs
+    :return: Number of tabs closed
+    """
+    try:
+        if not browser:
+            return 0
+            
+        handles = browser.window_handles
+        if len(handles) <= 1:
+            return 0  # Only one tab, nothing to close
+        
+        current_handle = browser.current_window_handle if keep_current else None
+        closed_count = 0
+        
+        for handle in handles:
+            if handle != current_handle:
+                try:
+                    browser.switch_to.window(handle)
+                    browser.close()
+                    closed_count += 1
+                except Exception as e:
+                    log.debug(f"Failed to close tab {handle}: {e}")
+        
+        # Switch back to current tab if we kept one
+        if current_handle and current_handle in browser.window_handles:
+            browser.switch_to.window(current_handle)
+        elif browser.window_handles:
+            browser.switch_to.window(browser.window_handles[0])
+        
+        if closed_count > 0:
+            log.info(f"🧹 已关闭 {closed_count} 个多余的浏览器标签页")
+        
+        return closed_count
+    except Exception as e:
+        log.debug(f"Error closing extra tabs: {e}")
+        return 0
+
+
+def navigate_to_target_url(browser, target_url, close_extra=True):
+    """
+    跳转到目标URL，可选关闭多余标签页
+    Navigate browser to target URL, optionally close extra tabs
+    
+    :param browser: Selenium WebDriver instance
+    :param target_url: The URL to navigate to
+    :param close_extra: If True, close extra tabs after navigation
+    :return: True if successful
+    """
+    try:
+        if not browser:
+            return False
+        
+        # Close extra tabs first if requested
+        if close_extra:
+            close_extra_browser_tabs(browser, keep_current=True)
+        
+        # Check if we're already on the target URL
+        current_url = browser.current_url
+        if target_url in current_url or current_url in target_url:
+            log.debug(f"Already on target URL: {target_url}")
+            return True
+        
+        # Navigate to target URL
+        browser.get(target_url)
+        log.info(f"🚀 浏览器跳转到: {target_url}")
+        
+        # Wait a moment for page to load
+        delay_time(1)
+        
+        return True
+    except Exception as e:
+        log.error(f"Error navigating to {target_url}: {e}")
+        return False

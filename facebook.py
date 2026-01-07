@@ -476,6 +476,16 @@ class MainWindow(QMainWindow):
                 try:
                     config.groups_selected_file = file_name
                     app_logger.log_action("BROWSE", f"已保存选择的群组文件: {file_name}")
+                    
+                    # 显示选择结果 - Show selection result to user
+                    try:
+                        with open(file_name, 'r', encoding='utf-8') as f:
+                            line_count = sum(1 for _ in f)
+                        base_name = os.path.basename(file_name)
+                        QMessageBox.information(self, "文件已选择", 
+                            f"✅ 已选择群组文件:\n\n{base_name}\n\n📊 包含 {line_count} 条记录\n\n启动采集成员后将使用此文件")
+                    except:
+                        QMessageBox.information(self, "文件已选择", f"✅ 已选择群组文件:\n\n{os.path.basename(file_name)}")
                 except Exception as config_error:
                     app_logger.log_warning("BROWSE", f"保存配置失败: {config_error}")
                 
@@ -544,6 +554,17 @@ class MainWindow(QMainWindow):
                 
                 # Also set to config for spider to use
                 config.members_selected_file = file_name
+                app_logger.log_action("BROWSE", f"已保存选择的成员文件: {file_name}")
+                
+                # 显示选择结果 - Show selection result to user  
+                try:
+                    with open(file_name, 'r', encoding='utf-8') as f:
+                        line_count = sum(1 for _ in f)
+                    base_name = os.path.basename(file_name)
+                    QMessageBox.information(self, "文件已选择", 
+                        f"✅ 已选择成员文件:\n\n{base_name}\n\n📊 包含 {line_count} 条成员\n\n启动私信后将向这些成员发送消息")
+                except:
+                    QMessageBox.information(self, "文件已选择", f"✅ 已选择成员文件:\n\n{os.path.basename(file_name)}")
                 
                 # Update UI
                 QApplication.processEvents()
@@ -559,9 +580,20 @@ class MainWindow(QMainWindow):
             if text and text != "使用默认采集结果":
                 config.groups_selected_file = text
                 log.info(f"群组文件选择已更新: {text}")
+                app_logger.log_action("CONFIG_CHANGE", f"✅ 已选择群组文件: {os.path.basename(text)}")
+                # 显示文件信息给用户
+                try:
+                    if os.path.exists(text):
+                        file_size = os.path.getsize(text)
+                        with open(text, 'r', encoding='utf-8') as f:
+                            line_count = sum(1 for _ in f)
+                        self.statusBar().showMessage(f"📁 已选择: {os.path.basename(text)} ({line_count}条记录, {file_size/1024:.1f}KB)", 5000)
+                except:
+                    pass
             else:
                 config.groups_selected_file = ''
                 log.info("使用默认群组文件")
+                self.statusBar().showMessage("📁 使用默认群组文件目录", 3000)
         except Exception as e:
             log.warning(f"更新群组文件配置失败: {e}")
 
@@ -571,9 +603,20 @@ class MainWindow(QMainWindow):
             if text and text != "使用默认采集结果":
                 config.members_selected_file = text
                 log.info(f"成员文件选择已更新: {text}")
+                app_logger.log_action("CONFIG_CHANGE", f"✅ 已选择成员文件: {os.path.basename(text)}")
+                # 显示文件信息给用户
+                try:
+                    if os.path.exists(text):
+                        file_size = os.path.getsize(text)
+                        with open(text, 'r', encoding='utf-8') as f:
+                            line_count = sum(1 for _ in f)
+                        self.statusBar().showMessage(f"📨 已选择私信文件: {os.path.basename(text)} ({line_count}条成员, {file_size/1024:.1f}KB)", 5000)
+                except:
+                    pass
             else:
                 config.members_selected_file = ''
                 log.info("使用默认成员文件")
+                self.statusBar().showMessage("📨 使用默认成员文件目录", 3000)
         except Exception as e:
             log.warning(f"更新成员文件配置失败: {e}")
 

@@ -159,6 +159,10 @@ class GreetsSpider(autoads.AirSpider):
     def parse(self, request, response):
         browser = response.browser
 
+        # 关闭浏览器中的多余标签页，只保留当前页面
+        # Close extra browser tabs to keep only the current working page
+        tools.close_extra_browser_tabs(browser, keep_current=True)
+
         log.info(
             f'线程{threading.current_thread().name}中浏览器{request.ads_id}请求地址比对:{urlparse(browser.current_url).path},{urlparse(request.url).path}')
 
