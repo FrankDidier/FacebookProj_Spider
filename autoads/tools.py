@@ -2941,12 +2941,15 @@ def cleanup_temp_files(directory=None):
         if not os.path.exists(dir_path):
             continue
         
-        # Find all _temp_ files
+        # Find all _temp_ files (various patterns)
         patterns = [
             os.path.join(dir_path, '*_temp_*.txt'),
             os.path.join(dir_path, '*_temp_*.json'),
             os.path.join(dir_path, '*_temp_*.csv'),
             os.path.join(dir_path, '*links_temp*'),
+            os.path.join(dir_path, '*_temp.txt'),  # Also match files ending with _temp.txt
+            os.path.join(dir_path, '*_temp.json'),
+            os.path.join(dir_path, '*_temp.csv'),
         ]
         
         for pattern in patterns:
