@@ -115,6 +115,10 @@ class ContactListSpider(autoads.AirSpider):
     """Generate and manage contact lists"""
     
     def start_requests(self):
+        # Get ads_ids for window arrangement
+        if not self.ads_ids:
+            self.ads_ids = tools.get_ads_id(self.config.account_nums) if hasattr(self.config, 'account_nums') else []
+        
         contact_action = getattr(config, 'contact_action', 'generate')  # generate, import
         contact_count = getattr(config, 'contact_count', 100)
         contact_region = getattr(config, 'contact_region', 'US')
@@ -164,7 +168,26 @@ class ContactListSpider(autoads.AirSpider):
             else:
                 tools.send_message_to_ui(self.ms, self.ui, "导入文件不存在")
         
-        # No need to yield requests for contact list generation
+        # This spider doesn't need browser automation, but yield empty for consistency
+        # If needed, can yield a request for browser-based contact sync
+        if hasattr(self, 'stop_event') and self.stop_event and self.stop_event.is_set():
+            return
+        
+        # No browser requests needed for contact list generation
         return
         yield  # Make it a generator
+    
+    def parse(self, request, response):
+        """Parse response - ContactListSpider mainly generates locally, this handles any web-based operations"""
+        browser = response.browser
+        if not browser:
+            return
+        
+        # Check for stop event
+        if hasattr(request, 'stop_event') and request.stop_event and request.stop_event.is_set():
+            return
+        
+        # This spider primarily generates contacts locally
+        # This parse method is for potential future web-based contact import/export
+        pass
 
