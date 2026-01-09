@@ -553,10 +553,19 @@ print("测试8: 日志分析 - 检查异常模式")
 print("=" * 80)
 
 def test_log_analysis():
-    log_file = "./testcase_logs/session_20260107_113724.log"
+    # Try multiple log files (newest first)
+    log_files = [
+        "./testcase_logs/session_20260108_123612.log",
+        "./testcase_logs/session_20260107_113724.log",
+    ]
+    log_file = None
+    for lf in log_files:
+        if os.path.exists(lf):
+            log_file = lf
+            break
     
-    if not os.path.exists(log_file):
-        record_test("日志分析", False, f"日志文件不存在: {log_file}")
+    if not log_file:
+        record_test("日志分析", False, f"日志文件不存在")
         return False
     
     with open(log_file, 'r', encoding='utf-8', errors='ignore') as f:

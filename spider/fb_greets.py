@@ -238,8 +238,14 @@ class GreetsSpider(autoads.AirSpider):
                 pics = [pic] if pic else []
                 
                 log.info(f'线程{threading.current_thread().name}中浏览器{request.ads_id}图片-->{pics}|文本-->{text}')
-
-                tools.send_message_to_ui(ms=self.ms, ui=self.ui, message=f'正在发私信，内容[{text}],图片[{pic if pic else "无"}]')
+                
+                # 显示更详细的进度信息
+                img_idx = GreetsSpider._image_index
+                txt_idx = GreetsSpider._text_index
+                pic_name = os.path.basename(pic) if pic else "无"
+                text_preview = text[:20] + "..." if text and len(text) > 20 else text if text else "无"
+                tools.send_message_to_ui(ms=self.ms, ui=self.ui, 
+                    message=f'📤 发送私信 | 🖼️图片{img_idx}/{len(all_pics)}: {pic_name} | 📝文本{txt_idx}/{len(all_texts)}: {text_preview}')
 
                 if len(pics) > 0 or text:
                     if len(pics) > 0:

@@ -935,7 +935,7 @@ class MainWindow(QMainWindow):
             text_browsers = self.findChildren(QTextBrowser, f'textBrowser{button_base}')
             if text_browsers:
                 main_text_browser: QTextBrowser = text_browsers[0]
-                main_text_browser.clear()
+            main_text_browser.clear()
 
     def validate_setup(self, feature_name="功能"):
         """Validate setup before starting any feature - Flexible for multiple browsers"""
@@ -1040,7 +1040,7 @@ class MainWindow(QMainWindow):
             return False
         
         return True
-    
+
     def on_group_spider_start(self):
         """
         启动采集群组按钮
@@ -1153,15 +1153,46 @@ class MainWindow(QMainWindow):
         app_logger.log_config_change('main', 'account_nums', '', self.ui.lineEditMemberMaxThreadCount.text())
         app_logger.log_config_change('main', 'group_nums', '', self.ui.lineEditGroupCount.text())
         
-        # Get selected group file from UI - THIS WAS MISSING!
+        # Get selected group file from UI
         selected_group_file = self.get_selected_group_file()
+        group_count = 0
+        group_file_name = "默认目录"
+        
         if selected_group_file:
             config.set_option('groups', 'selected_file', selected_group_file)
-            self.print_to_tui(self.ui.textBrowserMembersSpider, f'使用选择的群组文件: {selected_group_file}')
-            app_logger.log_action("MEMBER_SPIDER", f"使用选择的群组文件: {selected_group_file}")
+            group_file_name = os.path.basename(selected_group_file)
+            # Count groups in file
+            try:
+                with open(selected_group_file, 'r', encoding='utf-8') as f:
+                    group_count = sum(1 for line in f if line.strip())
+            except:
+                group_count = 0
+            self.print_to_tui(self.ui.textBrowserMembersSpider, f'📁 使用选择的群组文件: {group_file_name} ({group_count}个群组)')
+            app_logger.log_action("MEMBER_SPIDER", f"使用选择的群组文件: {selected_group_file} ({group_count}个)")
         else:
             config.set_option('groups', 'selected_file', '')
+            self.print_to_tui(self.ui.textBrowserMembersSpider, f'📁 使用默认群组目录')
             app_logger.log_action("MEMBER_SPIDER", "使用默认群组目录")
+        
+        # Show confirmation dialog with details
+        thread_count_preview = int(self.ui.lineEditMemberMaxThreadCount.text()) if self.ui.lineEditMemberMaxThreadCount.text() else 4
+        groups_per_browser = int(self.ui.lineEditGroupCount.text()) if self.ui.lineEditGroupCount.text() else 5
+        
+        confirm_msg = f"""👥 成员采集配置确认
+
+📁 群组文件: {group_file_name}
+🏠 群组数量: {group_count if group_count > 0 else '自动加载'}个
+
+🌐 浏览器数: {thread_count_preview}个
+📊 每浏览器采集: {groups_per_browser}个群组
+
+确认开始采集成员?"""
+        
+        reply = QMessageBox.question(self, "确认启动采集", confirm_msg, 
+                                     QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
+        if reply != QMessageBox.Yes:
+            self.print_to_tui(self.ui.textBrowserMembersSpider, '❌ 用户取消启动')
+            return
 
         # 获取可用的外部浏览器个数
         # ads_ids = tools.get_ads_id(config.account_nums)
@@ -1238,12 +1269,52 @@ class MainWindow(QMainWindow):
         
         # Get selected member file from UI
         selected_member_file = self.get_selected_member_file()
+        member_count = 0
+        member_file_name = "默认目录"
+        
         if selected_member_file:
             # Save the selected file path to config for spider to use
             config.set_option('members', 'selected_file', selected_member_file)
-            self.print_to_tui(self.ui.textBrowserGreetsSpider, f'使用选择的成员文件: {selected_member_file}')
+            member_file_name = os.path.basename(selected_member_file)
+            # Count members in file
+            try:
+                with open(selected_member_file, 'r', encoding='utf-8') as f:
+                    member_count = sum(1 for line in f if line.strip())
+            except:
+                member_count = 0
+            self.print_to_tui(self.ui.textBrowserGreetsSpider, f'📁 使用选择的成员文件: {member_file_name} ({member_count}条成员)')
+            app_logger.log_action("GREETS_SPIDER", f"使用选择的成员文件: {selected_member_file} ({member_count}条)")
         else:
             config.set_option('members', 'selected_file', '')
+            self.print_to_tui(self.ui.textBrowserGreetsSpider, f'📁 使用默认成员目录')
+            app_logger.log_action("GREETS_SPIDER", "使用默认成员目录")
+        
+        # Show confirmation dialog with details
+        image_count = len(greets_image)
+        text_count = len(greets_content)
+        thread_count_preview = int(self.ui.lineEditGreetsMaxThreadCount.text()) if self.ui.lineEditGreetsMaxThreadCount.text() else 4
+        msgs_per_browser = int(self.ui.lineEditGreetsCount.text()) if self.ui.lineEditGreetsCount.text() else 10
+        
+        confirm_msg = f"""📨 私信发送配置确认
+
+📁 成员文件: {member_file_name}
+👥 成员数量: {member_count if member_count > 0 else '自动加载'}条
+
+🖼️ 图片数量: {image_count}张 (轮询发送，每次1张)
+📝 文本数量: {text_count}条 (轮询发送，每次1条)
+
+🌐 浏览器数: {thread_count_preview}个
+📤 每浏览器发送: {msgs_per_browser}条
+
+⚠️ 注意: 部分用户可能关闭了私信功能，将自动跳过
+
+确认开始发送私信?"""
+        
+        reply = QMessageBox.question(self, "确认启动私信", confirm_msg, 
+                                     QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
+        if reply != QMessageBox.Yes:
+            self.print_to_tui(self.ui.textBrowserGreetsSpider, '❌ 用户取消启动')
+            return
 
         # 确定需要开启多少个线程来处理请求
         thread_count = tools.get_greet_threading_count(config_from_newest=config)
@@ -2141,7 +2212,7 @@ class MainWindow(QMainWindow):
         self.invalidate_seconds = None  # No expiration
         self.update_window_title()
         log.info("Activation bypassed - Application unlocked")
-    
+
     def on_verify(self, check_pass):
         # BYPASS: Always allow access
         self.bypass_activation()
