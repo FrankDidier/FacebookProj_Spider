@@ -4,6 +4,7 @@ import sys
 from logging.handlers import BaseRotatingHandler
 
 import loguru
+from autoads.app_paths import get_app_base_dir, get_writable_subdir
 from better_exceptions import format_exception
 # from autoads.config import config
 
@@ -95,10 +96,10 @@ def get_logger(
     ---------
     @result:
     """
-    # 加载setting里最新的值
-    name = name or os.path.basename(os.getcwd())
+    # 加载setting里最新的值 — avoid cwd (PyInstaller/System32); anchor to app dir
+    name = name or os.path.basename(get_app_base_dir()) or "app"
     # path = path + "/log/%s.log" % name
-    path = path or "log/%s.log" % name
+    path = path or os.path.join(get_writable_subdir("log"), "%s.log" % name)
     log_level = log_level or 'DEBUG'
     is_write_to_console = (
         is_write_to_console

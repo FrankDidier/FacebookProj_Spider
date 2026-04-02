@@ -15,6 +15,8 @@ from loguru import logger
 import threading
 import atexit
 
+from autoads.app_paths import get_writable_subdir
+
 
 class TeeOutput:
     """Capture stdout/stderr while still printing to console"""
@@ -67,7 +69,8 @@ class AppLogger:
         
         self._initialized = True
         self.session_id = datetime.now().strftime("%Y%m%d_%H%M%S")
-        self.default_log_dir = './logs/'
+        # Never use cwd-relative ./logs — frozen exe often has cwd System32 (not writable).
+        self.default_log_dir = get_writable_subdir("logs")
         self.log_file = None
         self.json_log_file = None
         self.actions = []
@@ -399,7 +402,7 @@ class AppLogger:
         Save all logs to specified location
         
         Args:
-            save_path: Directory to save logs. If None, uses default ./logs/
+            save_path: Directory to save logs. If None, uses default session log directory
         
         Returns:
             tuple: (log_file_path, json_file_path)
