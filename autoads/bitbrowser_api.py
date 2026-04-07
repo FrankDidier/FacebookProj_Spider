@@ -260,6 +260,17 @@ def update_browser_proxy(browser_id, proxy_config):
         return False
 
 
+def _bitbrowser_msg_means_still_opening(msg):
+    """BitBrowser often returns success=false while the profile is launching."""
+    if not msg:
+        return False
+    s = str(msg)
+    if "正在打开" in s or "打开中" in s:
+        return True
+    low = s.lower()
+    return "opening" in low or "still starting" in low or "please wait" in low
+
+
 def start_browser(browser_id, proxy_config=None):
     """启动浏览器
     Args:
@@ -274,26 +285,25 @@ def start_browser(browser_id, proxy_config=None):
             }
     """
     try:
-        _rate_limit()  # Avoid rate limiting
         base_url = get_bitbrowser_url()
-        # BitBrowser uses /browser/open, not /browser/start
-        endpoints = [
-            '/browser/open',
-            '/browser/start',
-            '/api/browser/open',
-            '/api/v1/browser/open'
+        # Primary API for current BitBrowser builds (others often 404 — do not treat as fatal)
+        primary_endpoint = "/browser/open"
+        fallback_endpoints = [
+            "/browser/start",
+            "/api/browser/open",
+            "/api/v1/browser/open",
         ]
-        
+
         headers = {
             "Content-Type": "application/json"
         }
-        
+
         body = {
             "id": browser_id
         }
-        
+
         use_proxy_args = False
-        
+
         # 如果有代理配置，转换为 BitBrowser 格式并更新浏览器配置
         if proxy_config:
             # 首先尝试更新浏览器的代理配置
@@ -306,7 +316,7 @@ def start_browser(browser_id, proxy_config=None):
                 log.info(f"💡 将通过命令行参数传递代理配置")
             else:
                 log.warning(f"⚠️ 代理配置更新失败，继续尝试启动浏览器")
-        
+
         # 如果需要通过命令行参数传递代理
         if use_proxy_args and proxy_config:
             proxy_type = proxy_config.get('proxy_type', 'http')
@@ -314,7 +324,7 @@ def start_browser(browser_id, proxy_config=None):
             port = proxy_config.get('proxy_port', '')
             username = proxy_config.get('proxy_user', '')
             password = proxy_config.get('proxy_password', '')
-            
+
             if host and port:
                 # 构建代理命令行参数
                 if username and password:
@@ -322,33 +332,85 @@ def start_browser(browser_id, proxy_config=None):
                     proxy_arg = f"--proxy-server={proxy_type}://{host}:{port}"
                 else:
                     proxy_arg = f"--proxy-server={proxy_type}://{host}:{port}"
-                
+
                 body["args"] = [proxy_arg]
                 body["loadExtensions"] = False
                 log.info(f"📡 添加代理命令行参数: {proxy_arg}")
-        
-        for endpoint in endpoints:
+
+        # Poll /browser/open: API returns success=false +「浏览器正在打开中」while launching — must wait, not switch endpoints.
+        max_open_wait_rounds = 90
+        poll_interval = 2.0
+        open_request_timeout = 90
+
+        for attempt in range(max_open_wait_rounds):
             try:
-                log.info(f"尝试 BitBrowser API: {base_url}{endpoint}")
-                # Longer timeout because browser startup can take time
-                response = requests.post(f"{base_url}{endpoint}", headers=headers, json=body, timeout=120)
+                _rate_limit()
+                url = f"{base_url}{primary_endpoint}"
+                if attempt == 0 or attempt % 10 == 9:
+                    log.info(f"尝试 BitBrowser API: {url} (轮询 {attempt + 1}/{max_open_wait_rounds})")
+                response = requests.post(
+                    url, headers=headers, json=body, timeout=open_request_timeout
+                )
+                if attempt == 0 or attempt % 10 == 9:
+                    log.info(f"BitBrowser API 响应状态: {response.status_code}")
+                if response.status_code != 200:
+                    break
+                data = response.json()
+                if attempt == 0 or data.get("success") or attempt % 10 == 9:
+                    log.info(f"BitBrowser 启动响应: {data}")
+                if data.get("success"):
+                    log.info(f"✅ BitBrowser 启动成功: {browser_id}")
+                    if use_proxy_args:
+                        log.info(f"   代理已通过命令行参数应用")
+                    return data
+                msg = data.get("msg", "") or data.get("message", "")
+                if _bitbrowser_msg_means_still_opening(msg):
+                    log.debug(
+                        f"BitBrowser 忙「{msg}」，{poll_interval:.0f}s 后重试 ({attempt + 1}/{max_open_wait_rounds})"
+                    )
+                    time.sleep(poll_interval)
+                    continue
+                log.warning(f"BitBrowser 启动返回失败: {msg or 'Unknown'}")
+                break
+            except requests.exceptions.Timeout:
+                log.warning(
+                    f"BitBrowser /browser/open 超时（{open_request_timeout}s），"
+                    f"{poll_interval:.0f}s 后重试 ({attempt + 1}/{max_open_wait_rounds})"
+                )
+                time.sleep(poll_interval)
+                continue
+            except Exception as e:
+                log.debug(f"BitBrowser API {primary_endpoint} 失败: {e}")
+                time.sleep(poll_interval)
+                continue
+
+        # Legacy / alternate installs: only try fallbacks if primary did not succeed
+        for endpoint in fallback_endpoints:
+            try:
+                _rate_limit()
+                log.info(f"尝试备用 BitBrowser API: {base_url}{endpoint}")
+                response = requests.post(
+                    f"{base_url}{endpoint}",
+                    headers=headers,
+                    json=body,
+                    timeout=open_request_timeout,
+                )
                 log.info(f"BitBrowser API 响应状态: {response.status_code}")
                 if response.status_code == 200:
                     data = response.json()
                     log.info(f"BitBrowser 启动响应: {data}")
-                    if data.get('success'):
+                    if data.get("success"):
                         log.info(f"✅ BitBrowser 启动成功: {browser_id}")
-                        if use_proxy_args:
-                            log.info(f"   代理已通过命令行参数应用")
                         return data
-                    else:
-                        log.warning(f"BitBrowser 启动返回失败: {data.get('msg', 'Unknown')}")
-                        # If first endpoint fails with proper response, try others
+                    msg = data.get("msg", "")
+                    if _bitbrowser_msg_means_still_opening(msg):
+                        time.sleep(poll_interval)
+                        # one more try same fallback
                         continue
             except Exception as e:
                 log.debug(f"BitBrowser API 端点 {endpoint} 失败: {e}")
                 continue
-        
+
         log.error(f"BitBrowser 启动失败: {browser_id} - 所有端点都失败")
         return None
     except Exception as e:
