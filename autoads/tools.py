@@ -462,40 +462,28 @@ def get_page_data_mutilxpath(browser, list_xpath,is_log=False):
         return []
 
 
-def setTextBrowserObjectName(ui=None, grid_layout=None):
-    if ui and grid_layout:
-        # 获取线程锁
-        with threading.RLock():
-            thread_name = threading.current_thread().name
-            # print(f'setTextBrowser_thread_name={thread_name}')
-            if not ui.findChildren(QTextBrowser, thread_name):  # 先去查找下是不是有这个对象
-                grid = grid_layout
-                num = grid.count()
-                # print(f'grid-browser-count={num}')
-                for i in range(num):
-                    textBroswer = grid.itemAt(i).widget()
-                    name = textBroswer.objectName()
-                    # print(f'grid items {i} name={name}')
-                    if not name:
-                        textBroswer.setObjectName(thread_name)
-                        return True
-                return False
-            else:
-                return True
+def setTextBrowserObjectName(ui=None, grid_layout=None, ms=None):
+    """Request the GUI thread to assign a QTextBrowser to this worker thread.
+
+    Previous implementation directly accessed Qt widgets from the worker thread,
+    violating Qt's threading model and causing the GUI to freeze (stop button
+    unresponsive).  Now we emit a signal so the main thread handles it.
+    """
+    if not (ui and grid_layout):
+        return False
+    thread_name = threading.current_thread().name
+    if ms and hasattr(ms, 'assign_browser_name'):
+        grid_name = grid_layout.objectName() if hasattr(grid_layout, 'objectName') else ''
+        ms.assign_browser_name.emit(grid_name, thread_name)
+        return True
+    return False
 
 
 def send_message_to_ui(ms=None, ui=None, message=None):
-    if ms and ui and message:
+    """Emit a signal with the thread name so the GUI thread can route the message."""
+    if ms and message:
         thread_name = threading.current_thread().name
-        # print(f'thread_name={thread_name}')
-        text_browsers = ui.findChildren(QTextBrowser, thread_name)
-        if len(text_browsers) == 0:
-            # print(f'__name__={threading.current_thread().__class__.__name__}')
-            text_browsers = ui.findChildren(QTextBrowser,
-                                            'textBrowser' + threading.current_thread().__class__.__name__)
-
-        if len(text_browsers) > 0:
-            ms.text_print.emit(text_browsers[0], message)
+        ms.text_print.emit(thread_name, message)
 
 
 def clear_queue(q: Queue):

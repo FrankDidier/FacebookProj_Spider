@@ -53,9 +53,15 @@ class GreetsSpider(autoads.AirSpider):
         self.pipeline = self._item_buffer._pipelines[0]
         member_template = MemberItem()
         
-        # Check if a specific file was selected in UI
-        if hasattr(self.config, 'members_selected_file') and self.config.members_selected_file:
-            self.selected_member_file = self.config.members_selected_file
+        # Check if a specific file was selected in UI (direct attribute or INI fallback)
+        _sel = getattr(self.config, 'members_selected_file', '') or ''
+        if not _sel:
+            try:
+                _sel = self.config.get_option('members', 'selected_file') or ''
+            except Exception:
+                _sel = ''
+        if _sel:
+            self.selected_member_file = _sel
             log.info(f'Using selected member file: {self.selected_member_file}')
             
             # Check if it's a _links.txt file (plain URLs) or regular JSON file

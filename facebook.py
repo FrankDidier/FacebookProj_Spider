@@ -49,9 +49,10 @@ MACHINE = tools.getCombinNumber()
 
 
 class MySignals(QObject):
-    text_print = Signal(QTextBrowser, str)
+    text_print = Signal(str, str)  # (browser_name, message) — looked up in the GUI thread
     update_control_status = Signal(list)
     update_activate = Signal(bool)
+    assign_browser_name = Signal(str, str)  # (grid_object_name, thread_name)
 
 
 class ProcessCheckCode(object):
@@ -135,6 +136,7 @@ class MainWindow(QMainWindow):
         self.ms.text_print.connect(self.print_to_tui)
         self.ms.update_control_status.connect(self.update_control_enabled)
         self.ms.update_activate.connect(self.on_verify)
+        self.ms.assign_browser_name.connect(self._assign_browser_name)
         
         # 启动时清理临时文件 - Clean up temp files on startup
         try:
@@ -758,12 +760,41 @@ class MainWindow(QMainWindow):
             return True
         return False
 
-    def print_to_tui(self, fb, text):
+    def print_to_tui(self, browser_name_or_widget, text):
+        """Accept either a QTextBrowser (legacy direct calls) or a string name (signal from worker thread)."""
+        if isinstance(browser_name_or_widget, str):
+            browsers = self.findChildren(QTextBrowser, browser_name_or_widget)
+            if not browsers:
+                browsers = self.findChildren(QTextBrowser, 'textBrowser' + browser_name_or_widget)
+            if not browsers:
+                return
+            fb = browsers[0]
+        else:
+            fb = browser_name_or_widget
         str_time = time.strftime('%H:%M:%S', time.localtime(time.time()))
         format_text = f'<font color="#66CC00">{str_time}</font><font color="#CD0000"> | </font>{text}'
         fb.append(format_text)
-        # fb.moveCursor(QTextCursor.Start)
         fb.ensureCursorVisible()
+
+    def _assign_browser_name(self, grid_name, thread_name):
+        """Assign a QTextBrowser to a worker thread (runs in GUI thread)."""
+        try:
+            grids = [
+                getattr(self.ui, 'gridLayoutGroupSpider', None),
+                getattr(self.ui, 'gridLayoutMembersSpider', None),
+                getattr(self.ui, 'gridLayoutGreetsSpider', None),
+            ]
+            for grid in grids:
+                if grid is None:
+                    continue
+                if not self.findChildren(QTextBrowser, thread_name):
+                    for i in range(grid.count()):
+                        widget = grid.itemAt(i).widget()
+                        if widget and not widget.objectName():
+                            widget.setObjectName(thread_name)
+                            return
+        except Exception as e:
+            log.debug(f"_assign_browser_name error: {e}")
 
     def update_config(self):
         def run():
@@ -1273,10 +1304,9 @@ class MainWindow(QMainWindow):
         member_file_name = "默认目录"
         
         if selected_member_file:
-            # Save the selected file path to config for spider to use
             config.set_option('members', 'selected_file', selected_member_file)
+            config.members_selected_file = selected_member_file
             member_file_name = os.path.basename(selected_member_file)
-            # Count members in file
             try:
                 with open(selected_member_file, 'r', encoding='utf-8') as f:
                     member_count = sum(1 for line in f if line.strip())
@@ -1286,6 +1316,7 @@ class MainWindow(QMainWindow):
             app_logger.log_action("GREETS_SPIDER", f"使用选择的成员文件: {selected_member_file} ({member_count}条)")
         else:
             config.set_option('members', 'selected_file', '')
+            config.members_selected_file = ''
             self.print_to_tui(self.ui.textBrowserGreetsSpider, f'📁 使用默认成员目录')
             app_logger.log_action("GREETS_SPIDER", "使用默认成员目录")
         
@@ -2478,9 +2509,19 @@ class MainWindow(QMainWindow):
         #     Thread(target=check_data, daemon=True).start()
 
     def closeEvent(self, event):
-        """Handle application close - auto-save logs and notify user"""
+        """Handle application close - stop all spiders, auto-save logs"""
         app_logger.log_action("APP_CLOSE", "用户请求关闭应用")
-        
+
+        # Signal every running spider to stop immediately
+        for attr in ('group_stop_event', 'member_stop_event', 'greets_stop_event',
+                     'group_specified_stop_event', 'members_rapid_stop_event',
+                     'posts_stop_event', 'pages_stop_event',
+                     'ins_followers_stop_event', 'ins_following_stop_event',
+                     'ins_profile_stop_event', 'ins_reels_comments_stop_event'):
+            evt = getattr(self, attr, None)
+            if evt is not None:
+                evt.set()
+
         # AUTO-SAVE logs first (so they're never lost)
         try:
             log_file, json_file = app_logger.save_logs()

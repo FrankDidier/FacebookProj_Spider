@@ -21,6 +21,7 @@ class AirSpider(Thread):
         # tracemalloc.start()
 
         super(AirSpider, self).__init__()
+        self.daemon = True
 
         self._thread_count = thread_count
 

@@ -25,6 +25,7 @@ class AirSpiderParserControl(threading.Thread):
     def __init__(self, memory_db: MemoryDB, item_buffer: ItemBuffer,processing_request: MemoryDB, ui=None, ms=None, grid_layout=None,
                  stop_event=None,is_use_interval_timeout=False):
         super(AirSpiderParserControl, self).__init__()
+        self.daemon = True
         self._parsers = []
         self._memory_db = memory_db
         self._processing_request=processing_request
@@ -67,7 +68,7 @@ class AirSpiderParserControl(threading.Thread):
     def run(self):
         # print(f'self._started={self._started.is_set()}')
         log.info(f'1、处理请求线程{threading.current_thread().name}开始启动，等待请求任务的到来')
-        tools.setTextBrowserObjectName(ui=self.ui, grid_layout=self.grid_layout)
+        tools.setTextBrowserObjectName(ui=self.ui, grid_layout=self.grid_layout, ms=self.ms)
 
         while not self._thread_stop:
             try:
